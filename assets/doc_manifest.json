@@ -1,0 +1,32 @@
+{
+  "schema": "specforge-manifest-v1",
+  "core_documents": [
+    "00-product-brief.md",
+    "01-reality-research.md",
+    "02-prd-behavior-contract.md",
+    "03-sdd-requirements-spec.md",
+    "04-technical-design.md",
+    "05-contracts-data-permissions.md",
+    "06-eval-golden-dataset.md",
+    "07-agent-execution-plan.md"
+  ],
+  "support_artifacts": [
+    "traceability_matrix.json",
+    "research_ledger.json",
+    "handoff_manifest.json"
+  ],
+  "quality_gates": [
+    "live research completed or blocked explicitly",
+    "all requirements have EARS acceptance criteria",
+    "all major stack choices cite official docs and current open-source evidence",
+    "all major subsystems include a reuse, integration, fork, pattern-extraction, or build-from-scratch decision",
+    "state truth model declares persisted, runtime-only, derived, reset, snapshot, diff, and migration behavior",
+    "workflow/navigation/action contract declares routes, screens, dialogs, commands, transitions, side effects, and invalid transitions",
+    "module/file responsibility contract declares ownership, allowed content, forbidden content, dependency direction, and public interfaces",
+    "generated artifact contract maps each generated output to a source declaration, generator command, and no-hand-edit rule",
+    "deterministic judge/evidence contract maps each requirement to code, state, API, file, screenshot, log, or manual evidence",
+    "data sufficiency check confirms fixtures, default data, golden cases, bad cases, and edge cases support the planned workflows",
+    "all tasks include validation commands or evidence requirements",
+    "traceability maps requirements to design, contracts, tasks, and evals"
+  ]
+}

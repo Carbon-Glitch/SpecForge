@@ -1,0 +1,34 @@
+# SpecForge
+
+This directory is an installable cross-platform agent skill. Use it when a user wants to turn a rough product concept into a research-grounded Spec-Driven Development document pack for AI vibe coding.
+
+Primary invocation:
+
+```text
+/specforge <product idea or rough requirements>
+```
+
+The skill generates eight AI-readable documents:
+
+1. `00-product-brief.md`
+2. `01-reality-research.md`
+3. `02-prd-behavior-contract.md`
+4. `03-sdd-requirements-spec.md`
+5. `04-technical-design.md`
+6. `05-contracts-data-permissions.md`
+7. `06-eval-golden-dataset.md`
+8. `07-agent-execution-plan.md`
+
+Key operating rule: perform live web research before market claims, technology choices, API choices, compliance claims, or open-source recommendations. If live research is unavailable, label those claims unverified.
+
+Executable-contract operating rule: before implementation tasks, require contracts for state truth, workflow/navigation/actions, deterministic judging, module/file boundaries, generated artifacts, and data sufficiency. Tasks should reference those contracts and include concrete validation commands or evidence requirements.
+
+Use `SKILL.md` for the full workflow. Use `references/research-protocol.md` for the source-scoring rules and `references/output-docs.md` for the exact content contract.
+
+Useful commands:
+
+```bash
+python scripts/run_pipeline.py --idea "<product idea>" --out sdd-docs
+python scripts/validate_pack.py sdd-docs
+python scripts/run_evals.py --validate
+```

@@ -1,0 +1,175 @@
+# Eight Document Contract
+
+The pack is designed for AI coding agents. It should be precise, traceable, and executable.
+
+## 00-product-brief.md
+
+Purpose: turn the user's rough idea into a clear working brief.
+
+Must include:
+
+- one-sentence product concept
+- target users
+- jobs-to-be-done
+- primary workflows
+- constraints
+- assumptions
+- success criteria with IDs, for example `SC-001`
+- open questions grouped by blocking vs non-blocking
+
+Use this document to record clarification answers. If the user does not answer, choose conservative defaults and label them.
+
+## 01-reality-research.md
+
+Purpose: align the product and technology plan with the real world.
+
+Must include:
+
+- research status
+- market reality
+- competitor table
+- current user behavior evidence
+- current official documentation findings
+- current GitHub/open-source findings
+- open-source reuse/fork/integration decision table by subsystem
+- risk and compliance findings
+- implementation prior art
+- rejected options
+- sources
+
+This document must be written before stack decisions are finalized.
+
+## 02-prd-behavior-contract.md
+
+Purpose: define why the product exists and how it should behave.
+
+Must include:
+
+- problem statement
+- goals and measurable success metrics
+- personas
+- scope and anti-goals
+- core user journeys
+- behavior contract
+- guardrails
+- failure behavior
+- release criteria
+
+For AI products, focus on behavior and failure modes, not only feature lists.
+
+## 03-sdd-requirements-spec.md
+
+Purpose: define testable requirements.
+
+Must include:
+
+- functional requirements with stable IDs
+- non-functional requirements
+- user stories
+- EARS acceptance criteria
+- edge cases
+- out-of-scope items
+
+Every requirement should be testable and traceable.
+
+## 04-technical-design.md
+
+Purpose: turn product requirements into architecture.
+
+Must include:
+
+- architecture overview
+- stack decision with source-backed rationale
+- open-source reuse plan: what to integrate, fork, wrap, extract, or build from scratch
+- module boundaries
+- data flow
+- state truth model: persisted state, runtime-only state, derived state, source of truth, snapshot/diff/reset behavior, migrations, and sensitive state
+- workflow navigation action contract: routes, screens, dialogs, tabs, commands, transitions, side effects, invalid transitions, and future test selectors or route declarations
+- generated artifact plan: source declarations, generated outputs, generator commands, regeneration triggers, and no-hand-edit rules
+- failure handling
+- observability
+- performance and cost notes
+- migration and rollback plan
+
+Do not make technology choices before `01-reality-research.md` is filled.
+
+## 05-contracts-data-permissions.md
+
+Purpose: define the interfaces the code agent should not improvise.
+
+Must include:
+
+- API contracts
+- data model
+- state model contract
+- tool contracts
+- permission mapping
+- module file responsibility contract: each module/file role, allowed content, forbidden content, ownership, dependency direction, and public interface
+- security boundaries
+- storage and retention rules
+- external integrations
+
+For Agent products, include read-only, read-write, and destructive tool tiers.
+
+## 06-eval-golden-dataset.md
+
+Purpose: define what good enough means.
+
+Must include:
+
+- eval philosophy
+- launch, target, and aspirational thresholds
+- deterministic judge contract: code/state/API/file/screenshot/log/manual evidence for each requirement
+- evidence matrix mapping requirement IDs to judge type, command, fixture, expected state, and failure signal
+- data sufficiency check for defaults, fixtures, seed scenarios, edge cases, and bad cases
+- golden cases
+- bad cases
+- edge cases
+- automated checks
+- manual review checks
+- regression gates
+
+Golden cases can be JSON, CSV, markdown, screenshots, or scenario tables, but they must be concrete.
+
+## 07-agent-execution-plan.md
+
+Purpose: give Cursor/Codex/Claude/Antigravity a direct implementation playbook.
+
+Must include:
+
+- agent operating rules
+- implementation phases
+- task list with IDs
+- dependencies and parallelization
+- source-vs-generated rules
+- validation commands
+- handoff to coding agent
+- generated `AGENTS.md` content
+- done definition
+
+Tasks should be small enough for a coding agent to execute one by one and must include verification.
+
+## Traceability
+
+Populate `traceability_matrix.json` with mappings like:
+
+```json
+{
+  "requirement_id": "FR-001",
+  "source": "02-prd-behavior-contract.md#Core User Journeys",
+  "design_refs": ["04-technical-design.md#Module Boundaries"],
+  "contract_refs": ["05-contracts-data-permissions.md#API Contracts"],
+  "task_refs": ["07-agent-execution-plan.md#Task List"],
+  "eval_refs": ["06-eval-golden-dataset.md#Golden Cases"]
+}
+```
+
+## Build Readiness Levels
+
+Use these labels in `handoff_manifest.json`:
+
+- `draft` — skeleton exists, research incomplete
+- `research-complete` — sources gathered, docs still being written
+- `spec-complete` — docs complete, traceability partial
+- `build-ready` — docs, traceability, evals, and task validation are complete
+- `blocked` — missing external access or critical unanswered question

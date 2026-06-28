@@ -1,0 +1,29 @@
+{
+  "schema": "specforge-research-protocol-v1",
+  "mandatory_categories": [
+    "market",
+    "official_docs",
+    "github_open_source",
+    "open_source_reuse_decisions",
+    "risk_compliance",
+    "implementation_prior_art"
+  ],
+  "minimum_sources": {
+    "market": 5,
+    "official_docs": 2,
+    "github_open_source": 3,
+    "open_source_reuse_decisions": 1,
+    "risk_compliance": 2,
+    "implementation_prior_art": 2
+  },
+  "reuse_decisions": [
+    "reuse as-is",
+    "integrate via API/SDK",
+    "wrap",
+    "fork and modify",
+    "extract pattern only",
+    "build from scratch"
+  ],
+  "confidence_values": ["high", "medium", "low"],
+  "claim_labels": ["Evidence", "Inference", "Unknown"]
+}
