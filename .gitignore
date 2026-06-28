@@ -2,6 +2,6 @@ __pycache__/
 *.py[cod]
 .tmp-eval-pack/
 evals/.rollout/
-sdd-docs/
+/sdd-docs/
 .DS_Store
 Thumbs.db

@@ -5,13 +5,13 @@ This eval checks that the skill can scaffold and validate an eight-document SDD 
 ```json
 {
   "skill": "specforge-skill",
-  "run": "python scripts/run_pipeline.py --idea \"{idea}\" --out {output} --force",
+  "run": "python scripts/run_pipeline.py --idea \"{idea}\" --out {output} --stage all --force",
   "criteria": [
     {
       "id": "valid-pack",
       "text": "The generated pack passes validate_pack.py.",
       "type": "command",
-      "cmd": "python scripts/validate_pack.py {output}"
+      "cmd": "python scripts/validate_pack.py {output} --stage all"
     },
     {
       "id": "has-eight-docs",
@@ -43,6 +43,16 @@ This eval checks that the skill can scaffold and validate an eight-document SDD 
     {
       "id": "verification-is-evidence-based",
       "text": "The output requires each implementation task or requirement to be verified by a concrete command, state/API/file evidence, screenshot/log evidence, or explicit manual review criteria.",
+      "type": "llm-judge"
+    },
+    {
+      "id": "stage-gates-are-explicit",
+      "text": "The skill requires stopping for user confirmation after product brief plus reality research, and again after PRD plus requirements plus technical design.",
+      "type": "llm-judge"
+    },
+    {
+      "id": "golden-cases-avoid-self-certification",
+      "text": "The skill requires golden and bad cases to declare provenance and not rely only on synthetic cases before build-ready handoff.",
       "type": "llm-judge"
     }
   ],

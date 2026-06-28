@@ -122,6 +122,7 @@ Must include:
 - deterministic judge contract: code/state/API/file/screenshot/log/manual evidence for each requirement
 - evidence matrix mapping requirement IDs to judge type, command, fixture, expected state, and failure signal
 - data sufficiency check for defaults, fixtures, seed scenarios, edge cases, and bad cases
+- golden case source policy: each case must declare `user-confirmed`, `real-source-derived`, or `synthetic`; build-ready packs must not use only synthetic cases
 - golden cases
 - bad cases
 - edge cases
@@ -173,3 +174,13 @@ Use these labels in `handoff_manifest.json`:
 - `spec-complete` — docs complete, traceability partial
 - `build-ready` — docs, traceability, evals, and task validation are complete
 - `blocked` — missing external access or critical unanswered question
+
+## Stage Gates
+
+SpecForge should be reviewed in three gates:
+
+- `gate1` — complete `00-product-brief.md` and `01-reality-research.md`, then stop for user confirmation.
+- `gate2` — complete `02-prd-behavior-contract.md`, `03-sdd-requirements-spec.md`, and `04-technical-design.md`, then stop for user confirmation.
+- `gate3` — complete `05-contracts-data-permissions.md`, `06-eval-golden-dataset.md`, and `07-agent-execution-plan.md`, then validate and hand off.
+
+Do not mark a pack `build-ready` until all gates have either been reviewed or explicitly skipped by the user.

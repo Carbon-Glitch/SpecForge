@@ -23,12 +23,16 @@ Key operating rule: perform live web research before market claims, technology c
 
 Executable-contract operating rule: before implementation tasks, require contracts for state truth, workflow/navigation/actions, deterministic judging, module/file boundaries, generated artifacts, and data sufficiency. Tasks should reference those contracts and include concrete validation commands or evidence requirements.
 
+Stage-gate rule: do not fill all eight documents in one pass unless the user explicitly asks to skip review. Complete `00-product-brief.md` and `01-reality-research.md`, stop for confirmation, then complete PRD/requirements/technical design, stop again, then complete contracts/evals/agent plan.
+
+Eval provenance rule: golden and bad cases must declare `user-confirmed`, `real-source-derived`, or `synthetic`. A build-ready pack cannot rely only on synthetic cases.
+
 Use `SKILL.md` for the full workflow. Use `references/research-protocol.md` for the source-scoring rules and `references/output-docs.md` for the exact content contract.
 
 Useful commands:
 
 ```bash
 python scripts/run_pipeline.py --idea "<product idea>" --out sdd-docs
-python scripts/validate_pack.py sdd-docs
+python scripts/validate_pack.py sdd-docs --stage gate1
 python scripts/run_evals.py --validate
 ```

@@ -1,0 +1,83 @@
+{
+  "schema": "specforge-research-ledger-v1",
+  "product": "AI meeting notes for sales teams",
+  "generated_at": "2026-06-28T00:00:00Z",
+  "status": "verified-demo-sample",
+  "categories": {
+    "market": [
+      {
+        "title": "Meetily",
+        "url": "https://meetily.ai/",
+        "publisher": "Meetily",
+        "published_or_updated": "accessed 2026-06-28",
+        "accessed_at": "2026-06-28",
+        "claim_supported": "Local-first AI meeting notes positioning.",
+        "confidence": "medium"
+      }
+    ],
+    "official_docs": [
+      {
+        "title": "OpenAI Whisper GitHub",
+        "url": "https://github.com/openai/whisper",
+        "publisher": "OpenAI",
+        "published_or_updated": "accessed 2026-06-28",
+        "accessed_at": "2026-06-28",
+        "claim_supported": "Open-source speech recognition model repository.",
+        "confidence": "high"
+      }
+    ],
+    "github_open_source": [
+      {
+        "title": "whisper.cpp",
+        "url": "https://github.com/ggml-org/whisper.cpp",
+        "publisher": "GitHub",
+        "published_or_updated": "accessed 2026-06-28",
+        "accessed_at": "2026-06-28",
+        "claim_supported": "Local Whisper implementation option.",
+        "confidence": "high"
+      },
+      {
+        "title": "Meetily GitHub",
+        "url": "https://github.com/Zackriya-Solutions/meetily",
+        "publisher": "GitHub",
+        "published_or_updated": "accessed 2026-06-28",
+        "accessed_at": "2026-06-28",
+        "claim_supported": "Open-source AI meeting note taker reference.",
+        "confidence": "medium"
+      }
+    ],
+    "open_source_reuse_decisions": [
+      {
+        "title": "Transcription adapter reuse decision",
+        "url": "https://github.com/openai/whisper",
+        "publisher": "SpecForge demo",
+        "published_or_updated": "2026-06-28",
+        "accessed_at": "2026-06-28",
+        "claim_supported": "Wrap or evaluate existing transcription engines before custom implementation.",
+        "confidence": "medium"
+      }
+    ],
+    "risk_compliance": [
+      {
+        "title": "Meeting data privacy risk",
+        "url": "https://meetily.ai/",
+        "publisher": "SpecForge demo",
+        "published_or_updated": "2026-06-28",
+        "accessed_at": "2026-06-28",
+        "claim_supported": "Privacy and local processing are meaningful product concerns for meeting notes.",
+        "confidence": "medium"
+      }
+    ],
+    "implementation_prior_art": [
+      {
+        "title": "GitHub meeting-notes topic",
+        "url": "https://github.com/topics/meeting-notes",
+        "publisher": "GitHub",
+        "published_or_updated": "accessed 2026-06-28",
+        "accessed_at": "2026-06-28",
+        "claim_supported": "Meeting note and transcription project patterns exist on GitHub.",
+        "confidence": "medium"
+      }
+    ]
+  }
+}

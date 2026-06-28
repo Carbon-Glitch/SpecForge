@@ -1,0 +1,54 @@
+# Product Brief
+
+- Product idea: AI meeting notes for sales teams
+- Status: demo-complete
+- Stage: gate1
+
+## Concept
+
+MeetingBrief is a privacy-aware AI meeting notes product for sales teams. It records or imports meeting audio, transcribes the conversation, extracts decisions and action items, and syncs structured follow-ups to the CRM.
+
+## Target Users
+
+| ID | User | Job |
+|---|---|---|
+| U-001 | Account executive | Leave calls with accurate follow-up actions without manual note cleanup. |
+| U-002 | Sales manager | Review call outcomes and risks without watching recordings. |
+| U-003 | RevOps admin | Ensure CRM notes are complete, structured, and auditable. |
+
+## Jobs To Be Done
+
+- JTBD-001: Capture reliable notes from customer calls.
+- JTBD-002: Extract decisions, objections, next steps, and owners.
+- JTBD-003: Sync reviewed summaries to the CRM.
+- JTBD-004: Preserve privacy and consent boundaries for recorded meetings.
+
+## Success Criteria
+
+| ID | Criterion |
+|---|---|
+| SC-001 | A user can upload a meeting recording and receive transcript, summary, decisions, and action items. |
+| SC-002 | Every action item includes owner, due date or missing-date flag, source quote, and confidence. |
+| SC-003 | Users review and approve notes before CRM sync. |
+| SC-004 | The system stores source citations from transcript spans for every generated claim. |
+
+## Constraints
+
+- MVP supports recording upload first; live meeting bot is out of scope.
+- CRM sync starts with HubSpot-style generic contact/deal mapping.
+- All AI outputs require user review before external write.
+
+## Assumptions
+
+- Sales teams already have recordings or call audio exports.
+- English-language calls are the first target.
+- Privacy-sensitive customers prefer review-before-sync over full automation.
+
+## Open Questions
+
+| ID | Question | Blocking |
+|---|---|---|
+| Q-001 | Which CRM should be first: HubSpot, Salesforce, or a generic webhook? | yes |
+| Q-002 | Should the first version support local transcription, cloud transcription, or both? | yes |
+| Q-003 | What retention policy is required for audio files? | yes |
+| Q-004 | Should managers see raw transcripts or only approved notes? | no |

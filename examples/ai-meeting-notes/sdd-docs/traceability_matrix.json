@@ -1,0 +1,30 @@
+{
+  "schema": "specforge-traceability-v1",
+  "product": "AI meeting notes for sales teams",
+  "generated_at": "2026-06-28T00:00:00Z",
+  "coverage": [
+    {
+      "requirement_id": "FR-004",
+      "source": "02-prd-behavior-contract.md#Behavior Contract",
+      "design_refs": ["04-technical-design.md#Workflow Navigation Action Contract"],
+      "contract_refs": ["05-contracts-data-permissions.md#Tool Contracts"],
+      "task_refs": ["07-agent-execution-plan.md#Task List"],
+      "eval_refs": ["06-eval-golden-dataset.md#Golden Cases"]
+    },
+    {
+      "requirement_id": "FR-005",
+      "source": "03-sdd-requirements-spec.md#Functional Requirements",
+      "design_refs": ["04-technical-design.md#Data Flow"],
+      "contract_refs": ["05-contracts-data-permissions.md#Data Model"],
+      "task_refs": ["07-agent-execution-plan.md#Task List"],
+      "eval_refs": ["06-eval-golden-dataset.md#Evidence Matrix"]
+    }
+  ],
+  "rules": [
+    "Every requirement must map to at least one design decision.",
+    "Every requirement must map to at least one task.",
+    "Every task must map to at least one validation command or evidence requirement.",
+    "Every current-world claim must map to a research ledger source.",
+    "Golden and bad cases must declare provenance."
+  ]
+}

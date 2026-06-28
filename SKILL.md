@@ -6,7 +6,7 @@ description: >-
 license: MIT
 metadata:
   author: Codex
-  version: 1.1.0
+  version: 1.2.0
   created: 2026-06-28
   last_reviewed: 2026-06-28
   review_interval_days: 45
@@ -125,17 +125,17 @@ If any of these contracts cannot be completed, mark the pack `blocked` or `spec-
 
 ## Workflow
 
-### 1. Initialize The Pack
+### 1. Initialize Gate 1
 
-Run the scaffold script when you need local files:
+Run the scaffold script when you need local files. By default it creates only Gate 1 documents:
 
 ```bash
 python scripts/run_pipeline.py --idea "<product concept>" --out sdd-docs
 ```
 
-This creates the eight-document skeleton, manifest files, and validation checklist. The script does not replace reasoning or web research; it creates the disciplined workspace.
+This creates `00-product-brief.md`, `01-reality-research.md`, manifest files, and the validation checklist. The script does not replace reasoning or web research; it creates the disciplined workspace.
 
-### 2. Research First
+### 2. Gate 1 — Brief And Reality Research
 
 Populate `01-reality-research.md` before making architecture decisions.
 
@@ -150,34 +150,73 @@ Minimum evidence:
 
 If the project is niche or regulated, expand research until the major unknowns are explicit.
 
-### 3. Produce The Eight Documents
+Stop after Gate 1. Show the user the product brief, research findings, assumptions, source quality, open questions, and recommended direction. Continue only after the user confirms or corrects the direction.
 
-Write the docs in this order:
+Validate Gate 1 with:
 
-1. `00-product-brief.md`
-2. `01-reality-research.md`
-3. `02-prd-behavior-contract.md`
-4. `03-sdd-requirements-spec.md`
-5. `04-technical-design.md`
-6. `05-contracts-data-permissions.md`
-7. `06-eval-golden-dataset.md`
-8. `07-agent-execution-plan.md`
+```bash
+python scripts/validate_pack.py sdd-docs --stage gate1
+```
+
+### 3. Gate 2 — PRD, Requirements, And Technical Design
+
+After Gate 1 is confirmed, scaffold the next stage:
+
+```bash
+python scripts/run_pipeline.py --idea "<product concept>" --out sdd-docs --stage gate2
+```
+
+Then write:
+
+1. `02-prd-behavior-contract.md`
+2. `03-sdd-requirements-spec.md`
+3. `04-technical-design.md`
+
+Stop again after Gate 2. Show the user the PRD, acceptance criteria, architecture, stack choice, state truth model, workflow/action contract, and generated artifact plan. Continue only after confirmation.
+
+Validate Gate 2 with:
+
+```bash
+python scripts/validate_pack.py sdd-docs --stage gate2
+```
+
+### 4. Gate 3 — Contracts, Evals, And Agent Plan
+
+After Gate 2 is confirmed, scaffold the final stage:
+
+```bash
+python scripts/run_pipeline.py --idea "<product concept>" --out sdd-docs --stage gate3
+```
+
+Then write:
+
+1. `05-contracts-data-permissions.md`
+2. `06-eval-golden-dataset.md`
+3. `07-agent-execution-plan.md`
 
 Do not let later docs invent requirements not traceable to earlier docs. If a new idea appears, update upstream docs and traceability.
 
 Before starting `07-agent-execution-plan.md`, verify that documents `04`, `05`, and `06` contain the executable contracts gate above. Implementation tasks must reference these contracts, not re-infer state, navigation, module ownership, generated files, or eval evidence.
 
-### 4. Validate
+Golden and bad cases must declare provenance: `user-confirmed`, `real-source-derived`, or `synthetic`. A build-ready pack must include at least one user-confirmed or real-source-derived golden case; do not rely only on synthetic cases made by the same model that writes the eval.
+
+### 5. Validate
 
 Run:
 
 ```bash
-python scripts/validate_pack.py sdd-docs
+python scripts/validate_pack.py sdd-docs --stage all
 ```
 
-Fix missing sections, missing research ledger entries, missing acceptance criteria, or tasks without validation commands.
+Use strict validation before build-ready handoff:
 
-### 5. Handoff To Code Agent
+```bash
+python scripts/validate_pack.py sdd-docs --stage all --strict
+```
+
+Fix missing sections, missing research ledger entries, missing acceptance criteria, all-synthetic evals, duplicate-looking cases, or tasks without validation commands.
+
+### 6. Handoff To Code Agent
 
 The final response should tell the user:
 
@@ -186,6 +225,8 @@ The final response should tell the user:
 - whether live research was completed or blocked
 - which command or file the code agent should start from
 - whether the package is MVP-ready, build-ready, or still needs answers
+
+Do not hand off to a coding agent until all three gates have been reviewed or the user explicitly asks to skip review.
 
 ## Document Quality Rules
 

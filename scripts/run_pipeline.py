@@ -16,9 +16,10 @@ from pathlib import Path
 from typing import Any
 
 
-DOCS: list[tuple[str, str, list[str]]] = [
+DOCS: list[tuple[str, str, str, list[str]]] = [
     (
         "00-product-brief.md",
+        "gate1",
         "Product Brief",
         [
             "Concept",
@@ -32,6 +33,7 @@ DOCS: list[tuple[str, str, list[str]]] = [
     ),
     (
         "01-reality-research.md",
+        "gate1",
         "Reality Research",
         [
             "Research Status",
@@ -49,6 +51,7 @@ DOCS: list[tuple[str, str, list[str]]] = [
     ),
     (
         "02-prd-behavior-contract.md",
+        "gate2",
         "PRD And Behavior Contract",
         [
             "Problem Statement",
@@ -65,6 +68,7 @@ DOCS: list[tuple[str, str, list[str]]] = [
     ),
     (
         "03-sdd-requirements-spec.md",
+        "gate2",
         "SDD Requirements Spec",
         [
             "Functional Requirements",
@@ -77,6 +81,7 @@ DOCS: list[tuple[str, str, list[str]]] = [
     ),
     (
         "04-technical-design.md",
+        "gate2",
         "Technical Design",
         [
             "Architecture Overview",
@@ -95,6 +100,7 @@ DOCS: list[tuple[str, str, list[str]]] = [
     ),
     (
         "05-contracts-data-permissions.md",
+        "gate3",
         "Contracts Data And Permissions",
         [
             "API Contracts",
@@ -110,6 +116,7 @@ DOCS: list[tuple[str, str, list[str]]] = [
     ),
     (
         "06-eval-golden-dataset.md",
+        "gate3",
         "Eval And Golden Dataset",
         [
             "Eval Philosophy",
@@ -117,6 +124,7 @@ DOCS: list[tuple[str, str, list[str]]] = [
             "Deterministic Judge Contract",
             "Evidence Matrix",
             "Data Sufficiency Check",
+            "Golden Case Source Policy",
             "Golden Cases",
             "Bad Cases",
             "Edge Cases",
@@ -127,6 +135,7 @@ DOCS: list[tuple[str, str, list[str]]] = [
     ),
     (
         "07-agent-execution-plan.md",
+        "gate3",
         "Agent Execution Plan",
         [
             "Agent Operating Rules",
@@ -141,6 +150,20 @@ DOCS: list[tuple[str, str, list[str]]] = [
         ],
     ),
 ]
+
+STAGE_ORDER = {
+    "gate1": {"gate1"},
+    "gate2": {"gate1", "gate2"},
+    "gate3": {"gate1", "gate2", "gate3"},
+    "all": {"gate1", "gate2", "gate3"},
+}
+
+STAGE_NEXT_ACTION = {
+    "gate1": "Stop for user confirmation of product brief and reality research before writing PRD or technical design.",
+    "gate2": "Stop for user confirmation of PRD, requirements, and technical design before writing contracts, evals, and task plan.",
+    "gate3": "Review the full pack, run validation, then hand off to the coding agent.",
+    "all": "Review the full pack, run validation, then hand off to the coding agent.",
+}
 
 
 def slugify(value: str) -> str:
@@ -191,6 +214,8 @@ def initial_traceability(idea: str) -> dict[str, Any]:
             "Every current-world claim must map to a research ledger source.",
             "Every generated artifact must map to a source declaration and regeneration command.",
             "Every requirement must declare a deterministic judge or explicit manual evidence.",
+            "Golden and bad cases must declare a source: user-confirmed, real-source-derived, or synthetic.",
+            "Build-ready packs must not rely only on synthetic golden cases.",
         ],
     }
 
@@ -222,32 +247,38 @@ def initial_research_ledger(idea: str) -> dict[str, Any]:
     }
 
 
-def initial_handoff(idea: str, out_dir: Path) -> dict[str, Any]:
+def initial_handoff(idea: str, out_dir: Path, stage: str) -> dict[str, Any]:
     """Create a handoff manifest."""
     return {
         "schema": "specforge-handoff-v1",
         "product": idea,
         "generated_at": now_iso(),
-        "documents": [filename for filename, _, _ in DOCS],
+        "stage": stage,
+        "stage_gate": STAGE_NEXT_ACTION[stage],
+        "documents": [filename for filename, doc_stage, _, _ in DOCS if doc_stage in STAGE_ORDER[stage]],
+        "pending_documents": [
+            filename for filename, doc_stage, _, _ in DOCS if doc_stage not in STAGE_ORDER[stage]
+        ],
         "support_artifacts": [
             "traceability_matrix.json",
             "research_ledger.json",
             "handoff_manifest.json",
         ],
         "output_dir": str(out_dir),
-        "build_readiness": "not-ready-until-research-and-validation-complete",
+        "build_readiness": "gate-review-required" if stage in {"gate1", "gate2"} else "not-ready-until-research-and-validation-complete",
         "open_questions": [],
-        "next_action": "Fill docs with live research and run validate_pack.py.",
+        "next_action": STAGE_NEXT_ACTION[stage],
     }
 
 
-def run_pipeline(idea: str, out_dir: Path, force: bool = False) -> Path:
+def run_pipeline(idea: str, out_dir: Path, force: bool = False, stage: str = "gate1") -> Path:
     """Create the document pack.
 
     Args:
         idea: Product concept or rough requirement.
         out_dir: Directory to create.
         force: Overwrite existing generated files when true.
+        stage: Document stage to scaffold.
 
     Returns:
         The output directory path.
@@ -256,7 +287,10 @@ def run_pipeline(idea: str, out_dir: Path, force: bool = False) -> Path:
         FileExistsError: If files exist and force is false.
     """
     out_dir.mkdir(parents=True, exist_ok=True)
-    for filename, title, sections in DOCS:
+    wanted_stages = STAGE_ORDER[stage]
+    for filename, doc_stage, title, sections in DOCS:
+        if doc_stage not in wanted_stages:
+            continue
         path = out_dir / filename
         if path.exists() and not force:
             continue
@@ -265,7 +299,7 @@ def run_pipeline(idea: str, out_dir: Path, force: bool = False) -> Path:
     artifacts = {
         "traceability_matrix.json": initial_traceability(idea),
         "research_ledger.json": initial_research_ledger(idea),
-        "handoff_manifest.json": initial_handoff(idea, out_dir),
+        "handoff_manifest.json": initial_handoff(idea, out_dir, stage),
     }
     for filename, data in artifacts.items():
         path = out_dir / filename
@@ -277,14 +311,20 @@ def run_pipeline(idea: str, out_dir: Path, force: bool = False) -> Path:
 
 def main() -> None:
     """CLI entrypoint."""
-    parser = argparse.ArgumentParser(description="Create an eight-document SDD pack.")
+    parser = argparse.ArgumentParser(description="Create a staged SpecForge SDD pack.")
     parser.add_argument("--idea", required=True, help="Product concept or rough requirement")
     parser.add_argument("--out", default="sdd-docs", help="Output directory")
+    parser.add_argument(
+        "--stage",
+        choices=sorted(STAGE_ORDER),
+        default="gate1",
+        help="Scaffold gate1, gate2, gate3, or all documents. Default: gate1.",
+    )
     parser.add_argument("--force", action="store_true", help="Overwrite existing generated files")
     args = parser.parse_args()
 
-    out = run_pipeline(args.idea, Path(args.out), args.force)
-    print(f"Created SDD document pack at {out.resolve()}")
+    out = run_pipeline(args.idea, Path(args.out), args.force, args.stage)
+    print(f"Created SpecForge {args.stage} document pack at {out.resolve()}")
 
 
 if __name__ == "__main__":

@@ -1,8 +1,10 @@
 # SpecForge
 
-**From a rough product idea to agent-ready build specs.**
+**From a rough product idea to research-grounded, eval-ready build specs.**
 
 SpecForge is a cross-platform agent skill that turns a simple product concept into a research-grounded Spec-Driven Development document pack for AI coding agents.
+
+Unlike generic spec generators, SpecForge combines live research, GitHub open-source reuse analysis, executable engineering contracts, and deterministic eval planning before coding begins.
 
 It is designed for Cursor, Codex, Claude Code, Antigravity, GitHub Copilot, Gemini CLI, Windsurf, Cline, Roo, Kiro, OpenCode, Goose, and other agent environments that can read `SKILL.md`, `AGENTS.md`, or project rules.
 
@@ -14,8 +16,10 @@ SpecForge creates the missing bridge:
 
 ```text
 rough product idea
-  -> live market and technology research
+  -> Gate 1: product brief + live market and technology research
+  -> human review
   -> product and behavior specs
+  -> human review
   -> executable engineering contracts
   -> evals and golden cases
   -> coding-agent task plan
@@ -52,10 +56,24 @@ Support artifacts:
 
 ```bash
 python scripts/run_pipeline.py --idea "AI meeting notes for sales teams" --out sdd-docs
-python scripts/validate_pack.py sdd-docs
+python scripts/validate_pack.py sdd-docs --stage gate1
 ```
 
-Then use `/specforge` in your coding-agent session to fill the generated skeleton with live research and final content.
+By default, SpecForge creates Gate 1 only: product brief plus reality research. Review that gate, then continue:
+
+```bash
+python scripts/run_pipeline.py --idea "AI meeting notes for sales teams" --out sdd-docs --stage gate2
+python scripts/validate_pack.py sdd-docs --stage gate2
+
+python scripts/run_pipeline.py --idea "AI meeting notes for sales teams" --out sdd-docs --stage gate3
+python scripts/validate_pack.py sdd-docs --stage all
+```
+
+Use `/specforge` in your coding-agent session to fill each stage with live research and final content.
+
+## Example Output
+
+See [`examples/ai-meeting-notes/sdd-docs/`](examples/ai-meeting-notes/sdd-docs/) for a compact completed demo pack. It shows the intended shape of all eight documents, including research ledger entries, executable contracts, golden-case provenance, and agent handoff rules.
 
 Example prompts:
 
@@ -118,7 +136,8 @@ On Windows PowerShell:
 ## Validation
 
 ```bash
-python scripts/validate_pack.py sdd-docs
+python scripts/validate_pack.py sdd-docs --stage all
+python scripts/validate_pack.py sdd-docs --stage all --strict
 python scripts/run_evals.py --validate
 ```
 
@@ -136,11 +155,13 @@ The bundled scripts use only the Python standard library.
 
 # SpecForge 中文说明
 
-**从一句产品想法，到 AI 可执行开发规范包。**
+**从一句产品想法，到有真实调研、有评测规划、AI 可执行的开发规范包。**
 
 SpecForge 是一个跨平台 agent skill，用来把简单的产品概念转成适合 AI coding agent 执行的规范驱动开发文档包。
 
 它适配 Cursor、Codex、Claude Code、Antigravity、GitHub Copilot、Gemini CLI、Windsurf、Cline、Roo、Kiro、OpenCode、Goose 等能读取 `SKILL.md`、`AGENTS.md` 或项目规则的 agent 环境。
+
+它和普通“生成 PRD/spec”的工具不同：SpecForge 会在开发前加入真实调研、GitHub 开源复用分析、可执行工程契约和确定性评测规划。
 
 ## 为什么需要 SpecForge
 
@@ -188,7 +209,17 @@ SpecForge 会生成 8 份核心文档：
 
 ```bash
 python scripts/run_pipeline.py --idea "面向销售团队的 AI 会议纪要产品" --out sdd-docs
-python scripts/validate_pack.py sdd-docs
+python scripts/validate_pack.py sdd-docs --stage gate1
+```
+
+默认只生成 Gate 1：产品 brief 和真实调研。确认后再继续：
+
+```bash
+python scripts/run_pipeline.py --idea "面向销售团队的 AI 会议纪要产品" --out sdd-docs --stage gate2
+python scripts/validate_pack.py sdd-docs --stage gate2
+
+python scripts/run_pipeline.py --idea "面向销售团队的 AI 会议纪要产品" --out sdd-docs --stage gate3
+python scripts/validate_pack.py sdd-docs --stage all
 ```
 
 然后在支持 skill 的 agent 会话中使用：
@@ -198,6 +229,10 @@ python scripts/validate_pack.py sdd-docs
 /specforge 为 AI 合同审查产品生成开发规范
 /specforge 给现有 React 项目加权限系统，先生成 SDD 文档包
 ```
+
+## 示例输出
+
+查看 [`examples/ai-meeting-notes/sdd-docs/`](examples/ai-meeting-notes/sdd-docs/) 可以看到一个精简但完整的 8 文档 demo，包括调研台账、工程契约、golden case 来源标记和 agent 交接规则。
 
 ## 安装
 
@@ -230,7 +265,8 @@ Copy-Item -Recurse . ".agent\skills\specforge-skill"
 ## 验证
 
 ```bash
-python scripts/validate_pack.py sdd-docs
+python scripts/validate_pack.py sdd-docs --stage all
+python scripts/validate_pack.py sdd-docs --stage all --strict
 python scripts/run_evals.py --validate
 python scripts/run_evals.py --rollout
 ```

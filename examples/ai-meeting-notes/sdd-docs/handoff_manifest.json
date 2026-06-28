@@ -1,0 +1,29 @@
+{
+  "schema": "specforge-handoff-v1",
+  "product": "AI meeting notes for sales teams",
+  "generated_at": "2026-06-28T00:00:00Z",
+  "stage": "gate3",
+  "stage_gate": "All gates reviewed in demo sample.",
+  "documents": [
+    "00-product-brief.md",
+    "01-reality-research.md",
+    "02-prd-behavior-contract.md",
+    "03-sdd-requirements-spec.md",
+    "04-technical-design.md",
+    "05-contracts-data-permissions.md",
+    "06-eval-golden-dataset.md",
+    "07-agent-execution-plan.md"
+  ],
+  "support_artifacts": [
+    "traceability_matrix.json",
+    "research_ledger.json",
+    "handoff_manifest.json"
+  ],
+  "build_readiness": "demo-only",
+  "open_questions": [
+    "Confirm first CRM integration.",
+    "Confirm audio retention policy.",
+    "Confirm cloud versus local transcription backend."
+  ],
+  "next_action": "Use this example as shape guidance, not as a production-ready product spec."
+}

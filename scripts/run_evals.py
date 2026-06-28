@@ -75,7 +75,7 @@ def run_rollout(spec: dict[str, Any]) -> int:
             exit_code = result.returncode
             continue
         validator = subprocess.run(
-            [sys.executable, str(ROOT / "scripts" / "validate_pack.py"), str(output_path)],
+            [sys.executable, str(ROOT / "scripts" / "validate_pack.py"), str(output_path), "--stage", "all"],
             cwd=ROOT,
         )
         if validator.returncode != 0:
