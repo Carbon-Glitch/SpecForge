@@ -46,6 +46,10 @@ In scope:
 | J-002 | Review action items -> assign owner -> mark missing due dates -> approve. |
 | J-003 | Manager opens approved meeting -> sees risks, decisions, and evidence snippets. |
 
+## Compatibility Contract
+
+Not applicable for this greenfield demo. For Feature Mode, this section must list existing behaviors, APIs, data shapes, tests, and user workflows that the new feature must preserve.
+
 ## Behavior Contract
 
 - The system must never present generated notes as final until approved.

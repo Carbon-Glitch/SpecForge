@@ -36,6 +36,10 @@
 - If a required CRM field is missing, the system shall block export and show the missing field list.
 - While a meeting is unapproved, the system shall not write notes to the CRM.
 
+## Regression Requirements
+
+Not applicable for this greenfield demo. For Feature Mode, list existing tests and behaviors that must remain unchanged.
+
 ## Edge Cases
 
 - Empty or corrupted audio file

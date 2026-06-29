@@ -4,6 +4,14 @@
 - Status: demo-complete
 - Stage: gate1
 
+## Mode
+
+greenfield
+
+## Brainstorming Summary
+
+The product direction is an upload-first sales meeting notes tool, not a live meeting bot. The recommended MVP emphasizes transcript-grounded action items, human review, and gated CRM export.
+
 ## Concept
 
 MeetingBrief is a privacy-aware AI meeting notes product for sales teams. It records or imports meeting audio, transcribes the conversation, extracts decisions and action items, and syncs structured follow-ups to the CRM.
@@ -22,6 +30,10 @@ MeetingBrief is a privacy-aware AI meeting notes product for sales teams. It rec
 - JTBD-002: Extract decisions, objections, next steps, and owners.
 - JTBD-003: Sync reviewed summaries to the CRM.
 - JTBD-004: Preserve privacy and consent boundaries for recorded meetings.
+
+## Existing System Context
+
+Not applicable. This demo describes a greenfield product. For feature work, this section should summarize the existing repository, current architecture, affected modules, tests, and integration constraints.
 
 ## Success Criteria
 

@@ -38,7 +38,7 @@
 | Note extractor | read-write internal | Reads transcript, writes draft notes with evidence. |
 | CRM exporter | external write | Requires approval and idempotency key. |
 
-## Permission Mapping
+## Access And Permission Rules
 
 | Role | Allowed |
 |---|---|

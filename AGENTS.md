@@ -8,6 +8,8 @@ Primary invocation:
 /specforge <product idea or rough requirements>
 ```
 
+Begin with a concise discovery brainstorming gate: restate intent, classify `greenfield` vs `feature`, ask only material questions, offer options when useful, and state assumptions.
+
 The skill generates eight AI-readable documents:
 
 1. `00-product-brief.md`
@@ -21,11 +23,13 @@ The skill generates eight AI-readable documents:
 
 Key operating rule: perform live web research before market claims, technology choices, API choices, compliance claims, or open-source recommendations. If live research is unavailable, label those claims unverified.
 
+Feature-mode rule: when the request targets an existing project, inspect current code, tests, docs, schemas, routes, data, and deployment constraints before writing specs. Preserve compatibility unless the user asks for redesign.
+
 Executable-contract operating rule: before implementation tasks, require contracts for state truth, workflow/navigation/actions, deterministic judging, module/file boundaries, generated artifacts, and data sufficiency. Tasks should reference those contracts and include concrete validation commands or evidence requirements.
 
 Stage-gate rule: do not fill all eight documents in one pass unless the user explicitly asks to skip review. Complete `00-product-brief.md` and `01-reality-research.md`, stop for confirmation, then complete PRD/requirements/technical design, stop again, then complete contracts/evals/agent plan.
 
-Eval provenance rule: golden and bad cases must declare `user-confirmed`, `real-source-derived`, or `synthetic`. A build-ready pack cannot rely only on synthetic cases.
+Eval provenance rule: golden, bad, and regression cases must declare `user-confirmed`, `real-source-derived`, `existing-test-derived`, or `synthetic`. A build-ready pack cannot rely only on synthetic cases.
 
 Use `SKILL.md` for the full workflow. Use `references/research-protocol.md` for the source-scoring rules and `references/output-docs.md` for the exact content contract.
 

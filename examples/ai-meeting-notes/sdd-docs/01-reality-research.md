@@ -28,6 +28,10 @@ AI meeting notes are a crowded product category. The strongest wedge for this co
 - Sales workflows require structured fields, not only prose summaries.
 - Review-before-sync reduces the risk of incorrect CRM updates.
 
+## Existing System Reality
+
+Not applicable for this greenfield demo. In Feature Mode, this section should summarize current code paths, schemas, routes, services, tests, deployment constraints, and code/doc conflicts.
+
 ## Official Documentation Findings
 
 | Source | Finding |

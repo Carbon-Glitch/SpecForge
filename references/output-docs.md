@@ -8,7 +8,10 @@ Purpose: turn the user's rough idea into a clear working brief.
 
 Must include:
 
+- mode: `greenfield` or `feature`
+- brainstorming summary
 - one-sentence product concept
+- existing system context when adding to a codebase
 - target users
 - jobs-to-be-done
 - primary workflows
@@ -29,6 +32,7 @@ Must include:
 - market reality
 - competitor table
 - current user behavior evidence
+- existing system reality when a codebase is provided
 - current official documentation findings
 - current GitHub/open-source findings
 - open-source reuse/fork/integration decision table by subsystem
@@ -50,6 +54,7 @@ Must include:
 - personas
 - scope and anti-goals
 - core user journeys
+- compatibility contract for existing behavior when in Feature Mode
 - behavior contract
 - guardrails
 - failure behavior
@@ -67,6 +72,7 @@ Must include:
 - non-functional requirements
 - user stories
 - EARS acceptance criteria
+- regression requirements for existing behavior when in Feature Mode
 - edge cases
 - out-of-scope items
 
@@ -81,6 +87,7 @@ Must include:
 - architecture overview
 - stack decision with source-backed rationale
 - open-source reuse plan: what to integrate, fork, wrap, extract, or build from scratch
+- integration plan for existing modules, APIs, routes, data, jobs, and tests when in Feature Mode
 - module boundaries
 - data flow
 - state truth model: persisted state, runtime-only state, derived state, source of truth, snapshot/diff/reset behavior, migrations, and sensitive state
@@ -103,7 +110,7 @@ Must include:
 - data model
 - state model contract
 - tool contracts
-- permission mapping
+- access and permission rules
 - module file responsibility contract: each module/file role, allowed content, forbidden content, ownership, dependency direction, and public interface
 - security boundaries
 - storage and retention rules
@@ -122,9 +129,10 @@ Must include:
 - deterministic judge contract: code/state/API/file/screenshot/log/manual evidence for each requirement
 - evidence matrix mapping requirement IDs to judge type, command, fixture, expected state, and failure signal
 - data sufficiency check for defaults, fixtures, seed scenarios, edge cases, and bad cases
-- golden case source policy: each case must declare `user-confirmed`, `real-source-derived`, or `synthetic`; build-ready packs must not use only synthetic cases
+- golden case source policy: each case must declare `user-confirmed`, `real-source-derived`, `existing-test-derived`, or `synthetic`; build-ready packs must not use only synthetic cases
 - golden cases
 - bad cases
+- regression cases
 - edge cases
 - automated checks
 - manual review checks

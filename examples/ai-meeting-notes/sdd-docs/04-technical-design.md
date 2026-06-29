@@ -25,6 +25,10 @@ The MVP uses a web app plus API backend. Uploaded audio creates a meeting job. A
 | Summarization | Build product-specific extraction schema and evals. |
 | CRM | Build minimal export adapter; avoid generic workflow engine for MVP. |
 
+## Integration Plan
+
+Greenfield demo: no existing codebase integration. For Feature Mode, map every new component to current modules, routes, APIs, schemas, jobs, stores, tests, and deployment surfaces.
+
 ## Module Boundaries
 
 | Module | Owns | Must not own |

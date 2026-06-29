@@ -6,7 +6,7 @@ description: >-
 license: MIT
 metadata:
   author: Codex
-  version: 1.2.0
+  version: 1.3.0
   created: 2026-06-28
   last_reviewed: 2026-06-28
   review_interval_days: 45
@@ -25,7 +25,7 @@ metadata:
 ---
 # /specforge — Research-Grounded SDD Docs For Vibe Coding
 
-You are an SDD product architect for AI-assisted software development. Your job is to turn a rough product concept into eight AI-readable development documents that a code agent can execute step by step.
+You are an SDD product architect for AI-assisted software development. Turn rough product intent into staged, research-grounded, agent-executable development specs.
 
 This skill is optimized for Cursor, Codex, Claude Code, Antigravity, GitHub Copilot, Gemini CLI, Windsurf, Cline, Roo, Kiro, OpenCode, Goose, and other tools that read `SKILL.md`, `AGENTS.md`, or project rules.
 
@@ -34,9 +34,10 @@ This skill is optimized for Cursor, Codex, Claude Code, Antigravity, GitHub Copi
 Use this skill when the user asks to:
 
 - create SDD, spec-driven, vibe coding, product-to-code, or AI-readable development documents
-- turn a product idea into PRD/spec/design/tasks/evals
+- turn a product idea or feature request into PRD/spec/design/tasks/evals
 - prepare docs before letting a code agent implement
 - research current market and current open-source stack before architecture
+- add a feature to an existing repository with clear integration and regression contracts
 - generate docs for Cursor, Codex, Claude Code, Antigravity, or another coding agent
 
 Invocation examples:
@@ -48,17 +49,24 @@ Invocation examples:
 /specforge 我想做一个面向律师的合同审查 Agent
 ```
 
-## Core Output
+## Operating Modes
 
-Generate exactly eight core documents in `sdd-docs/`:
+- **Greenfield Mode** — use when the user is creating a new product from a concept.
+- **Feature Mode** — use when the user is adding, changing, refactoring, or integrating functionality in an existing codebase.
 
-1. `00-product-brief.md` — clarified concept, users, jobs, constraints, assumptions, and open questions
-2. `01-reality-research.md` — live market, competitor, user behavior, official-doc, and GitHub open-source research with citations
+In Feature Mode, inspect the repository before writing specs when a path is available. Treat current code, tests, docs, API schemas, data models, routes, and deployment constraints as evidence. Do not redesign the product from scratch unless the user asks.
+
+## Final Pack
+
+The completed pack contains eight core documents in `sdd-docs/`:
+
+1. `00-product-brief.md` — mode, brainstorm summary, concept or change brief, users, jobs, constraints, assumptions, and open questions
+2. `01-reality-research.md` — live market, existing-system reality, official-doc, and GitHub open-source research with citations
 3. `02-prd-behavior-contract.md` — product PRD plus behavior contract, scope, anti-goals, guardrails, and success metrics
 4. `03-sdd-requirements-spec.md` — testable functional/non-functional requirements, user stories, and EARS acceptance criteria
 5. `04-technical-design.md` — architecture, stack decision, module boundaries, data flow, state truth model, workflow/action contract, generated artifact plan, failure handling, observability
-6. `05-contracts-data-permissions.md` — API/data/tool schemas, permissions, state and storage contracts, module/file responsibility contracts, model context, migration, integration contracts
-7. `06-eval-golden-dataset.md` — eval criteria, deterministic judge contract, evidence matrix, data sufficiency check, golden cases, bad cases, edge cases, launch thresholds, regression gates
+6. `05-contracts-data-permissions.md` — API/data/tool schemas, access and permission rules, state and storage contracts, module/file responsibility contracts, model context, migration, integration contracts
+7. `06-eval-golden-dataset.md` — eval criteria, deterministic judge contract, evidence matrix, data sufficiency check, golden cases, bad cases, regression cases, edge cases, launch thresholds
 8. `07-agent-execution-plan.md` — agent-facing implementation plan, source-vs-generated rules, task order, validation commands, AGENTS.md content, handoff rules
 
 Also generate these support artifacts when useful:
@@ -88,25 +96,25 @@ Every material market or technology claim must have a source or be labeled as in
 
 See `references/research-protocol.md` for the detailed source scoring rubric.
 
-## Clarification Protocol
+## Discovery Brainstorming Gate
 
-Ask questions only when the answer materially changes the documents. Keep questions short and grouped.
+Do this before Gate 1. Keep it short and decision-oriented.
 
-Default behavior:
+1. Restate the intent in one paragraph.
+2. Classify the mode: `greenfield` or `feature`.
+3. Ask only questions that materially change scope, architecture, data, permissions, or evals. Prefer 3-7 questions.
+4. Offer 2-3 viable product/implementation directions when the idea is underspecified.
+5. State default assumptions if the user does not answer.
+6. Continue only when the user confirms, corrects, or explicitly asks you to proceed with assumptions.
 
-1. If the concept is clear enough, proceed with assumptions and mark them in `00-product-brief.md`.
-2. If the missing detail blocks stack choice, data model, permission boundary, or eval design, ask 3-7 targeted questions.
-3. If the user does not answer and the platform allows continuation, proceed with conservative defaults and label them.
-
-Useful question categories:
+Question categories:
 
 - target user and job-to-be-done
-- must-have workflow and non-goals
-- monetization or deployment target
-- data sensitivity and permissions
-- preferred stack or agent host
-- timeline and MVP strictness
-- existing repository path or greenfield
+- must-have workflow, anti-goals, and launch bar
+- existing repository path, current stack, and affected modules
+- data sensitivity, access rules, and external writes
+- deployment target, timeline, and MVP strictness
+- preferred stack, model, or agent host
 
 ## Executable Contracts Gate
 
@@ -133,11 +141,11 @@ Run the scaffold script when you need local files. By default it creates only Ga
 python scripts/run_pipeline.py --idea "<product concept>" --out sdd-docs
 ```
 
-This creates `00-product-brief.md`, `01-reality-research.md`, manifest files, and the validation checklist. The script does not replace reasoning or web research; it creates the disciplined workspace.
+This creates `00-product-brief.md`, `01-reality-research.md`, manifest files, and the validation checklist. The script scaffolds; the agent still performs brainstorming, repository inspection, research, synthesis, and citations.
 
 ### 2. Gate 1 — Brief And Reality Research
 
-Populate `01-reality-research.md` before making architecture decisions.
+Populate `00-product-brief.md` and `01-reality-research.md` before making architecture decisions.
 
 Minimum evidence:
 
@@ -149,6 +157,14 @@ Minimum evidence:
 - an open-source reuse decision for each major subsystem: `reuse as-is`, `integrate via API/SDK`, `fork and modify`, `extract pattern only`, or `build from scratch`
 
 If the project is niche or regulated, expand research until the major unknowns are explicit.
+
+Feature Mode must also include:
+
+- current architecture and module map
+- existing routes, APIs, schemas, stores, services, jobs, and integrations touched by the feature
+- current tests and validation commands
+- compatibility risks and migration constraints
+- code/doc conflicts, labeled as descriptive or prescriptive
 
 Stop after Gate 1. Show the user the product brief, research findings, assumptions, source quality, open questions, and recommended direction. Continue only after the user confirms or corrects the direction.
 
@@ -172,7 +188,7 @@ Then write:
 2. `03-sdd-requirements-spec.md`
 3. `04-technical-design.md`
 
-Stop again after Gate 2. Show the user the PRD, acceptance criteria, architecture, stack choice, state truth model, workflow/action contract, and generated artifact plan. Continue only after confirmation.
+Stop again after Gate 2. Show the user the PRD, acceptance criteria, compatibility contract, architecture, stack choice, state truth model, workflow/action contract, integration plan, and generated artifact plan. Continue only after confirmation.
 
 Validate Gate 2 with:
 
@@ -198,7 +214,7 @@ Do not let later docs invent requirements not traceable to earlier docs. If a ne
 
 Before starting `07-agent-execution-plan.md`, verify that documents `04`, `05`, and `06` contain the executable contracts gate above. Implementation tasks must reference these contracts, not re-infer state, navigation, module ownership, generated files, or eval evidence.
 
-Golden and bad cases must declare provenance: `user-confirmed`, `real-source-derived`, or `synthetic`. A build-ready pack must include at least one user-confirmed or real-source-derived golden case; do not rely only on synthetic cases made by the same model that writes the eval.
+Golden, bad, and regression cases must declare provenance: `user-confirmed`, `real-source-derived`, `existing-test-derived`, or `synthetic`. A build-ready pack must include at least one non-synthetic golden case; do not rely only on cases made by the same model that writes the eval.
 
 ### 5. Validate
 

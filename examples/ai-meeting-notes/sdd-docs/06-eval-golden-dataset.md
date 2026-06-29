@@ -51,9 +51,10 @@ Every case declares one source:
 
 - `user-confirmed`: supplied or approved by a real user
 - `real-source-derived`: derived from real product/research source patterns without copying private data
+- `existing-test-derived`: derived from existing repository tests or fixtures
 - `synthetic`: generated to cover an edge case
 
-Build-ready packs must include at least one `user-confirmed` or `real-source-derived` golden case and must not rely only on `synthetic` cases.
+Build-ready packs must include at least one non-synthetic golden case and must not rely only on `synthetic` cases.
 
 ## Golden Cases
 
@@ -69,6 +70,13 @@ Build-ready packs must include at least one `user-confirmed` or `real-source-der
 |---|---|---|---|
 | BC-001 | synthetic | User tries CRM export before approval. | Export is blocked and no external write is attempted. |
 | BC-002 | synthetic | Transcript does not mention a discount. | Summary must not invent a discount promise. |
+
+## Regression Cases
+
+| ID | Source | Input | Expected |
+|---|---|---|---|
+| RC-001 | synthetic | Approved note is exported twice with same idempotency key. | CRM receives one write; second call returns existing export status. |
+| RC-002 | synthetic | User edits notes before approval. | Audit trail records generated version and edited version. |
 
 ## Edge Cases
 

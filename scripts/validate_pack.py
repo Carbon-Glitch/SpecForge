@@ -17,15 +17,19 @@ from pathlib import Path
 
 REQUIRED_DOCS: dict[str, list[str]] = {
     "00-product-brief.md": [
+        "Mode",
+        "Brainstorming Summary",
         "Concept",
         "Target Users",
         "Jobs To Be Done",
+        "Existing System Context",
         "Success Criteria",
         "Open Questions",
     ],
     "01-reality-research.md": [
         "Research Status",
         "Market Reality",
+        "Existing System Reality",
         "Official Documentation Findings",
         "GitHub And Open Source Findings",
         "Open Source Reuse Decisions",
@@ -35,6 +39,7 @@ REQUIRED_DOCS: dict[str, list[str]] = {
         "Problem Statement",
         "Scope",
         "Anti Goals",
+        "Compatibility Contract",
         "Behavior Contract",
         "Guardrails",
     ],
@@ -42,11 +47,13 @@ REQUIRED_DOCS: dict[str, list[str]] = {
         "Functional Requirements",
         "Non Functional Requirements",
         "EARS Acceptance Criteria",
+        "Regression Requirements",
     ],
     "04-technical-design.md": [
         "Architecture Overview",
         "Stack Decision",
         "Open Source Reuse Plan",
+        "Integration Plan",
         "Module Boundaries",
         "State Truth Model",
         "Workflow Navigation Action Contract",
@@ -59,7 +66,7 @@ REQUIRED_DOCS: dict[str, list[str]] = {
         "Data Model",
         "State Model Contract",
         "Tool Contracts",
-        "Permission Mapping",
+        "Access And Permission Rules",
         "Module File Responsibility Contract",
     ],
     "06-eval-golden-dataset.md": [
@@ -70,6 +77,7 @@ REQUIRED_DOCS: dict[str, list[str]] = {
         "Golden Case Source Policy",
         "Golden Cases",
         "Bad Cases",
+        "Regression Cases",
         "Regression Gates",
     ],
     "07-agent-execution-plan.md": [
@@ -169,14 +177,19 @@ def validate_golden_cases(pack_dir: Path, strict: bool) -> list[str]:
         return errors
     text = path.read_text(encoding="utf-8")
     lower = text.lower()
-    allowed_sources = ["user-confirmed", "real-source-derived", "synthetic"]
+    allowed_sources = ["user-confirmed", "real-source-derived", "existing-test-derived", "synthetic"]
     if strict:
         if not any(source in lower for source in allowed_sources):
             errors.append(
                 "strict mode: golden/bad cases must include source markers: "
-                "user-confirmed, real-source-derived, or synthetic"
+                "user-confirmed, real-source-derived, existing-test-derived, or synthetic"
             )
-        if "synthetic" in lower and "user-confirmed" not in lower and "real-source-derived" not in lower:
+        if (
+            "synthetic" in lower
+            and "user-confirmed" not in lower
+            and "real-source-derived" not in lower
+            and "existing-test-derived" not in lower
+        ):
             errors.append("strict mode: build-ready evals must not rely only on synthetic cases")
 
     case_sections = "\n".join(

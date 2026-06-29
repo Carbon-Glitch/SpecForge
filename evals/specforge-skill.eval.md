@@ -52,7 +52,17 @@ This eval checks that the skill can scaffold and validate an eight-document SDD 
     },
     {
       "id": "golden-cases-avoid-self-certification",
-      "text": "The skill requires golden and bad cases to declare provenance and not rely only on synthetic cases before build-ready handoff.",
+      "text": "The skill requires golden, bad, and regression cases to declare provenance and not rely only on synthetic cases before build-ready handoff.",
+      "type": "llm-judge"
+    },
+    {
+      "id": "feature-mode-is-supported",
+      "text": "The skill supports adding features to existing repositories by requiring existing-system reality, compatibility, integration, and regression planning.",
+      "type": "llm-judge"
+    },
+    {
+      "id": "brainstorming-gate-is-explicit",
+      "text": "The skill requires a concise brainstorming gate before research and specification work, including mode classification, key questions, options, and assumptions.",
       "type": "llm-judge"
     }
   ],
