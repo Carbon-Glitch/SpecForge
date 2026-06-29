@@ -40,7 +40,7 @@ Frontend review UI can start after API contracts are stable. CRM adapter tests c
 ## Source Vs Generated Rules
 
 - API schemas are generated from route/type definitions.
-- Eval reports are generated from golden cases.
+- Eval reports are generated from reference, bad, and regression cases.
 - Do not hand-edit generated schemas or reports.
 
 ## Validation Commands
@@ -54,7 +54,7 @@ python scripts/validate_pack.py sdd-docs --stage all --strict
 
 ## Handoff To Coding Agent
 
-Start with T-001 and stop after each phase if validation fails. Use `06-eval-golden-dataset.md` as the regression contract.
+Start with T-001 and stop after each phase if validation fails. Use `06-eval-and-test-cases.md` as the regression contract.
 
 ## Generated AGENTS.md Content
 
@@ -71,6 +71,6 @@ Start with T-001 and stop after each phase if validation fails. Use `06-eval-gol
 
 - All tasks complete.
 - All automated checks pass.
-- Golden cases include provenance.
+- Eval and test cases include provenance.
 - CRM export requires approval.
 - Handoff manifest marks build readiness as `build-ready`.

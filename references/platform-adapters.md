@@ -79,7 +79,7 @@ After generating docs, the implementation agent should start from:
 1. `07-agent-execution-plan.md`
 2. `03-sdd-requirements-spec.md`
 3. `04-technical-design.md`
-4. `06-eval-golden-dataset.md`
+4. `06-eval-and-test-cases.md`
 5. `AGENTS.md` if exported
 
 The agent should not start from PRD alone.

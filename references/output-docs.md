@@ -118,7 +118,7 @@ Must include:
 
 For Agent products, include read-only, read-write, and destructive tool tiers.
 
-## 06-eval-golden-dataset.md
+## 06-eval-and-test-cases.md
 
 Purpose: define what good enough means.
 
@@ -129,8 +129,8 @@ Must include:
 - deterministic judge contract: code/state/API/file/screenshot/log/manual evidence for each requirement
 - evidence matrix mapping requirement IDs to judge type, command, fixture, expected state, and failure signal
 - data sufficiency check for defaults, fixtures, seed scenarios, edge cases, and bad cases
-- golden case source policy: each case must declare `user-confirmed`, `real-source-derived`, `existing-test-derived`, or `synthetic`; build-ready packs must not use only synthetic cases
-- golden cases
+- case source policy: each reference, bad, and regression case must declare `user-confirmed`, `real-source-derived`, `existing-test-derived`, or `synthetic`; build-ready packs must not use only synthetic cases
+- reference cases
 - bad cases
 - regression cases
 - edge cases
@@ -138,7 +138,7 @@ Must include:
 - manual review checks
 - regression gates
 
-Golden cases can be JSON, CSV, markdown, screenshots, or scenario tables, but they must be concrete.
+Cases can be JSON, CSV, markdown, screenshots, fixtures, API examples, or scenario tables, but they must be concrete.
 
 ## 07-agent-execution-plan.md
 
@@ -169,7 +169,7 @@ Populate `traceability_matrix.json` with mappings like:
   "design_refs": ["04-technical-design.md#Module Boundaries"],
   "contract_refs": ["05-contracts-data-permissions.md#API Contracts"],
   "task_refs": ["07-agent-execution-plan.md#Task List"],
-  "eval_refs": ["06-eval-golden-dataset.md#Golden Cases"]
+  "eval_refs": ["06-eval-and-test-cases.md#Reference Cases"]
 }
 ```
 
@@ -189,6 +189,6 @@ SpecForge should be reviewed in three gates:
 
 - `gate1` — complete `00-product-brief.md` and `01-reality-research.md`, then stop for user confirmation.
 - `gate2` — complete `02-prd-behavior-contract.md`, `03-sdd-requirements-spec.md`, and `04-technical-design.md`, then stop for user confirmation.
-- `gate3` — complete `05-contracts-data-permissions.md`, `06-eval-golden-dataset.md`, and `07-agent-execution-plan.md`, then validate and hand off.
+- `gate3` — complete `05-contracts-data-permissions.md`, `06-eval-and-test-cases.md`, and `07-agent-execution-plan.md`, then validate and hand off.
 
 Do not mark a pack `build-ready` until all gates have either been reviewed or explicitly skipped by the user.

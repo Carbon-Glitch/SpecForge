@@ -7,7 +7,7 @@
     "03-sdd-requirements-spec.md",
     "04-technical-design.md",
     "05-contracts-data-permissions.md",
-    "06-eval-golden-dataset.md",
+    "06-eval-and-test-cases.md",
     "07-agent-execution-plan.md"
   ],
   "support_artifacts": [
@@ -26,11 +26,11 @@
     "module/file responsibility contract declares ownership, allowed content, forbidden content, dependency direction, and public interfaces",
     "generated artifact contract maps each generated output to a source declaration, generator command, and no-hand-edit rule",
     "deterministic judge/evidence contract maps each requirement to code, state, API, file, screenshot, log, or manual evidence",
-    "data sufficiency check confirms fixtures, default data, golden cases, bad cases, and edge cases support the planned workflows",
+    "data sufficiency check confirms fixtures, default data, reference cases, bad cases, regression cases, and edge cases support the planned workflows",
     "stage gates require confirmation after brief plus research and after PRD plus requirements plus technical design",
     "feature-mode packs include existing-system reality, compatibility contract, integration plan, and regression cases",
-    "golden, bad, and regression cases declare provenance as user-confirmed, real-source-derived, existing-test-derived, or synthetic",
-    "build-ready evals include at least one non-synthetic golden case",
+    "reference, bad, and regression cases declare provenance as user-confirmed, real-source-derived, existing-test-derived, or synthetic",
+    "build-ready evals include at least one non-synthetic reference case",
     "all tasks include validation commands or evidence requirements",
     "traceability maps requirements to design, contracts, tasks, and evals"
   ]

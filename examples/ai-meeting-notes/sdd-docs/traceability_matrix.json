@@ -9,7 +9,7 @@
       "design_refs": ["04-technical-design.md#Workflow Navigation Action Contract"],
       "contract_refs": ["05-contracts-data-permissions.md#Tool Contracts"],
       "task_refs": ["07-agent-execution-plan.md#Task List"],
-      "eval_refs": ["06-eval-golden-dataset.md#Golden Cases"]
+      "eval_refs": ["06-eval-and-test-cases.md#Reference Cases"]
     },
     {
       "requirement_id": "FR-005",
@@ -17,7 +17,7 @@
       "design_refs": ["04-technical-design.md#Data Flow"],
       "contract_refs": ["05-contracts-data-permissions.md#Data Model"],
       "task_refs": ["07-agent-execution-plan.md#Task List"],
-      "eval_refs": ["06-eval-golden-dataset.md#Evidence Matrix"]
+      "eval_refs": ["06-eval-and-test-cases.md#Evidence Matrix"]
     }
   ],
   "rules": [
@@ -25,6 +25,6 @@
     "Every requirement must map to at least one task.",
     "Every task must map to at least one validation command or evidence requirement.",
     "Every current-world claim must map to a research ledger source.",
-    "Golden and bad cases must declare provenance."
+    "Reference and bad cases must declare provenance."
   ]
 }

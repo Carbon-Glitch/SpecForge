@@ -1,4 +1,4 @@
-# Eval And Golden Dataset
+# Eval And Test Cases
 
 - Product idea: AI meeting notes for sales teams
 - Status: demo-complete
@@ -45,7 +45,7 @@ Fixtures must include:
 - Corrupted or empty upload
 - CRM contact mismatch
 
-## Golden Case Source Policy
+## Case Source Policy
 
 Every case declares one source:
 
@@ -54,9 +54,9 @@ Every case declares one source:
 - `existing-test-derived`: derived from existing repository tests or fixtures
 - `synthetic`: generated to cover an edge case
 
-Build-ready packs must include at least one non-synthetic golden case and must not rely only on `synthetic` cases.
+Build-ready packs must include at least one non-synthetic reference case and must not rely only on `synthetic` cases.
 
-## Golden Cases
+## Reference Cases
 
 | ID | Source | Input | Expected |
 |---|---|---|---|

@@ -24,7 +24,7 @@ rough product idea
   -> product and behavior specs
   -> human review
   -> executable engineering contracts
-  -> evals and golden cases
+  -> evals, test fixtures, and regression cases
   -> coding-agent task plan
 ```
 
@@ -38,7 +38,7 @@ SpecForge generates eight core documents in `sdd-docs/`:
 4. `03-sdd-requirements-spec.md` - functional/non-functional requirements, user stories, and EARS acceptance criteria
 5. `04-technical-design.md` - architecture, stack choices, state truth model, workflows/actions, generated artifacts, and observability
 6. `05-contracts-data-permissions.md` - API/data/tool contracts, permissions, storage, module/file boundaries, and integrations
-7. `06-eval-golden-dataset.md` - deterministic judge contract, evidence matrix, golden cases, bad cases, and regression gates
+7. `06-eval-and-test-cases.md` - deterministic judge contract, evidence matrix, test fixtures, reference cases, bad cases, and regression gates
 8. `07-agent-execution-plan.md` - coding-agent implementation plan, task order, validation commands, and AGENTS.md handoff rules
 
 Support artifacts:
@@ -78,7 +78,7 @@ Use `/specforge` in your coding-agent session to fill each stage with live resea
 
 ## Example Output
 
-See [`examples/ai-meeting-notes/sdd-docs/`](examples/ai-meeting-notes/sdd-docs/) for a compact completed demo pack. It shows the intended shape of all eight documents, including research ledger entries, executable contracts, golden-case provenance, and agent handoff rules.
+See [`examples/ai-meeting-notes/sdd-docs/`](examples/ai-meeting-notes/sdd-docs/) for a compact completed demo pack. It shows the intended shape of all eight documents, including research ledger entries, executable contracts, case provenance, and agent handoff rules.
 
 Example prompts:
 
@@ -196,7 +196,7 @@ SpecForge 会生成 8 份核心文档：
 4. `03-sdd-requirements-spec.md` - 可测试需求、用户故事和 EARS 验收标准
 5. `04-technical-design.md` - 架构、技术栈、状态真相模型、流程动作、生成物和可观测性
 6. `05-contracts-data-permissions.md` - API、数据、工具、权限、存储、模块文件边界和集成契约
-7. `06-eval-golden-dataset.md` - 确定性评测、证据矩阵、golden cases、bad cases 和回归门槛
+7. `06-eval-and-test-cases.md` - 确定性评测、证据矩阵、测试 fixtures、reference cases、bad cases 和回归门槛
 8. `07-agent-execution-plan.md` - 给 code agent 执行的任务顺序、验证命令和 AGENTS.md 交接规则
 
 辅助文件：
@@ -243,7 +243,7 @@ python scripts/validate_pack.py sdd-docs --stage all
 
 ## 示例输出
 
-查看 [`examples/ai-meeting-notes/sdd-docs/`](examples/ai-meeting-notes/sdd-docs/) 可以看到一个精简但完整的 8 文档 demo，包括调研台账、工程契约、golden case 来源标记和 agent 交接规则。
+查看 [`examples/ai-meeting-notes/sdd-docs/`](examples/ai-meeting-notes/sdd-docs/) 可以看到一个精简但完整的 8 文档 demo，包括调研台账、工程契约、用例来源标记和 agent 交接规则。
 
 ## 安装
 

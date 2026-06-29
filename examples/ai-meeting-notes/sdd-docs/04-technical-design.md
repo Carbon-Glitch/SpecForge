@@ -37,7 +37,7 @@ Greenfield demo: no existing codebase integration. For Feature Mode, map every n
 | `transcription` | audio-to-segment adapter | note extraction |
 | `notes` | structured summaries and evidence spans | raw audio storage |
 | `crm_export` | export payload and external write gate | note generation |
-| `evals` | golden cases and deterministic checks | production side effects |
+| `evals` | reference cases and deterministic checks | production side effects |
 
 ## Data Flow
 
@@ -74,7 +74,7 @@ Invalid transitions:
 | Artifact | Source | Command |
 |---|---|---|
 | API schema | backend route definitions | `npm run generate:api` or equivalent |
-| Eval report | golden cases | `python scripts/run_evals.py` |
+| Eval report | reference and regression cases | `python scripts/run_evals.py` |
 | CRM payload fixture | contract examples | `python scripts/export_fixtures.py` |
 
 ## Failure Handling

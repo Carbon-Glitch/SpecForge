@@ -51,8 +51,8 @@ This eval checks that the skill can scaffold and validate an eight-document SDD 
       "type": "llm-judge"
     },
     {
-      "id": "golden-cases-avoid-self-certification",
-      "text": "The skill requires golden, bad, and regression cases to declare provenance and not rely only on synthetic cases before build-ready handoff.",
+      "id": "eval-cases-avoid-self-certification",
+      "text": "The skill requires reference, bad, and regression cases to declare provenance and not rely only on synthetic cases before build-ready handoff.",
       "type": "llm-judge"
     },
     {

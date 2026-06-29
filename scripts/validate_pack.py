@@ -69,13 +69,13 @@ REQUIRED_DOCS: dict[str, list[str]] = {
         "Access And Permission Rules",
         "Module File Responsibility Contract",
     ],
-    "06-eval-golden-dataset.md": [
+    "06-eval-and-test-cases.md": [
         "Launch Thresholds",
         "Deterministic Judge Contract",
         "Evidence Matrix",
         "Data Sufficiency Check",
-        "Golden Case Source Policy",
-        "Golden Cases",
+        "Case Source Policy",
+        "Reference Cases",
         "Bad Cases",
         "Regression Cases",
         "Regression Gates",
@@ -169,10 +169,10 @@ def section_text(text: str, heading: str) -> str:
     return rest[: next_heading.start()] if next_heading else rest
 
 
-def validate_golden_cases(pack_dir: Path, strict: bool) -> list[str]:
+def validate_eval_cases(pack_dir: Path, strict: bool) -> list[str]:
     """Validate source provenance and obvious self-certification patterns."""
     errors: list[str] = []
-    path = pack_dir / "06-eval-golden-dataset.md"
+    path = pack_dir / "06-eval-and-test-cases.md"
     if not path.exists():
         return errors
     text = path.read_text(encoding="utf-8")
@@ -181,7 +181,7 @@ def validate_golden_cases(pack_dir: Path, strict: bool) -> list[str]:
     if strict:
         if not any(source in lower for source in allowed_sources):
             errors.append(
-                "strict mode: golden/bad cases must include source markers: "
+                "strict mode: reference/bad/regression cases must include source markers: "
                 "user-confirmed, real-source-derived, existing-test-derived, or synthetic"
             )
         if (
@@ -193,14 +193,15 @@ def validate_golden_cases(pack_dir: Path, strict: bool) -> list[str]:
             errors.append("strict mode: build-ready evals must not rely only on synthetic cases")
 
     case_sections = "\n".join(
-        section_text(text, heading) for heading in ["Golden Cases", "Bad Cases", "Edge Cases"]
+        section_text(text, heading)
+        for heading in ["Reference Cases", "Bad Cases", "Regression Cases", "Edge Cases"]
     )
     contradiction = re.search(
         r"\b(ok|pass|passed|success|succeeded|通过)\b.*\b(error|failed|failure|exception|traceback|错误|失败)\b",
         case_sections.lower(),
     )
     if contradiction:
-        errors.append("06-eval-golden-dataset.md has a pass/ok case that also contains error/failure language")
+        errors.append("06-eval-and-test-cases.md has a pass/ok case that also contains error/failure language")
 
     case_lines = [
         normalize_case_line(line)
@@ -210,7 +211,7 @@ def validate_golden_cases(pack_dir: Path, strict: bool) -> list[str]:
     if len(case_lines) >= 3:
         unique_ratio = len(set(case_lines)) / len(case_lines)
         if unique_ratio < 0.67:
-            errors.append("06-eval-golden-dataset.md has too many near-duplicate case lines")
+            errors.append("06-eval-and-test-cases.md has too many near-duplicate case lines")
     return errors
 
 
@@ -238,7 +239,7 @@ def validate_pack(pack_dir: Path, strict: bool = False, stage: str = "all") -> l
 
     errors.extend(validate_research_ledger(pack_dir, strict))
     if stage in {"gate3", "all"}:
-        errors.extend(validate_golden_cases(pack_dir, strict))
+        errors.extend(validate_eval_cases(pack_dir, strict))
     return errors
 
 

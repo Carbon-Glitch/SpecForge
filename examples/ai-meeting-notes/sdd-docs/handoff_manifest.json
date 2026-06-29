@@ -11,7 +11,7 @@
     "03-sdd-requirements-spec.md",
     "04-technical-design.md",
     "05-contracts-data-permissions.md",
-    "06-eval-golden-dataset.md",
+    "06-eval-and-test-cases.md",
     "07-agent-execution-plan.md"
   ],
   "support_artifacts": [

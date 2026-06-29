@@ -6,7 +6,7 @@ description: >-
 license: MIT
 metadata:
   author: Codex
-  version: 1.3.0
+  version: 1.4.0
   created: 2026-06-28
   last_reviewed: 2026-06-28
   review_interval_days: 45
@@ -66,7 +66,7 @@ The completed pack contains eight core documents in `sdd-docs/`:
 4. `03-sdd-requirements-spec.md` — testable functional/non-functional requirements, user stories, and EARS acceptance criteria
 5. `04-technical-design.md` — architecture, stack decision, module boundaries, data flow, state truth model, workflow/action contract, generated artifact plan, failure handling, observability
 6. `05-contracts-data-permissions.md` — API/data/tool schemas, access and permission rules, state and storage contracts, module/file responsibility contracts, model context, migration, integration contracts
-7. `06-eval-golden-dataset.md` — eval criteria, deterministic judge contract, evidence matrix, data sufficiency check, golden cases, bad cases, regression cases, edge cases, launch thresholds
+7. `06-eval-and-test-cases.md` — eval criteria, deterministic judge contract, evidence matrix, data sufficiency check, reference cases, bad cases, regression cases, edge cases, launch thresholds
 8. `07-agent-execution-plan.md` — agent-facing implementation plan, source-vs-generated rules, task order, validation commands, AGENTS.md content, handoff rules
 
 Also generate these support artifacts when useful:
@@ -207,14 +207,14 @@ python scripts/run_pipeline.py --idea "<product concept>" --out sdd-docs --stage
 Then write:
 
 1. `05-contracts-data-permissions.md`
-2. `06-eval-golden-dataset.md`
+2. `06-eval-and-test-cases.md`
 3. `07-agent-execution-plan.md`
 
 Do not let later docs invent requirements not traceable to earlier docs. If a new idea appears, update upstream docs and traceability.
 
 Before starting `07-agent-execution-plan.md`, verify that documents `04`, `05`, and `06` contain the executable contracts gate above. Implementation tasks must reference these contracts, not re-infer state, navigation, module ownership, generated files, or eval evidence.
 
-Golden, bad, and regression cases must declare provenance: `user-confirmed`, `real-source-derived`, `existing-test-derived`, or `synthetic`. A build-ready pack must include at least one non-synthetic golden case; do not rely only on cases made by the same model that writes the eval.
+Reference, bad, and regression cases must declare provenance: `user-confirmed`, `real-source-derived`, `existing-test-derived`, or `synthetic`. A build-ready pack must include at least one non-synthetic reference case; do not rely only on cases made by the same model that writes the eval.
 
 ### 5. Validate
 
@@ -302,7 +302,7 @@ Subsystems that require explicit reuse research include:
 - workflow engines and job queues
 - agent runtimes and tool registries
 - RAG, search, indexing, and vector pipelines
-- eval frameworks and golden-dataset harnesses
+- eval frameworks, test fixtures, and regression harnesses
 - UI component libraries and feature-specific components
 - realtime collaboration, notifications, files, media, payments, analytics
 

@@ -122,17 +122,17 @@ DOCS: list[tuple[str, str, str, list[str]]] = [
         ],
     ),
     (
-        "06-eval-golden-dataset.md",
+        "06-eval-and-test-cases.md",
         "gate3",
-        "Eval And Golden Dataset",
+        "Eval And Test Cases",
         [
             "Eval Philosophy",
             "Launch Thresholds",
             "Deterministic Judge Contract",
             "Evidence Matrix",
             "Data Sufficiency Check",
-            "Golden Case Source Policy",
-            "Golden Cases",
+            "Case Source Policy",
+            "Reference Cases",
             "Bad Cases",
             "Regression Cases",
             "Edge Cases",
@@ -222,8 +222,8 @@ def initial_traceability(idea: str) -> dict[str, Any]:
             "Every current-world claim must map to a research ledger source.",
             "Every generated artifact must map to a source declaration and regeneration command.",
             "Every requirement must declare a deterministic judge or explicit manual evidence.",
-            "Golden and bad cases must declare a source: user-confirmed, real-source-derived, or synthetic.",
-            "Build-ready packs must not rely only on synthetic golden cases.",
+            "Reference, bad, and regression cases must declare a source: user-confirmed, real-source-derived, existing-test-derived, or synthetic.",
+            "Build-ready packs must not rely only on synthetic reference cases.",
         ],
     }
 

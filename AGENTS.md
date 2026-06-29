@@ -18,7 +18,7 @@ The skill generates eight AI-readable documents:
 4. `03-sdd-requirements-spec.md`
 5. `04-technical-design.md`
 6. `05-contracts-data-permissions.md`
-7. `06-eval-golden-dataset.md`
+7. `06-eval-and-test-cases.md`
 8. `07-agent-execution-plan.md`
 
 Key operating rule: perform live web research before market claims, technology choices, API choices, compliance claims, or open-source recommendations. If live research is unavailable, label those claims unverified.
@@ -29,7 +29,7 @@ Executable-contract operating rule: before implementation tasks, require contrac
 
 Stage-gate rule: do not fill all eight documents in one pass unless the user explicitly asks to skip review. Complete `00-product-brief.md` and `01-reality-research.md`, stop for confirmation, then complete PRD/requirements/technical design, stop again, then complete contracts/evals/agent plan.
 
-Eval provenance rule: golden, bad, and regression cases must declare `user-confirmed`, `real-source-derived`, `existing-test-derived`, or `synthetic`. A build-ready pack cannot rely only on synthetic cases.
+Eval provenance rule: reference, bad, and regression cases must declare `user-confirmed`, `real-source-derived`, `existing-test-derived`, or `synthetic`. A build-ready pack cannot rely only on synthetic cases.
 
 Use `SKILL.md` for the full workflow. Use `references/research-protocol.md` for the source-scoring rules and `references/output-docs.md` for the exact content contract.
 

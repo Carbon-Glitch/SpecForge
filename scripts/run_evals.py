@@ -58,7 +58,7 @@ def validate_spec(spec: dict[str, Any]) -> list[str]:
 
 
 def run_rollout(spec: dict[str, Any]) -> int:
-    """Run the deterministic scaffold against golden cases."""
+    """Run the deterministic scaffold against bundled validation cases."""
     run_template = spec["run"]
     output_root = ROOT / "evals" / ".rollout"
     output_root.mkdir(parents=True, exist_ok=True)
