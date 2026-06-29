@@ -6,7 +6,7 @@ This is a simple skill, not a suite. The workflow has one core objective: produc
 
 ## Document Count
 
-The skill outputs eight core documents. This is intentionally smaller than a full enterprise AIPM 22-document system but richer than a minimal `requirements/design/tasks` trio.
+The skill outputs one preflight decision document plus eight core development documents. The preflight gate decides whether the idea deserves SDD work; the eight core documents remain the build-spec pack.
 
 ## Research Gate
 
@@ -26,7 +26,11 @@ The skill makes state, navigation/actions, judges, generated artifacts, and modu
 
 ## Stage Gates
 
-SpecForge defaults to staged output instead of one-pass document generation. Gate 1 produces product brief and reality research, Gate 2 produces PRD, requirements, and technical design, and Gate 3 produces contracts, evals, and the agent execution plan. The user should review Gate 1 and Gate 2 before the next stage unless they explicitly skip review.
+SpecForge defaults to staged output instead of one-pass document generation. Gate 0 pressure-tests the idea, Gate 1 produces product brief and reality research, Gate 2 produces PRD, requirements, and technical design, and Gate 3 produces contracts, evals, and the agent execution plan. The user should review Gate 0, Gate 1, and Gate 2 before the next stage unless they explicitly skip review.
+
+## Pressure Test Integration
+
+The pressure-test gate is a native SpecForge preflight, not a hard dependency on another skill or package. It absorbs the useful startup-validation pattern: core assumption, fatal flaws, current alternatives, first users, and a 2-week real-user test.
 
 ## Eval Provenance
 

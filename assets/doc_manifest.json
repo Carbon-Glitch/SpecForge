@@ -1,5 +1,8 @@
 {
   "schema": "specforge-manifest-v1",
+  "preflight_documents": [
+    "preflight-idea-pressure-test.md"
+  ],
   "core_documents": [
     "00-product-brief.md",
     "01-reality-research.md",
@@ -16,6 +19,8 @@
     "handoff_manifest.json"
   ],
   "quality_gates": [
+    "greenfield commercial ideas complete or explicitly skip the idea pressure test before Gate 1",
+    "idea pressure test declares continue, pivot, research-needed, or pause with a core assumption and fast disconfirming test",
     "live research completed or blocked explicitly",
     "discovery brainstorming records mode, critical questions, options, and assumptions",
     "all requirements have EARS acceptance criteria",

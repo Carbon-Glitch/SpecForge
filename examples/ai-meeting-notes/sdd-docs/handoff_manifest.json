@@ -5,6 +5,7 @@
   "stage": "gate3",
   "stage_gate": "All gates reviewed in demo sample.",
   "documents": [
+    "preflight-idea-pressure-test.md",
     "00-product-brief.md",
     "01-reality-research.md",
     "02-prd-behavior-contract.md",

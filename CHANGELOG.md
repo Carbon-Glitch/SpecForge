@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.0 - 2026-06-29
+
+- Adds Gate 0 idea pressure testing before formal SDD planning for greenfield commercial products.
+- Changes `run_pipeline.py` default behavior to scaffold the pressure-test preflight first; Gate 1 now requires `--stage gate1`.
+- Adds pressure-test validation, manifest entries, example output, and eval criteria.
+
 ## 1.2.0 - 2026-06-28
 
 - Adds explicit staged gates: Gate 1 brief/research, Gate 2 PRD/requirements/technical design, Gate 3 contracts/evals/agent plan.

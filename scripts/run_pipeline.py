@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Create an SDD document pack skeleton.
+"""Create a SpecForge document pack skeleton.
 
 This script is deterministic. It does not perform live web research or write
-final product strategy. It creates the eight-document workspace, traceability
-files, and validation-friendly headings that the agent must fill.
+final product strategy. It creates a staged workspace, traceability files, and
+validation-friendly headings that the agent must fill.
 """
 
 from __future__ import annotations
@@ -17,6 +17,24 @@ from typing import Any
 
 
 DOCS: list[tuple[str, str, str, list[str]]] = [
+    (
+        "preflight-idea-pressure-test.md",
+        "gate0",
+        "Idea Pressure Test",
+        [
+            "Pressure Test Status",
+            "Verdict",
+            "Scorecard",
+            "Core Assumption",
+            "Fatal Flaws",
+            "Problem Reality",
+            "Current Behavior And Alternatives",
+            "First 10 Users",
+            "Two Week MVP Test",
+            "Decision",
+            "Evidence To Verify",
+        ],
+    ),
     (
         "00-product-brief.md",
         "gate1",
@@ -160,13 +178,15 @@ DOCS: list[tuple[str, str, str, list[str]]] = [
 ]
 
 STAGE_ORDER = {
-    "gate1": {"gate1"},
-    "gate2": {"gate1", "gate2"},
-    "gate3": {"gate1", "gate2", "gate3"},
-    "all": {"gate1", "gate2", "gate3"},
+    "gate0": {"gate0"},
+    "gate1": {"gate0", "gate1"},
+    "gate2": {"gate0", "gate1", "gate2"},
+    "gate3": {"gate0", "gate1", "gate2", "gate3"},
+    "all": {"gate0", "gate1", "gate2", "gate3"},
 }
 
 STAGE_NEXT_ACTION = {
+    "gate0": "Stop for user confirmation of the idea pressure test before writing product brief or research docs.",
     "gate1": "Stop for user confirmation of product brief and reality research before writing PRD or technical design.",
     "gate2": "Stop for user confirmation of PRD, requirements, and technical design before writing contracts, evals, and task plan.",
     "gate3": "Review the full pack, run validation, then hand off to the coding agent.",
@@ -224,6 +244,7 @@ def initial_traceability(idea: str) -> dict[str, Any]:
             "Every requirement must declare a deterministic judge or explicit manual evidence.",
             "Reference, bad, and regression cases must declare a source: user-confirmed, real-source-derived, existing-test-derived, or synthetic.",
             "Build-ready packs must not rely only on synthetic reference cases.",
+            "Greenfield commercial products should pass the idea pressure test or carry an explicit pivot/research-needed decision before Gate 1.",
         ],
     }
 
@@ -235,6 +256,13 @@ def initial_research_ledger(idea: str) -> dict[str, Any]:
         "product": idea,
         "generated_at": now_iso(),
         "status": "pending-live-research",
+        "idea_pressure_test": {
+            "status": "pending",
+            "verdict": "unknown",
+            "core_assumption": "",
+            "decision": "not-reviewed",
+            "evidence_to_verify": [],
+        },
         "categories": {
             "market": [],
             "official_docs": [],
@@ -273,7 +301,7 @@ def initial_handoff(idea: str, out_dir: Path, stage: str) -> dict[str, Any]:
             "handoff_manifest.json",
         ],
         "output_dir": str(out_dir),
-        "build_readiness": "gate-review-required" if stage in {"gate1", "gate2"} else "not-ready-until-research-and-validation-complete",
+        "build_readiness": "gate-review-required" if stage in {"gate0", "gate1", "gate2"} else "not-ready-until-research-and-validation-complete",
         "open_questions": [],
         "next_action": STAGE_NEXT_ACTION[stage],
     }
@@ -325,8 +353,8 @@ def main() -> None:
     parser.add_argument(
         "--stage",
         choices=sorted(STAGE_ORDER),
-        default="gate1",
-        help="Scaffold gate1, gate2, gate3, or all documents. Default: gate1.",
+        default="gate0",
+        help="Scaffold gate0, gate1, gate2, gate3, or all documents. Default: gate0.",
     )
     parser.add_argument("--force", action="store_true", help="Overwrite existing generated files")
     args = parser.parse_args()

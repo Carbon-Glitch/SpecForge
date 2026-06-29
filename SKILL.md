@@ -6,7 +6,7 @@ description: >-
 license: MIT
 metadata:
   author: Codex
-  version: 1.4.0
+  version: 1.5.0
   created: 2026-06-28
   last_reviewed: 2026-06-28
   review_interval_days: 45
@@ -58,7 +58,13 @@ In Feature Mode, inspect the repository before writing specs when a path is avai
 
 ## Final Pack
 
-The completed pack contains eight core documents in `sdd-docs/`:
+The completed pack contains one preflight gate document plus eight core development documents in `sdd-docs/`.
+
+Preflight:
+
+- `preflight-idea-pressure-test.md` — product idea pressure test, core assumption, fatal flaws, real alternatives, first users, 2-week validation test, and continue/pivot/pause decision
+
+Core development documents:
 
 1. `00-product-brief.md` — mode, brainstorm summary, concept or change brief, users, jobs, constraints, assumptions, and open questions
 2. `01-reality-research.md` — live market, existing-system reality, official-doc, and GitHub open-source research with citations
@@ -96,9 +102,31 @@ Every material market or technology claim must have a source or be labeled as in
 
 See `references/research-protocol.md` for the detailed source scoring rubric.
 
+## Gate 0 — Idea Pressure Test
+
+Run this before Gate 1 for greenfield commercial products, SaaS, consumer apps, AI agents, creator tools, marketplaces, and any idea where the user may be about to build before validating demand. Use a lighter version for Feature Mode or skip it only when the user is implementing a mandated requirement, internal tool, learning demo, or already validated scope.
+
+The goal is not to be harsh for theater. The goal is to prevent beautiful specs for products that should not be built yet.
+
+Create `preflight-idea-pressure-test.md` and stop for user confirmation before writing the product brief or reality research.
+
+Evaluate:
+
+1. **Verdict** — `continue`, `pivot`, `research-needed`, or `pause`.
+2. **Scorecard** — pain intensity, buyer/user clarity, urgency, differentiation, speed to validate, founder or team advantage.
+3. **Core assumption** — the single riskiest assumption that must be true.
+4. **Fatal flaws** — the top 1-3 reasons this idea fails, each with a fast disconfirming test.
+5. **Problem reality** — painkiller vs vitamin, frequency, cost of pain, current workaround.
+6. **Current behavior and alternatives** — direct competitors, indirect competitors, spreadsheets, agencies, manual workflows, habit, or status quo.
+7. **First 10 users** — where to find real early users manually before paid acquisition or automation.
+8. **Two-week MVP test** — the smallest real-user test that proves or kills the core assumption.
+9. **Decision** — whether to proceed to Gate 1, adjust the idea first, do more research, or stop.
+
+Use live search when current market or competitor facts matter. Do not invent market size, demand, or competitor claims. Record the pressure-test decision in `research_ledger.json.idea_pressure_test`.
+
 ## Discovery Brainstorming Gate
 
-Do this before Gate 1. Keep it short and decision-oriented.
+Do this before or during Gate 0. Keep it short and decision-oriented.
 
 1. Restate the intent in one paragraph.
 2. Classify the mode: `greenfield` or `feature`.
@@ -133,17 +161,29 @@ If any of these contracts cannot be completed, mark the pack `blocked` or `spec-
 
 ## Workflow
 
-### 1. Initialize Gate 1
+### 1. Initialize Gate 0
 
-Run the scaffold script when you need local files. By default it creates only Gate 1 documents:
+Run the scaffold script when you need local files. By default it creates only the pressure-test preflight:
 
 ```bash
 python scripts/run_pipeline.py --idea "<product concept>" --out sdd-docs
 ```
 
-This creates `00-product-brief.md`, `01-reality-research.md`, manifest files, and the validation checklist. The script scaffolds; the agent still performs brainstorming, repository inspection, research, synthesis, and citations.
+Populate `preflight-idea-pressure-test.md`, then stop. Continue only after the user confirms the decision or asks to proceed with explicit assumptions.
+
+Validate Gate 0 with:
+
+```bash
+python scripts/validate_pack.py sdd-docs --stage gate0
+```
 
 ### 2. Gate 1 — Brief And Reality Research
+
+After Gate 0 is confirmed or explicitly skipped, scaffold Gate 1:
+
+```bash
+python scripts/run_pipeline.py --idea "<product concept>" --out sdd-docs --stage gate1
+```
 
 Populate `00-product-brief.md` and `01-reality-research.md` before making architecture decisions.
 

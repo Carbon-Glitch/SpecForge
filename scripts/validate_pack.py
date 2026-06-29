@@ -16,6 +16,19 @@ from pathlib import Path
 
 
 REQUIRED_DOCS: dict[str, list[str]] = {
+    "preflight-idea-pressure-test.md": [
+        "Pressure Test Status",
+        "Verdict",
+        "Scorecard",
+        "Core Assumption",
+        "Fatal Flaws",
+        "Problem Reality",
+        "Current Behavior And Alternatives",
+        "First 10 Users",
+        "Two Week MVP Test",
+        "Decision",
+        "Evidence To Verify",
+    ],
     "00-product-brief.md": [
         "Mode",
         "Brainstorming Summary",
@@ -90,8 +103,14 @@ REQUIRED_DOCS: dict[str, list[str]] = {
 }
 
 STAGE_DOCS = {
-    "gate1": ["00-product-brief.md", "01-reality-research.md"],
+    "gate0": ["preflight-idea-pressure-test.md"],
+    "gate1": [
+        "preflight-idea-pressure-test.md",
+        "00-product-brief.md",
+        "01-reality-research.md",
+    ],
     "gate2": [
+        "preflight-idea-pressure-test.md",
         "00-product-brief.md",
         "01-reality-research.md",
         "02-prd-behavior-contract.md",
@@ -134,6 +153,14 @@ def validate_research_ledger(pack_dir: Path, strict: bool) -> list[str]:
     if errors:
         return errors
     data = json.loads(path.read_text(encoding="utf-8"))
+    pressure_test = data.get("idea_pressure_test")
+    if not isinstance(pressure_test, dict):
+        errors.append("research_ledger.json missing idea_pressure_test object")
+    elif strict:
+        if pressure_test.get("status") in {None, "", "pending"}:
+            errors.append("strict mode: idea_pressure_test.status must be completed, skipped, or blocked")
+        if not pressure_test.get("decision"):
+            errors.append("strict mode: idea_pressure_test.decision is required")
     categories = data.get("categories", {})
     required = [
         "market",

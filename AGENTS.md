@@ -10,8 +10,11 @@ Primary invocation:
 
 Begin with a concise discovery brainstorming gate: restate intent, classify `greenfield` vs `feature`, ask only material questions, offer options when useful, and state assumptions.
 
-The skill generates eight AI-readable documents:
+For greenfield commercial products, run `preflight-idea-pressure-test.md` before Gate 1. Decide `continue`, `pivot`, `research-needed`, or `pause` from the core assumption, fatal flaws, current alternatives, first users, and 2-week MVP test. Use a lighter version for feature work or mandated internal tools.
 
+The skill generates one preflight decision document plus eight AI-readable core documents:
+
+0. `preflight-idea-pressure-test.md`
 1. `00-product-brief.md`
 2. `01-reality-research.md`
 3. `02-prd-behavior-contract.md`
@@ -27,7 +30,7 @@ Feature-mode rule: when the request targets an existing project, inspect current
 
 Executable-contract operating rule: before implementation tasks, require contracts for state truth, workflow/navigation/actions, deterministic judging, module/file boundaries, generated artifacts, and data sufficiency. Tasks should reference those contracts and include concrete validation commands or evidence requirements.
 
-Stage-gate rule: do not fill all eight documents in one pass unless the user explicitly asks to skip review. Complete `00-product-brief.md` and `01-reality-research.md`, stop for confirmation, then complete PRD/requirements/technical design, stop again, then complete contracts/evals/agent plan.
+Stage-gate rule: do not fill the full pack in one pass unless the user explicitly asks to skip review. Complete the pressure test and stop for confirmation, then complete `00-product-brief.md` and `01-reality-research.md`, stop for confirmation, then complete PRD/requirements/technical design, stop again, then complete contracts/evals/agent plan.
 
 Eval provenance rule: reference, bad, and regression cases must declare `user-confirmed`, `real-source-derived`, `existing-test-derived`, or `synthetic`. A build-ready pack cannot rely only on synthetic cases.
 
@@ -37,6 +40,8 @@ Useful commands:
 
 ```bash
 python scripts/run_pipeline.py --idea "<product idea>" --out sdd-docs
+python scripts/validate_pack.py sdd-docs --stage gate0
+python scripts/run_pipeline.py --idea "<product idea>" --out sdd-docs --stage gate1
 python scripts/validate_pack.py sdd-docs --stage gate1
 python scripts/run_evals.py --validate
 ```

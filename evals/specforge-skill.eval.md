@@ -1,6 +1,6 @@
 # Eval: specforge-skill
 
-This eval checks that the skill can scaffold and validate an eight-document SDD pack.
+This eval checks that the skill can scaffold and validate a pressure-test preflight plus the eight-document SDD pack.
 
 ```json
 {
@@ -14,10 +14,10 @@ This eval checks that the skill can scaffold and validate an eight-document SDD 
       "cmd": "python scripts/validate_pack.py {output} --stage all"
     },
     {
-      "id": "has-eight-docs",
-      "text": "The pack contains exactly the eight core markdown documents.",
+      "id": "has-preflight-plus-eight-core-docs",
+      "text": "The pack contains the pressure-test preflight plus the eight core markdown documents.",
       "type": "command",
-      "cmd": "python -c \"from pathlib import Path; p=Path(r'{output}'); docs=list(p.glob('*.md')); assert len(docs)==8\""
+      "cmd": "python -c \"from pathlib import Path; p=Path(r'{output}'); docs={x.name for x in p.glob('*.md')}; assert 'preflight-idea-pressure-test.md' in docs and len(docs)==9\""
     },
     {
       "id": "has-research-ledger",
@@ -43,6 +43,11 @@ This eval checks that the skill can scaffold and validate an eight-document SDD 
     {
       "id": "verification-is-evidence-based",
       "text": "The output requires each implementation task or requirement to be verified by a concrete command, state/API/file evidence, screenshot/log evidence, or explicit manual review criteria.",
+      "type": "llm-judge"
+    },
+    {
+      "id": "pressure-test-gate-is-explicit",
+      "text": "The skill requires or recommends an idea pressure-test gate before Gate 1 for greenfield commercial products, with a proceed, pivot, research-needed, or pause decision.",
       "type": "llm-judge"
     },
     {

@@ -3,6 +3,18 @@
   "product": "AI meeting notes for sales teams",
   "generated_at": "2026-06-28T00:00:00Z",
   "status": "verified-demo-sample",
+  "idea_pressure_test": {
+    "status": "completed-demo-sample",
+    "verdict": "research-needed",
+    "core_assumption": "Sales teams will repeatedly use and pay for CRM-ready call follow-up faster than current meeting recorders, templates, or manual notes.",
+    "decision": "continue-to-gate1-with-narrow-sales-wedge",
+    "evidence_to_verify": [
+      "current AI meeting assistant competitors and pricing",
+      "current open-source transcription and meeting-note projects",
+      "sales-user complaints about CRM follow-up and post-call admin",
+      "privacy and recording expectations for customer calls"
+    ]
+  },
   "categories": {
     "market": [
       {

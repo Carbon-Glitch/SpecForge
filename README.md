@@ -19,6 +19,8 @@ SpecForge creates the missing bridge:
 ```text
 rough product idea
   -> discovery brainstorming
+  -> Gate 0: idea pressure test
+  -> human go / pivot / pause decision
   -> Gate 1: product brief + live market and technology research
   -> human review
   -> product and behavior specs
@@ -30,7 +32,13 @@ rough product idea
 
 ## What It Produces
 
-SpecForge generates eight core documents in `sdd-docs/`:
+SpecForge generates one preflight decision document plus eight core development documents in `sdd-docs/`.
+
+Preflight:
+
+- `preflight-idea-pressure-test.md` - core assumption, fatal flaws, current alternatives, first users, 2-week MVP test, and continue/pivot/pause decision
+
+Core documents:
 
 1. `00-product-brief.md` - clarified concept, users, jobs, constraints, assumptions, and open questions
 2. `01-reality-research.md` - live market, competitor, official-doc, and GitHub open-source research with citations
@@ -50,6 +58,7 @@ Support artifacts:
 ## Core Principles
 
 - **Brainstorm before specs**: clarify intent, mode, options, assumptions, and material unknowns before writing documents.
+- **Pressure-test before planning**: for greenfield commercial ideas, test whether the idea deserves SDD work before generating development specs.
 - **Research before architecture**: market claims, compliance claims, APIs, frameworks, and open-source choices must be checked against current sources.
 - **Respect existing systems**: for feature work, inspect the current codebase and preserve compatibility unless the user asks for a redesign.
 - **GitHub reuse before custom build**: if a subsystem already has a suitable open-source implementation, evaluate integration, wrapping, forking, or pattern extraction before building from scratch.
@@ -61,12 +70,15 @@ Support artifacts:
 
 ```bash
 python scripts/run_pipeline.py --idea "AI meeting notes for sales teams" --out sdd-docs
-python scripts/validate_pack.py sdd-docs --stage gate1
+python scripts/validate_pack.py sdd-docs --stage gate0
 ```
 
-By default, SpecForge creates Gate 1 only: product brief plus reality research. Review that gate, then continue:
+By default, SpecForge creates Gate 0 only: the idea pressure test. Review the verdict, then continue:
 
 ```bash
+python scripts/run_pipeline.py --idea "AI meeting notes for sales teams" --out sdd-docs --stage gate1
+python scripts/validate_pack.py sdd-docs --stage gate1
+
 python scripts/run_pipeline.py --idea "AI meeting notes for sales teams" --out sdd-docs --stage gate2
 python scripts/validate_pack.py sdd-docs --stage gate2
 
@@ -78,7 +90,7 @@ Use `/specforge` in your coding-agent session to fill each stage with live resea
 
 ## Example Output
 
-See [`examples/ai-meeting-notes/sdd-docs/`](examples/ai-meeting-notes/sdd-docs/) for a compact completed demo pack. It shows the intended shape of all eight documents, including research ledger entries, executable contracts, case provenance, and agent handoff rules.
+See [`examples/ai-meeting-notes/sdd-docs/`](examples/ai-meeting-notes/sdd-docs/) for a compact completed demo pack. It shows the intended shape of the pressure-test preflight plus all eight core documents, including research ledger entries, executable contracts, case provenance, and agent handoff rules.
 
 Example prompts:
 
@@ -188,7 +200,13 @@ SpecForge 做的事情就是把这些内容提前变成 AI 可读、可追踪、
 
 ## 生成什么
 
-SpecForge 会生成 8 份核心文档：
+SpecForge 会生成 1 份前置决策文档和 8 份核心开发文档。
+
+前置文档：
+
+- `preflight-idea-pressure-test.md` - 核心假设、致命风险、当前替代方案、首批用户、两周 MVP 验证和继续/调整/暂停决策
+
+核心文档：
 
 1. `00-product-brief.md` - 产品概念、用户、任务、约束、假设和开放问题
 2. `01-reality-research.md` - 真实市场、竞品、官方文档、GitHub 开源方案调研和引用来源
@@ -208,6 +226,7 @@ SpecForge 会生成 8 份核心文档：
 ## 核心原则
 
 - **先 brainstorm，再写规范**：先澄清意图、模式、方向、假设和关键未知数。
+- **先压力测试，再进入规划**：从 0 到 1 的商业产品先判断是否值得进入 SDD，而不是把任何想法都包装成开发文档。
 - **先联网调研，再做架构**：市场、合规、API、框架、开源项目都必须和真实世界对齐。
 - **尊重现有系统**：已有项目加功能时，先读当前代码、接口、数据、测试和部署约束。
 - **先看 GitHub 能否复用，再决定自研**：能集成、包装、fork、魔改或借鉴的，不默认从零造。
@@ -219,12 +238,15 @@ SpecForge 会生成 8 份核心文档：
 
 ```bash
 python scripts/run_pipeline.py --idea "面向销售团队的 AI 会议纪要产品" --out sdd-docs
-python scripts/validate_pack.py sdd-docs --stage gate1
+python scripts/validate_pack.py sdd-docs --stage gate0
 ```
 
-默认只生成 Gate 1：产品 brief 和真实调研。确认后再继续：
+默认只生成 Gate 0：产品想法压力测试。确认方向后再继续：
 
 ```bash
+python scripts/run_pipeline.py --idea "面向销售团队的 AI 会议纪要产品" --out sdd-docs --stage gate1
+python scripts/validate_pack.py sdd-docs --stage gate1
+
 python scripts/run_pipeline.py --idea "面向销售团队的 AI 会议纪要产品" --out sdd-docs --stage gate2
 python scripts/validate_pack.py sdd-docs --stage gate2
 
@@ -243,7 +265,7 @@ python scripts/validate_pack.py sdd-docs --stage all
 
 ## 示例输出
 
-查看 [`examples/ai-meeting-notes/sdd-docs/`](examples/ai-meeting-notes/sdd-docs/) 可以看到一个精简但完整的 8 文档 demo，包括调研台账、工程契约、用例来源标记和 agent 交接规则。
+查看 [`examples/ai-meeting-notes/sdd-docs/`](examples/ai-meeting-notes/sdd-docs/) 可以看到一个精简但完整的 demo，包括压力测试前置文档、8 份核心文档、调研台账、工程契约、用例来源标记和 agent 交接规则。
 
 ## 安装
 
