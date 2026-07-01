@@ -3,6 +3,11 @@
   "product": "AI meeting notes for sales teams",
   "generated_at": "2026-06-28T00:00:00Z",
   "status": "verified-demo-sample",
+  "research_depth": "light",
+  "unverified_claims": [
+    "Current pricing and product positioning must be refreshed before production use.",
+    "Open-source repository health must be rechecked before implementation."
+  ],
   "idea_pressure_test": {
     "status": "completed-demo-sample",
     "verdict": "research-needed",

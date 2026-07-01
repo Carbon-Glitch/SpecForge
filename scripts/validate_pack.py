@@ -35,6 +35,9 @@ REQUIRED_DOCS: dict[str, list[str]] = {
         "Concept",
         "Target Users",
         "Jobs To Be Done",
+        "Scope Boundary",
+        "Prescriptive Inputs",
+        "This Pack Owns",
         "Existing System Context",
         "Success Criteria",
         "Open Questions",
@@ -87,6 +90,7 @@ REQUIRED_DOCS: dict[str, list[str]] = {
         "Deterministic Judge Contract",
         "Evidence Matrix",
         "Data Sufficiency Check",
+        "UI Judge",
         "Case Source Policy",
         "Reference Cases",
         "Bad Cases",
@@ -97,8 +101,22 @@ REQUIRED_DOCS: dict[str, list[str]] = {
         "Agent Operating Rules",
         "Task List",
         "Source Vs Generated Rules",
+        "Design And Visual Implementation Phase",
         "Validation Commands",
         "Done Definition",
+    ],
+    "08-ui-visual-design.md": [
+        "Visual Design Status",
+        "Design Source Of Truth",
+        "Design Positioning",
+        "Design Tokens",
+        "Core Components",
+        "Page Skeletons",
+        "Interaction And Motion",
+        "Responsive And Accessibility",
+        "UI Judge Contract",
+        "MVP Visual Non Goals",
+        "Design Orchestration",
     ],
 }
 
@@ -127,11 +145,41 @@ SUPPORT_FILES = [
     "handoff_manifest.json",
 ]
 
+HEADING_ALIASES: dict[str, list[str]] = {
+    "Anti Goals": ["Anti-Goals", "Anti-goals", "Non Goals", "Non-Goals"],
+    "Non Functional Requirements": ["Non-Functional Requirements", "Nonfunctional Requirements", "NFRs"],
+    "Out Of Scope": ["Out of Scope", "Out-of-Scope"],
+    "Workflow Navigation Action Contract": [
+        "Workflow/Navigation/Action Contract",
+        "Workflow Navigation And Action Contract",
+        "Workflow Action Contract",
+    ],
+    "Access And Permission Rules": ["Permission Rules", "Access Rules", "Permissions"],
+    "Module File Responsibility Contract": [
+        "Module/File Responsibility Contract",
+        "Module Responsibility Contract",
+        "File Responsibility Contract",
+    ],
+    "UI Judge": ["Visual Judge", "UI Evaluation", "Visual Evaluation"],
+}
+
+
+def normalize_heading(value: str) -> str:
+    """Normalize a markdown heading for tolerant matching."""
+    value = value.lower()
+    value = re.sub(r"[^a-z0-9\u4e00-\u9fff]+", " ", value)
+    return re.sub(r"\s+", " ", value).strip()
+
 
 def heading_present(text: str, heading: str) -> bool:
     """Return true if a markdown heading exists."""
-    pattern = rf"^##+\s+{re.escape(heading)}\s*$"
-    return re.search(pattern, text, flags=re.MULTILINE) is not None
+    wanted = [heading, *HEADING_ALIASES.get(heading, [])]
+    existing = [
+        match.group(1).strip()
+        for match in re.finditer(r"^##+\s+(.+?)\s*$", text, flags=re.MULTILINE)
+    ]
+    existing_normalized = {normalize_heading(item) for item in existing}
+    return any(normalize_heading(item) in existing_normalized for item in wanted)
 
 
 def validate_json(path: Path) -> list[str]:
@@ -153,6 +201,12 @@ def validate_research_ledger(pack_dir: Path, strict: bool) -> list[str]:
     if errors:
         return errors
     data = json.loads(path.read_text(encoding="utf-8"))
+    if "research_depth" not in data:
+        errors.append("research_ledger.json missing research_depth")
+    elif data.get("research_depth") not in {"light", "standard", "deep"}:
+        errors.append("research_ledger.json research_depth must be light, standard, or deep")
+    if "unverified_claims" not in data:
+        errors.append("research_ledger.json missing unverified_claims")
     pressure_test = data.get("idea_pressure_test")
     if not isinstance(pressure_test, dict):
         errors.append("research_ledger.json missing idea_pressure_test object")
@@ -175,6 +229,35 @@ def validate_research_ledger(pack_dir: Path, strict: bool) -> list[str]:
             errors.append(f"research_ledger.json missing category: {key}")
         elif strict and not categories[key]:
             errors.append(f"strict mode: research category has no sources: {key}")
+    return errors
+
+
+def validate_handoff_manifest(pack_dir: Path, strict: bool) -> list[str]:
+    """Validate handoff readiness semantics."""
+    path = pack_dir / "handoff_manifest.json"
+    errors = validate_json(path)
+    if errors:
+        return errors
+    data = json.loads(path.read_text(encoding="utf-8"))
+    readiness = data.get("build_readiness")
+    if readiness not in {
+        "gate-review-required",
+        "spec-incomplete",
+        "spec-complete",
+        "build-ready",
+        "demo-only",
+        "blocked",
+    }:
+        errors.append(f"handoff_manifest.json has unknown build_readiness: {readiness}")
+    if readiness == "build-ready":
+        eval_text = (pack_dir / "06-eval-and-test-cases.md").read_text(encoding="utf-8") if (pack_dir / "06-eval-and-test-cases.md").exists() else ""
+        plan_text = (pack_dir / "07-agent-execution-plan.md").read_text(encoding="utf-8") if (pack_dir / "07-agent-execution-plan.md").exists() else ""
+        if not section_text(eval_text, "Automated Checks").strip():
+            errors.append("build-ready requires non-empty 06 Automated Checks")
+        if "```" not in section_text(plan_text, "Validation Commands") and "manual-only" not in plan_text.lower():
+            errors.append("build-ready requires runnable 07 Validation Commands or explicit manual-only marking")
+    if strict and data.get("gates_skipped") and "single-pass" not in json.dumps(data, ensure_ascii=False).lower():
+        errors.append("strict mode: gates_skipped must record an explicit single-pass rationale")
     return errors
 
 
@@ -242,6 +325,46 @@ def validate_eval_cases(pack_dir: Path, strict: bool) -> list[str]:
     return errors
 
 
+def validate_requirement_task_refs(pack_dir: Path, strict: bool) -> list[str]:
+    """Check that requirement IDs are at least referenced by the task plan."""
+    if not strict:
+        return []
+    req_path = pack_dir / "03-sdd-requirements-spec.md"
+    plan_path = pack_dir / "07-agent-execution-plan.md"
+    if not req_path.exists() or not plan_path.exists():
+        return []
+    req_text = req_path.read_text(encoding="utf-8")
+    plan_text = plan_path.read_text(encoding="utf-8")
+    ids = sorted(set(re.findall(r"\b(?:FR|NFR)-\d+\b", req_text)))
+    if not ids:
+        return []
+    missing = [item for item in ids if item not in plan_text and "manual-only" not in plan_text.lower()]
+    if missing:
+        return [f"strict mode: requirement IDs not referenced in 07 task plan: {', '.join(missing[:10])}"]
+    return []
+
+
+def validate_ui_visual_contract(pack_dir: Path, strict: bool) -> list[str]:
+    """Validate optional visual design contract when present."""
+    errors: list[str] = []
+    visual_path = pack_dir / "08-ui-visual-design.md"
+    if not visual_path.exists():
+        return errors
+    text = visual_path.read_text(encoding="utf-8")
+    for heading in REQUIRED_DOCS["08-ui-visual-design.md"]:
+        if not heading_present(text, heading):
+            errors.append(f"08-ui-visual-design.md missing heading: {heading}")
+    eval_path = pack_dir / "06-eval-and-test-cases.md"
+    plan_path = pack_dir / "07-agent-execution-plan.md"
+    eval_text = eval_path.read_text(encoding="utf-8") if eval_path.exists() else ""
+    plan_text = plan_path.read_text(encoding="utf-8") if plan_path.exists() else ""
+    if "screenshot_manual" not in eval_text and "a11y_contrast" not in eval_text and "route_snapshot" not in eval_text:
+        errors.append("08-ui-visual-design.md present but 06 UI Judge lacks screenshot_manual, a11y_contrast, or route_snapshot")
+    if strict and "08-ui-visual-design.md" not in plan_text and "DESIGN.md" not in plan_text:
+        errors.append("strict mode: 07 must cite 08-ui-visual-design.md or DESIGN.md when visual contract exists")
+    return errors
+
+
 def validate_pack(pack_dir: Path, strict: bool = False, stage: str = "all") -> list[str]:
     """Validate a generated pack and return error messages."""
     errors: list[str] = []
@@ -261,12 +384,19 @@ def validate_pack(pack_dir: Path, strict: bool = False, stage: str = "all") -> l
         if strict and "<!-- Fill with specific" in text:
             errors.append(f"strict mode: placeholder remains in {filename}")
 
+    if (pack_dir / "08-ui-visual-design.md").exists():
+        # Optional document: validate when present, independent of stage.
+        pass
+
     for filename in SUPPORT_FILES:
         errors.extend(validate_json(pack_dir / filename))
 
     errors.extend(validate_research_ledger(pack_dir, strict))
+    errors.extend(validate_handoff_manifest(pack_dir, strict))
     if stage in {"gate3", "all"}:
         errors.extend(validate_eval_cases(pack_dir, strict))
+        errors.extend(validate_requirement_task_refs(pack_dir, strict))
+    errors.extend(validate_ui_visual_contract(pack_dir, strict))
     return errors
 
 

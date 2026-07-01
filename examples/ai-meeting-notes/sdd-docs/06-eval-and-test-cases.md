@@ -45,6 +45,14 @@ Fixtures must include:
 - Corrupted or empty upload
 - CRM contact mismatch
 
+## UI Judge
+
+| Type | Target | Evidence |
+|---|---|---|
+| screenshot_manual | Review-and-approve screen at 1440px and 375px | Summary, transcript evidence, approval action, and CRM preview do not overlap or overflow. |
+| a11y_contrast | Primary text, secondary text, approve/export controls | Token pair contrast meets WCAG AA for normal text and controls. |
+| route_snapshot | `/meetings/:id/review` loaded with GC-002 fixture | Screenshot proves review screen, not a generic empty or settings page. |
+
 ## Case Source Policy
 
 Every case declares one source:

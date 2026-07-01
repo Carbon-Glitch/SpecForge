@@ -24,14 +24,15 @@
 
 ## Task List
 
-| ID | Task | Depends on | Verify |
-|---|---|---|---|
-| T-001 | Create meeting data model and upload endpoint | none | `pytest tests/test_meeting_upload.py` |
-| T-002 | Add transcription adapter interface | T-001 | `pytest tests/test_transcription_adapter.py` |
-| T-003 | Store timestamped transcript segments | T-002 | `pytest tests/test_transcript_segments.py` |
-| T-004 | Generate structured notes with evidence IDs | T-003 | `pytest tests/test_action_item_evidence.py` |
-| T-005 | Build review and approval flow | T-004 | `pytest tests/test_approval_flow.py` |
-| T-006 | Build CRM export gate | T-005 | `pytest tests/test_crm_export_gate.py` |
+| ID | Requirements | Task | Depends on | Verify |
+|---|---|---|---|---|
+| T-001 | FR-001 | Create meeting data model and upload endpoint | none | `pytest tests/test_meeting_upload.py` |
+| T-002 | FR-002 | Add transcription adapter interface | T-001 | `pytest tests/test_transcription_adapter.py` |
+| T-003 | FR-002 | Store timestamped transcript segments | T-002 | `pytest tests/test_transcript_segments.py` |
+| T-004 | FR-003, FR-005 | Generate structured notes with evidence IDs | T-003 | `pytest tests/test_action_item_evidence.py` |
+| T-005 | FR-004, NFR-001 | Build review and approval flow | T-004 | `pytest tests/test_approval_flow.py` |
+| T-006 | FR-004, NFR-003 | Build CRM export gate | T-005 | `pytest tests/test_crm_export_gate.py` |
+| T-007 | NFR-002 | Add configurable audio retention policy | T-001 | `pytest tests/test_retention_policy.py` |
 
 ## Parallelization
 
@@ -42,6 +43,12 @@ Frontend review UI can start after API contracts are stable. CRM adapter tests c
 - API schemas are generated from route/type definitions.
 - Eval reports are generated from reference, bad, and regression cases.
 - Do not hand-edit generated schemas or reports.
+
+## Design And Visual Implementation Phase
+
+- Use `08-ui-visual-design.md` as the UI contract for the review screen before writing frontend code.
+- If the repository later gets a durable `DESIGN.md`, keep 08 aligned with it and treat `DESIGN.md` as the broader design source of truth.
+- If pixel-level reference matching is required, hand off the approved reference and route state to `$visual-ralph`; do not replace the deterministic product and API checks with subjective UI judgment.
 
 ## Validation Commands
 

@@ -13,6 +13,9 @@
     "06-eval-and-test-cases.md",
     "07-agent-execution-plan.md"
   ],
+  "optional_documents": [
+    "08-ui-visual-design.md"
+  ],
   "support_artifacts": [
     "traceability_matrix.json",
     "research_ledger.json",
@@ -21,7 +24,10 @@
   "quality_gates": [
     "greenfield commercial ideas complete or explicitly skip the idea pressure test before Gate 1",
     "idea pressure test declares continue, pivot, research-needed, or pause with a core assumption and fast disconfirming test",
+    "scope-slice packs declare in_pack, referenced_only, and future_pack boundaries",
+    "docs-first packs index existing markdown documents and separate prescriptive inputs from this pack's ownership",
     "live research completed or blocked explicitly",
+    "research ledger declares research_depth and unverified_claims",
     "discovery brainstorming records mode, critical questions, options, and assumptions",
     "all requirements have EARS acceptance criteria",
     "all major stack choices cite official docs and current open-source evidence",
@@ -33,9 +39,13 @@
     "deterministic judge/evidence contract maps each requirement to code, state, API, file, screenshot, log, or manual evidence",
     "data sufficiency check confirms fixtures, default data, reference cases, bad cases, regression cases, and edge cases support the planned workflows",
     "stage gates require confirmation after brief plus research and after PRD plus requirements plus technical design",
+    "single-pass generation records gates_skipped in handoff_manifest.json",
     "feature-mode packs include existing-system reality, compatibility contract, integration plan, and regression cases",
     "reference, bad, and regression cases declare provenance as user-confirmed, real-source-derived, existing-test-derived, or synthetic",
     "build-ready evals include at least one non-synthetic reference case",
+    "build-ready handoffs include non-empty automated checks and runnable validation commands or explicit manual-only markings",
+    "UI-heavy packs include 08-ui-visual-design.md or explicitly state why it is omitted",
+    "08-ui-visual-design.md, when present, is connected to 06 UI Judge and 07 design implementation phase",
     "all tasks include validation commands or evidence requirements",
     "traceability maps requirements to design, contracts, tasks, and evals"
   ]

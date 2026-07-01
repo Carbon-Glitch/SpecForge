@@ -1,11 +1,11 @@
 # Eval: specforge-skill
 
-This eval checks that the skill can scaffold and validate a pressure-test preflight plus the eight-document SDD pack.
+This eval checks that the skill can scaffold and validate a pressure-test preflight, the eight-document SDD pack, and the optional visual contract.
 
 ```json
 {
   "skill": "specforge-skill",
-  "run": "python scripts/run_pipeline.py --idea \"{idea}\" --out {output} --stage all --force",
+  "run": "python scripts/run_pipeline.py --idea \"{idea}\" --out {output} --stage all --include-visual --force",
   "criteria": [
     {
       "id": "valid-pack",
@@ -14,16 +14,32 @@ This eval checks that the skill can scaffold and validate a pressure-test prefli
       "cmd": "python scripts/validate_pack.py {output} --stage all"
     },
     {
-      "id": "has-preflight-plus-eight-core-docs",
-      "text": "The pack contains the pressure-test preflight plus the eight core markdown documents.",
+      "id": "has-preflight-plus-eight-core-docs-and-visual",
+      "text": "The pack contains the pressure-test preflight, the eight core markdown documents, and optional visual design contract.",
       "type": "command",
-      "cmd": "python -c \"from pathlib import Path; p=Path(r'{output}'); docs={x.name for x in p.glob('*.md')}; assert 'preflight-idea-pressure-test.md' in docs and len(docs)==9\""
+      "cmd": "python -c \"from pathlib import Path; p=Path(r'{output}'); docs={x.name for x in p.glob('*.md')}; assert 'preflight-idea-pressure-test.md' in docs and '08-ui-visual-design.md' in docs and len(docs)==10\""
     },
     {
       "id": "has-research-ledger",
       "text": "The pack includes a research ledger JSON artifact.",
       "type": "command",
       "cmd": "python -c \"import json, pathlib; json.load(open(pathlib.Path(r'{output}')/'research_ledger.json', encoding='utf-8'))\""
+    },
+    {
+      "id": "has-scope-and-docs-first-fields",
+      "text": "The generated pack includes scope boundary, prescriptive inputs, this-pack ownership, research depth, and unverified-claims fields.",
+      "type": "command",
+      "cmd": "python -c \"import json, pathlib; p=pathlib.Path(r'{output}'); assert '## Scope Boundary' in (p/'00-product-brief.md').read_text(encoding='utf-8'); data=json.load(open(p/'research_ledger.json', encoding='utf-8')); assert 'research_depth' in data and 'unverified_claims' in data\""
+    },
+    {
+      "id": "visual-contract-connected-to-evals",
+      "text": "The optional visual contract is connected to the eval/UI judge and agent execution plan.",
+      "type": "llm-judge"
+    },
+    {
+      "id": "readiness-is-not-overstated",
+      "text": "The skill distinguishes spec-complete from build-ready and does not claim build-ready without automated checks and runnable validation evidence.",
+      "type": "llm-judge"
     },
     {
       "id": "research-is-mandatory",

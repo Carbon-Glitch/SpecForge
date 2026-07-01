@@ -21,9 +21,11 @@ rough product idea
   -> discovery brainstorming
   -> Gate 0: idea pressure test
   -> human go / pivot / pause decision
+  -> optional scope slice / docs-first indexing
   -> Gate 1: product brief + live market and technology research
   -> human review
   -> product and behavior specs
+  -> optional Gate 2.5: visual design contract
   -> human review
   -> executable engineering contracts
   -> evals, test fixtures, and regression cases
@@ -49,6 +51,10 @@ Core documents:
 7. `06-eval-and-test-cases.md` - deterministic judge contract, evidence matrix, test fixtures, reference cases, bad cases, and regression gates
 8. `07-agent-execution-plan.md` - coding-agent implementation plan, task order, validation commands, and AGENTS.md handoff rules
 
+Optional:
+
+- `08-ui-visual-design.md` - UI visual contract for design positioning, tokens, core components, page skeletons, motion, responsive/a11y checks, and UI judge rules
+
 Support artifacts:
 
 - `traceability_matrix.json`
@@ -63,6 +69,8 @@ Support artifacts:
 - **Respect existing systems**: for feature work, inspect the current codebase and preserve compatibility unless the user asks for a redesign.
 - **GitHub reuse before custom build**: if a subsystem already has a suitable open-source implementation, evaluate integration, wrapping, forking, or pattern extraction before building from scratch.
 - **Executable contracts before tasks**: state, workflows, actions, modules, generated files, data, and judges must be explicit before implementation starts.
+- **Scope before expansion**: when only one slice should be built, mark every subsystem as `in_pack`, `referenced_only`, or `future_pack`.
+- **Visual contracts before UI coding**: UI-heavy products can add `08-ui-visual-design.md`; use `$design` for durable `DESIGN.md` and `$visual-ralph` for pixel/reference implementation.
 - **Agent-readable over prose-heavy**: stable headings, IDs, tables, acceptance criteria, validation commands, and traceability beat vague planning text.
 - **Evidence-based verification**: every task should have a command, state/API/file check, screenshot/log evidence, or explicit manual review criterion.
 
@@ -82,8 +90,18 @@ python scripts/validate_pack.py sdd-docs --stage gate1
 python scripts/run_pipeline.py --idea "AI meeting notes for sales teams" --out sdd-docs --stage gate2
 python scripts/validate_pack.py sdd-docs --stage gate2
 
+python scripts/run_pipeline.py --idea "AI meeting notes for sales teams" --out sdd-docs --stage gate2 --include-visual
+
 python scripts/run_pipeline.py --idea "AI meeting notes for sales teams" --out sdd-docs --stage gate3
 python scripts/validate_pack.py sdd-docs --stage all
+```
+
+Useful options:
+
+```bash
+python scripts/run_pipeline.py --idea "Spell Academy" --out sdd-docs --scope user-app-only --exclude factory,admin,crawler
+python scripts/run_pipeline.py --idea "Add onboarding" --out sdd-docs --repo-root .
+python scripts/run_pipeline.py --idea "Ship compressed docs" --out sdd-docs --stage all --single-pass
 ```
 
 Use `/specforge` in your coding-agent session to fill each stage with live research and final content.
@@ -217,6 +235,10 @@ SpecForge 会生成 1 份前置决策文档和 8 份核心开发文档。
 7. `06-eval-and-test-cases.md` - 确定性评测、证据矩阵、测试 fixtures、reference cases、bad cases 和回归门槛
 8. `07-agent-execution-plan.md` - 给 code agent 执行的任务顺序、验证命令和 AGENTS.md 交接规则
 
+可选文档：
+
+- `08-ui-visual-design.md` - UI 视觉合同，包括设计定位、tokens、核心组件、页面骨架、动效、响应式/可访问性检查和 UI judge
+
 辅助文件：
 
 - `traceability_matrix.json`
@@ -231,6 +253,8 @@ SpecForge 会生成 1 份前置决策文档和 8 份核心开发文档。
 - **尊重现有系统**：已有项目加功能时，先读当前代码、接口、数据、测试和部署约束。
 - **先看 GitHub 能否复用，再决定自研**：能集成、包装、fork、魔改或借鉴的，不默认从零造。
 - **先定义可执行契约，再拆开发任务**：状态、流程、动作、模块、生成物、数据、评测都要提前说清楚。
+- **先切范围，再防膨胀**：只做一个切片时，把子系统标成 `in_pack`、`referenced_only` 或 `future_pack`。
+- **先定视觉合同，再写 UI**：消费产品、移动端、游戏、dashboard 等可加 `08-ui-visual-design.md`；需要 DESIGN.md 用 `$design`，需要像素对照实现用 `$visual-ralph`。
 - **给 AI 看优先于给人写散文**：稳定标题、ID、表格、验收标准、验证命令、追踪矩阵比漂亮长文更重要。
 - **完成必须有证据**：每个任务都应有命令、状态/API/文件检查、截图/日志证据或明确人工验收标准。
 
@@ -250,8 +274,18 @@ python scripts/validate_pack.py sdd-docs --stage gate1
 python scripts/run_pipeline.py --idea "面向销售团队的 AI 会议纪要产品" --out sdd-docs --stage gate2
 python scripts/validate_pack.py sdd-docs --stage gate2
 
+python scripts/run_pipeline.py --idea "面向销售团队的 AI 会议纪要产品" --out sdd-docs --stage gate2 --include-visual
+
 python scripts/run_pipeline.py --idea "面向销售团队的 AI 会议纪要产品" --out sdd-docs --stage gate3
 python scripts/validate_pack.py sdd-docs --stage all
+```
+
+常用参数：
+
+```bash
+python scripts/run_pipeline.py --idea "咒语学院" --out sdd-docs --scope user-app-only --exclude factory,admin,crawler
+python scripts/run_pipeline.py --idea "给现有项目加 onboarding" --out sdd-docs --repo-root .
+python scripts/run_pipeline.py --idea "一次性压缩产出文档" --out sdd-docs --stage all --single-pass
 ```
 
 然后在支持 skill 的 agent 会话中使用：

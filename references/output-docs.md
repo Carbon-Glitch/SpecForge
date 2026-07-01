@@ -1,6 +1,22 @@
-# Eight Document Contract
+# SpecForge Document Contract
 
 The pack is designed for AI coding agents. It should be precise, traceable, and executable.
+
+## preflight-idea-pressure-test.md
+
+Purpose: decide whether a greenfield idea should proceed into formal SDD.
+
+Must include:
+
+- verdict: `continue`, `pivot`, `research-needed`, or `pause`
+- scorecard
+- core assumption
+- fatal flaws with fast tests
+- problem reality
+- current behavior and alternatives
+- first 10 users
+- two-week MVP test
+- decision and evidence to verify
 
 ## 00-product-brief.md
 
@@ -12,6 +28,9 @@ Must include:
 - brainstorming summary
 - one-sentence product concept
 - existing system context when adding to a codebase
+- scope boundary: `in_pack`, `referenced_only`, and `future_pack`
+- prescriptive inputs
+- this pack owns
 - target users
 - jobs-to-be-done
 - primary workflows
@@ -129,6 +148,7 @@ Must include:
 - deterministic judge contract: code/state/API/file/screenshot/log/manual evidence for each requirement
 - evidence matrix mapping requirement IDs to judge type, command, fixture, expected state, and failure signal
 - data sufficiency check for defaults, fixtures, seed scenarios, edge cases, and bad cases
+- UI judge when the product has visible UI: `screenshot_manual`, `a11y_contrast`, `route_snapshot`, or explicit manual-only reason
 - case source policy: each reference, bad, and regression case must declare `user-confirmed`, `real-source-derived`, `existing-test-derived`, or `synthetic`; build-ready packs must not use only synthetic cases
 - reference cases
 - bad cases
@@ -151,12 +171,33 @@ Must include:
 - task list with IDs
 - dependencies and parallelization
 - source-vs-generated rules
+- design and visual implementation phase when `08-ui-visual-design.md` exists
 - validation commands
 - handoff to coding agent
 - generated `AGENTS.md` content
 - done definition
 
 Tasks should be small enough for a coding agent to execute one by one and must include verification.
+
+## 08-ui-visual-design.md
+
+Purpose: define a visual implementation contract for UI-heavy products.
+
+Must include:
+
+- visual design status
+- design source of truth: `08`, `DESIGN.md`, or both
+- design positioning
+- design tokens
+- core components and states
+- page skeletons
+- interaction and motion
+- responsive and accessibility rules
+- UI judge contract
+- MVP visual non-goals
+- design orchestration with `$design` and `$visual-ralph` when available
+
+This document is optional for pure API/backend/CLI products.
 
 ## Traceability
 
@@ -177,18 +218,19 @@ Populate `traceability_matrix.json` with mappings like:
 
 Use these labels in `handoff_manifest.json`:
 
-- `draft` — skeleton exists, research incomplete
-- `research-complete` — sources gathered, docs still being written
-- `spec-complete` — docs complete, traceability partial
-- `build-ready` — docs, traceability, evals, and task validation are complete
+- `gate-review-required` — a gate has been scaffolded or drafted and needs user confirmation
+- `spec-complete` — docs, scope, contracts, traceability, and eval plan are complete enough for engineering review
+- `build-ready` — `spec-complete` plus fixtures/seed data, at least one runnable validation command, non-empty automated checks, and no blocker for the first implementation slice
 - `blocked` — missing external access or critical unanswered question
 
 ## Stage Gates
 
-SpecForge should be reviewed in three gates:
+SpecForge should be reviewed in staged gates:
 
+- `gate0` — complete `preflight-idea-pressure-test.md`, then stop for user confirmation.
 - `gate1` — complete `00-product-brief.md` and `01-reality-research.md`, then stop for user confirmation.
 - `gate2` — complete `02-prd-behavior-contract.md`, `03-sdd-requirements-spec.md`, and `04-technical-design.md`, then stop for user confirmation.
+- optional visual gate — complete `08-ui-visual-design.md` for UI-heavy products after Gate 2.
 - `gate3` — complete `05-contracts-data-permissions.md`, `06-eval-and-test-cases.md`, and `07-agent-execution-plan.md`, then validate and hand off.
 
 Do not mark a pack `build-ready` until all gates have either been reviewed or explicitly skipped by the user.

@@ -13,7 +13,11 @@
     "04-technical-design.md",
     "05-contracts-data-permissions.md",
     "06-eval-and-test-cases.md",
-    "07-agent-execution-plan.md"
+    "07-agent-execution-plan.md",
+    "08-ui-visual-design.md"
+  ],
+  "optional_documents": [
+    "08-ui-visual-design.md"
   ],
   "support_artifacts": [
     "traceability_matrix.json",
@@ -21,6 +25,26 @@
     "handoff_manifest.json"
   ],
   "build_readiness": "demo-only",
+  "build_readiness_meaning": {
+    "demo-only": "Example shape only; refresh research and commands before implementation.",
+    "spec-complete": "Documents and traceability can be reviewed for implementation.",
+    "build-ready": "Requires fixtures, runnable validation commands, and non-empty automated checks."
+  },
+  "scope": {
+    "requested": "upload-first-sales-meeting-notes",
+    "excluded": [
+      "live meeting bot",
+      "CRM marketplace",
+      "manager analytics dashboard"
+    ],
+    "rule": "Only implement in_pack rows from 00-product-brief.md#Scope Boundary."
+  },
+  "docs_first": {
+    "repo_root": "",
+    "markdown_docs_indexed": [],
+    "rule": "For real repos, index existing product/domain/design markdown before Gate 1."
+  },
+  "gates_skipped": [],
   "open_questions": [
     "Confirm first CRM integration.",
     "Confirm audio retention policy.",

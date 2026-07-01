@@ -68,7 +68,7 @@ If the tool does not read `SKILL.md`, copy the body of `SKILL.md` into its rule 
 
 - trigger terms
 - research gate
-- eight-document contract
+- SpecForge document contract
 - validation commands
 - stop conditions
 

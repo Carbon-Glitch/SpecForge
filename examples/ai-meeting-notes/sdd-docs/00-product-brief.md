@@ -31,6 +31,30 @@ MeetingBrief is a privacy-aware AI meeting notes product for sales teams. It rec
 - JTBD-003: Sync reviewed summaries to the CRM.
 - JTBD-004: Preserve privacy and consent boundaries for recorded meetings.
 
+## Scope Boundary
+
+| Area | Status | Rule |
+|---|---|---|
+| Upload-first meeting note workflow | in_pack | Specify upload, transcript, structured notes, review, and gated CRM export. |
+| Live meeting bot | future_pack | Mention assumptions only; do not task implementation. |
+| Multi-CRM marketplace | future_pack | Keep export contract generic and defer provider-specific marketplace work. |
+| Sales coaching analytics | referenced_only | Preserve data shape for future analytics but do not build dashboards. |
+
+## Prescriptive Inputs
+
+| Source | Why It Is Prescriptive | Rule |
+|---|---|---|
+| Gate 0 pressure test | Defines narrow sales workflow wedge. | Avoid generic meeting assistant scope. |
+| Reality research ledger | Records open-source and competitor evidence. | Cite source-backed claims before stack and product decisions. |
+
+## This Pack Owns
+
+| Owned Area | Requirements | Explicit Non-Ownership |
+|---|---|---|
+| Meeting upload and processing | FR-001, FR-002, FR-003 | No live meeting bot. |
+| Review and CRM export gate | FR-004, NFR-001, NFR-003 | No uncontrolled external writes. |
+| Evidence-backed action items | FR-005 | No unsupported generated claims. |
+
 ## Existing System Context
 
 Not applicable. This demo describes a greenfield product. For feature work, this section should summarize the existing repository, current architecture, affected modules, tests, and integration constraints.

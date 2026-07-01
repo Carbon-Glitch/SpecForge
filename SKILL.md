@@ -6,7 +6,7 @@ description: >-
 license: MIT
 metadata:
   author: Codex
-  version: 1.5.0
+  version: 1.6.0
   created: 2026-06-28
   last_reviewed: 2026-06-28
   review_interval_days: 45
@@ -47,14 +47,19 @@ Invocation examples:
 /specforge Build a lightweight CRM for solo founders
 /specforge 给这个现有仓库加多语言，生成 SDD 文档包
 /specforge 我想做一个面向律师的合同审查 Agent
+/specforge --scope user-app-only --exclude factory,admin 为咒语学院生成用户端开发包
 ```
 
 ## Operating Modes
 
 - **Greenfield Mode** — use when the user is creating a new product from a concept.
 - **Feature Mode** — use when the user is adding, changing, refactoring, or integrating functionality in an existing codebase.
+- **Docs-First Mode** — use when an existing repository already contains product docs, design docs, plans, or domain markdown that should be indexed before writing a new pack.
+- **Scope Slice Mode** — use when only part of a product should be owned by this pack, such as `user-app-only`, while other subsystems are referenced or deferred.
 
 In Feature Mode, inspect the repository before writing specs when a path is available. Treat current code, tests, docs, API schemas, data models, routes, and deployment constraints as evidence. Do not redesign the product from scratch unless the user asks.
+
+In Docs-First Mode, scan existing markdown docs before writing Gate 1. Put path plus one-line responsibility into `00-product-brief.md#Existing System Context`. Separate **Prescriptive Inputs** from **This Pack Owns** so the new pack does not drift away from existing source docs.
 
 ## Final Pack
 
@@ -81,6 +86,14 @@ Also generate these support artifacts when useful:
 - `research_ledger.json` — sources searched, source dates, URLs, claims, and confidence
 - `handoff_manifest.json` — file list, confidence, unresolved questions, and next action
 - optional `AGENTS.md` and `tasks.md` exports derived from `07-agent-execution-plan.md`
+
+Optional visual layer:
+
+- `08-ui-visual-design.md` — visual design contract for UI-heavy products: design positioning, tokens, core components, page skeletons, motion rules, responsive/accessibility checks, UI judge, and MVP visual non-goals
+
+Generate `08-ui-visual-design.md` for consumer products, games, mobile apps, dashboards, landing pages, visual tools, and any product where default component-library styling would be unacceptable. Skip it for pure API/backend/CLI packs unless the user asks.
+
+If pixel-level fidelity is required, run `$design` first to create or refresh repo-local `DESIGN.md`, then use `$visual-ralph` after the visual reference is approved. `08-ui-visual-design.md` is an agent contract, not a screenshot-matching loop.
 
 ## Non-Negotiable Research Gate
 
@@ -144,6 +157,20 @@ Question categories:
 - deployment target, timeline, and MVP strictness
 - preferred stack, model, or agent host
 
+## Scope Slice Gate
+
+If the user supplies `--scope`, `--exclude`, or natural-language boundaries such as "user app only" or "factory later", create a scope boundary before Gate 1.
+
+`00-product-brief.md#Scope Boundary` must include:
+
+| Area | Status | Rule |
+|---|---|---|
+| owned subsystem | `in_pack` | This pack specifies and tasks it. |
+| dependency/context subsystem | `referenced_only` | Mention contracts only; do not task implementation. |
+| deferred subsystem | `future_pack` | Capture assumptions and handoff boundary. |
+
+Put the first rule of generated `AGENTS.md` as: implement only `in_pack` scope unless the user explicitly expands scope.
+
 ## Executable Contracts Gate
 
 Before writing implementation tasks, create executable contracts. These contracts make the docs usable by code agents instead of merely descriptive.
@@ -158,6 +185,21 @@ The pack must specify:
 6. **Data sufficiency contract** — default data, fixtures, seed scenarios, edge cases, bad cases, and whether the planned data can actually support the user journeys and evals.
 
 If any of these contracts cannot be completed, mark the pack `blocked` or `spec-complete` rather than `build-ready`.
+
+## Readiness Levels
+
+Do not use `build-ready` as a synonym for "the markdown files exist".
+
+Use:
+
+| Status | Meaning |
+|---|---|
+| `gate-review-required` | A gate has been scaffolded or drafted and needs user confirmation. |
+| `spec-complete` | Documents, scope, contracts, traceability, and eval plan are complete enough for engineering review. |
+| `build-ready` | `spec-complete` plus seed data or fixtures, at least one runnable validation command, non-empty automated checks, and no unresolved blocker affecting the first implementation slice. |
+| `blocked` | A missing decision, source, permission, or dependency prevents reliable implementation. |
+
+Strict validation should reject `build-ready` when `06 Automated Checks` is empty or `07 Validation Commands` has no runnable command and no explicit `manual-only` marking.
 
 ## Workflow
 
@@ -236,6 +278,26 @@ Validate Gate 2 with:
 python scripts/validate_pack.py sdd-docs --stage gate2
 ```
 
+### 3.5. Optional Visual Contract
+
+For UI-heavy products, scaffold the optional visual contract after Gate 2:
+
+```bash
+python scripts/run_pipeline.py --idea "<product concept>" --out sdd-docs --stage gate2 --include-visual
+```
+
+Then write `08-ui-visual-design.md`. It must define:
+
+1. design source of truth: `08` only, `DESIGN.md`, or `DESIGN.md + 08`
+2. design positioning and visual personality
+3. tokens: color, typography, spacing, radius, elevation, motion
+4. 3-5 core components with states
+5. page/screen skeletons with minimum responsive constraints
+6. UI judge entries: `screenshot_manual`, `a11y_contrast`, `route_snapshot`, or explicit manual-only reason
+7. MVP visual non-goals
+
+If `$design` exists in the host, use it when the repository needs durable design governance in `DESIGN.md`. If `$visual-ralph` exists and pixel/reference matching is required, use it after the user approves the visual reference. SpecForge should hand off the visual contract; it should not pretend to run a pixel-diff loop inside the spec pack.
+
 ### 4. Gate 3 — Contracts, Evals, And Agent Plan
 
 After Gate 2 is confirmed, scaffold the final stage:
@@ -255,6 +317,12 @@ Do not let later docs invent requirements not traceable to earlier docs. If a ne
 Before starting `07-agent-execution-plan.md`, verify that documents `04`, `05`, and `06` contain the executable contracts gate above. Implementation tasks must reference these contracts, not re-infer state, navigation, module ownership, generated files, or eval evidence.
 
 Reference, bad, and regression cases must declare provenance: `user-confirmed`, `real-source-derived`, `existing-test-derived`, or `synthetic`. A build-ready pack must include at least one non-synthetic reference case; do not rely only on cases made by the same model that writes the eval.
+
+For UI products, `06-eval-and-test-cases.md#UI Judge` must include at least one of:
+
+- `screenshot_manual` — named route, viewport, state, expected visual evidence, reviewer rule
+- `a11y_contrast` — token pair, minimum contrast threshold, check command or manual rule
+- `route_snapshot` — route, viewport, screenshot command, and non-overlap/no-overflow assertions
 
 ### 5. Validate
 
@@ -281,6 +349,7 @@ The final response should tell the user:
 - whether live research was completed or blocked
 - which command or file the code agent should start from
 - whether the package is MVP-ready, build-ready, or still needs answers
+- whether the handoff is `spec-complete`, `build-ready`, `blocked`, or `gate-review-required`
 
 Do not hand off to a coding agent until all three gates have been reviewed or the user explicitly asks to skip review.
 
@@ -295,6 +364,7 @@ Each document must be written for AI execution first and human review second:
 - include failure states and recovery paths
 - include citations for current-world facts
 - avoid vague words like "simple", "fast", "good", "intuitive" unless converted into measurable criteria
+- for UI products, include visual acceptance checks rather than subjective beauty claims
 
 ## EARS Acceptance Criteria
 
@@ -368,14 +438,30 @@ For Antigravity, install this skill under `.agent/skills/` and include the gener
 
 See `references/platform-adapters.md`.
 
+## Orchestration With Sister Skills
+
+Use this lightweight orchestration map when the host has these skills:
+
+| Stage | Tooling |
+|---|---|
+| Idea pressure test | SpecForge Gate 0 |
+| Behavior and engineering specs | SpecForge Gate 1-3 |
+| Durable design source of truth | `$design` creates or refreshes repo-local `DESIGN.md` |
+| Visual implementation against reference | `$visual-ralph` after approved reference/baseline |
+| Coding handoff | `07-agent-execution-plan.md` plus generated `AGENTS.md` |
+
+Do not force sister skills when unavailable. Record the missing capability and keep the SpecForge pack self-contained.
+
 ## When To Stop
 
 Stop only when:
 
 - all eight core docs exist
+- optional `08-ui-visual-design.md` exists for UI-heavy products or the reason for omission is explicit
 - current-world research is complete or explicitly marked blocked
 - each requirement traces to a task and eval
 - every task has a verification command or manual evidence requirement
+- handoff readiness is not overstated beyond the evidence in `06` and `07`
 - unresolved questions are listed with impact
 
 Do not stop after only PRD/spec/tasks unless the user explicitly requests a lightweight draft.

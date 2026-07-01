@@ -24,15 +24,23 @@ The skill generates one preflight decision document plus eight AI-readable core 
 7. `06-eval-and-test-cases.md`
 8. `07-agent-execution-plan.md`
 
+Optional UI-heavy packs may also include `08-ui-visual-design.md`. Treat it as the visual contract for tokens, components, page skeletons, motion, responsive/a11y checks, and UI judge rules. If repo-level design governance is needed, run `$design` to create or refresh `DESIGN.md`; if pixel/reference matching is needed, hand off to `$visual-ralph` after reference approval.
+
 Key operating rule: perform live web research before market claims, technology choices, API choices, compliance claims, or open-source recommendations. If live research is unavailable, label those claims unverified.
 
 Feature-mode rule: when the request targets an existing project, inspect current code, tests, docs, schemas, routes, data, and deployment constraints before writing specs. Preserve compatibility unless the user asks for redesign.
+
+Docs-first rule: when the repository already contains product/domain/design markdown, index those docs before Gate 1. Put path plus one-line responsibility in `00-product-brief.md#Existing System Context`, then separate `Prescriptive Inputs` from `This Pack Owns`.
+
+Scope-slice rule: if the user supplies `--scope` or `--exclude`, put `in_pack`, `referenced_only`, and `future_pack` boundaries in `00-product-brief.md#Scope Boundary` and generated `AGENTS.md`. Implement only `in_pack` scope.
 
 Executable-contract operating rule: before implementation tasks, require contracts for state truth, workflow/navigation/actions, deterministic judging, module/file boundaries, generated artifacts, and data sufficiency. Tasks should reference those contracts and include concrete validation commands or evidence requirements.
 
 Stage-gate rule: do not fill the full pack in one pass unless the user explicitly asks to skip review. Complete the pressure test and stop for confirmation, then complete `00-product-brief.md` and `01-reality-research.md`, stop for confirmation, then complete PRD/requirements/technical design, stop again, then complete contracts/evals/agent plan.
 
 Eval provenance rule: reference, bad, and regression cases must declare `user-confirmed`, `real-source-derived`, `existing-test-derived`, or `synthetic`. A build-ready pack cannot rely only on synthetic cases.
+
+Readiness rule: `spec-complete` means the docs and traceability are reviewable. `build-ready` requires non-empty automated checks, at least one runnable validation command or explicit `manual-only`, seed/fixture coverage for the first implementation slice, and no blocker.
 
 Use `SKILL.md` for the full workflow. Use `references/research-protocol.md` for the source-scoring rules and `references/output-docs.md` for the exact content contract.
 
@@ -43,5 +51,6 @@ python scripts/run_pipeline.py --idea "<product idea>" --out sdd-docs
 python scripts/validate_pack.py sdd-docs --stage gate0
 python scripts/run_pipeline.py --idea "<product idea>" --out sdd-docs --stage gate1
 python scripts/validate_pack.py sdd-docs --stage gate1
+python scripts/run_pipeline.py --idea "<product idea>" --out sdd-docs --stage gate2 --include-visual
 python scripts/run_evals.py --validate
 ```
