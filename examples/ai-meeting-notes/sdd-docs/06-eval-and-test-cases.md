@@ -108,3 +108,14 @@ Reviewers inspect 10 transcripts and confirm extracted decisions and action item
 - No unapproved external writes.
 - No generated action item without evidence.
 - No pass case can include unresolved error or failed status.
+
+## Launch Readiness Checks
+
+| Area | Check | Evidence |
+|---|---|---|
+| security | CRM write permission requires approval state and idempotency key. | `pytest tests/test_crm_export_gate.py` plus manual permission review. |
+| performance | Upload and processing status UI remains responsive while transcription runs asynchronously. | API/job timing report before launch. |
+| monitoring | Job stage, duration, adapter, retry count, and failure type are logged without transcript text. | Observability config or log sample. |
+| CI/CD | Upload, evidence, retention, and CRM gate checks run before deploy. | CI command or release checklist. |
+| environment separation | Preview uses sandbox CRM credentials and test storage bucket. | environment variable matrix. |
+| rollback | CRM export can be disabled while keeping reviewed markdown/CSV output. | feature flag or config rollback note. |

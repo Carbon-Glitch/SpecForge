@@ -20,6 +20,7 @@ REQUIRED_DOCS: dict[str, list[str]] = {
         "Pressure Test Status",
         "Verdict",
         "Scorecard",
+        "SDD Mode Decision",
         "Core Assumption",
         "Fatal Flaws",
         "Problem Reality",
@@ -31,6 +32,7 @@ REQUIRED_DOCS: dict[str, list[str]] = {
     ],
     "00-product-brief.md": [
         "Mode",
+        "SDD Mode",
         "Brainstorming Summary",
         "Concept",
         "Target Users",
@@ -68,6 +70,7 @@ REQUIRED_DOCS: dict[str, list[str]] = {
     "04-technical-design.md": [
         "Architecture Overview",
         "Stack Decision",
+        "Architecture Decision Lens",
         "Open Source Reuse Plan",
         "Integration Plan",
         "Module Boundaries",
@@ -96,13 +99,17 @@ REQUIRED_DOCS: dict[str, list[str]] = {
         "Bad Cases",
         "Regression Cases",
         "Regression Gates",
+        "Launch Readiness Checks",
     ],
     "07-agent-execution-plan.md": [
         "Agent Operating Rules",
         "Task List",
+        "Agent Session Plan",
         "Source Vs Generated Rules",
         "Design And Visual Implementation Phase",
+        "Living Spec Update Protocol",
         "Validation Commands",
+        "Launch Handoff",
         "Done Definition",
     ],
     "08-ui-visual-design.md": [
@@ -161,6 +168,12 @@ HEADING_ALIASES: dict[str, list[str]] = {
         "File Responsibility Contract",
     ],
     "UI Judge": ["Visual Judge", "UI Evaluation", "Visual Evaluation"],
+    "SDD Mode": ["SDD Depth", "Spec Mode", "Specification Mode"],
+    "Architecture Decision Lens": ["Architecture Decision Matrix", "ADR Decision Lens", "Technical Decision Matrix"],
+    "Agent Session Plan": ["Prompt Packet Plan", "Agent Prompt Packets", "Session Plan"],
+    "Living Spec Update Protocol": ["Spec Update Protocol", "Living Specification Protocol"],
+    "Launch Readiness Checks": ["Production Readiness Checks", "Launch Checklist", "Production Checklist"],
+    "Launch Handoff": ["Production Handoff", "Release Handoff"],
 }
 
 
@@ -223,6 +236,8 @@ def validate_research_ledger(pack_dir: Path, strict: bool) -> list[str]:
         "open_source_reuse_decisions",
         "risk_compliance",
         "implementation_prior_art",
+        "architecture_decision_sources",
+        "production_readiness",
     ]
     for key in required:
         if key not in categories:
@@ -245,6 +260,7 @@ def validate_handoff_manifest(pack_dir: Path, strict: bool) -> list[str]:
         "spec-incomplete",
         "spec-complete",
         "build-ready",
+        "launch-ready",
         "demo-only",
         "blocked",
     }:
@@ -256,6 +272,13 @@ def validate_handoff_manifest(pack_dir: Path, strict: bool) -> list[str]:
             errors.append("build-ready requires non-empty 06 Automated Checks")
         if "```" not in section_text(plan_text, "Validation Commands") and "manual-only" not in plan_text.lower():
             errors.append("build-ready requires runnable 07 Validation Commands or explicit manual-only marking")
+    if readiness == "launch-ready":
+        eval_text = (pack_dir / "06-eval-and-test-cases.md").read_text(encoding="utf-8") if (pack_dir / "06-eval-and-test-cases.md").exists() else ""
+        plan_text = (pack_dir / "07-agent-execution-plan.md").read_text(encoding="utf-8") if (pack_dir / "07-agent-execution-plan.md").exists() else ""
+        launch_text = section_text(eval_text, "Launch Readiness Checks") + section_text(plan_text, "Launch Handoff")
+        for term in ["security", "performance", "monitoring", "CI/CD", "rollback"]:
+            if term.lower() not in launch_text.lower():
+                errors.append(f"launch-ready requires launch readiness evidence for: {term}")
     if strict and data.get("gates_skipped") and "single-pass" not in json.dumps(data, ensure_ascii=False).lower():
         errors.append("strict mode: gates_skipped must record an explicit single-pass rationale")
     return errors
@@ -344,6 +367,45 @@ def validate_requirement_task_refs(pack_dir: Path, strict: bool) -> list[str]:
     return []
 
 
+def validate_architecture_decision_lens(pack_dir: Path, strict: bool) -> list[str]:
+    """Validate that architecture decisions carry durable reasoning."""
+    errors: list[str] = []
+    path = pack_dir / "04-technical-design.md"
+    if not path.exists():
+        return errors
+    text = path.read_text(encoding="utf-8")
+    section = section_text(text, "Architecture Decision Lens")
+    if not section:
+        return errors
+    required_terms = ["Real Pain Solved", "One-Year Technical Debt", "Team Scaling Cost", "Migration"]
+    missing = [term for term in required_terms if term.lower() not in section.lower()]
+    if missing:
+        errors.append(f"04 Architecture Decision Lens missing concepts: {', '.join(missing)}")
+    if strict and "01-reality-research.md" not in section and "research_ledger" not in section and "http" not in section:
+        errors.append("strict mode: 04 Architecture Decision Lens must cite research evidence")
+    return errors
+
+
+def validate_agent_session_plan(pack_dir: Path, strict: bool) -> list[str]:
+    """Validate prompt packets and living-spec update rules."""
+    errors: list[str] = []
+    path = pack_dir / "07-agent-execution-plan.md"
+    if not path.exists():
+        return errors
+    text = path.read_text(encoding="utf-8")
+    session = section_text(text, "Agent Session Plan")
+    if session:
+        required_terms = ["Role", "Context", "Task", "Constraints", "Output", "Validation"]
+        missing = [term for term in required_terms if term.lower() not in session.lower()]
+        if missing:
+            errors.append(f"07 Agent Session Plan missing prompt-packet fields: {', '.join(missing)}")
+    if strict:
+        living = section_text(text, "Living Spec Update Protocol")
+        if not living or not any(term in living.lower() for term in ["behavior", "api", "schema", "permission"]):
+            errors.append("strict mode: 07 Living Spec Update Protocol must cover behavior/API/schema/permission changes")
+    return errors
+
+
 def validate_ui_visual_contract(pack_dir: Path, strict: bool) -> list[str]:
     """Validate optional visual design contract when present."""
     errors: list[str] = []
@@ -396,6 +458,8 @@ def validate_pack(pack_dir: Path, strict: bool = False, stage: str = "all") -> l
     if stage in {"gate3", "all"}:
         errors.extend(validate_eval_cases(pack_dir, strict))
         errors.extend(validate_requirement_task_refs(pack_dir, strict))
+        errors.extend(validate_agent_session_plan(pack_dir, strict))
+        errors.extend(validate_architecture_decision_lens(pack_dir, strict))
     errors.extend(validate_ui_visual_contract(pack_dir, strict))
     return errors
 

@@ -43,3 +43,19 @@ Reference, bad, and regression cases must record whether they are `user-confirme
 ## Readiness Semantics
 
 `spec-complete` means the product, engineering, eval, and traceability documents are reviewable. `build-ready` additionally requires fixtures or seed data, non-empty automated checks, at least one runnable validation command or explicit `manual-only`, and no first-slice blocker.
+
+## SDD Depth
+
+SpecForge supports `vibe-prototype`, `spec-lite`, `full-sdd`, and `production-hardening`. This keeps lightweight exploration lightweight while still forcing stronger contracts when the work has production intent, team handoff, regression risk, private data, payments, or repeated context drift.
+
+## Architecture Decision Lens
+
+Major technical decisions must explain real pain solved, stage fit, one-year debt, team scaling cost, and migration or rollback path. Static technology recommendations age quickly, so choices must cite current research from `01-reality-research.md` or `research_ledger.json`.
+
+## Agent Session Packets And Living Specs
+
+The final execution plan now includes prompt packets per implementation slice: role, context, task, constraints, output format, and validation evidence. Specs remain living contracts during implementation; behavior, API, schema, permission, security, visual, or eval changes must update upstream documents and traceability before a task is considered done.
+
+## Launch Readiness
+
+`launch-ready` is stricter than `build-ready`. It requires security, performance, monitoring/logging, CI/CD, preview/prod separation, and rollback evidence. This prevents a merely runnable MVP from being confused with a production launch candidate.

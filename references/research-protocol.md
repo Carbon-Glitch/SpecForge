@@ -152,6 +152,30 @@ Look for:
 
 Use these to reduce implementation risk and to define validation commands.
 
+### 6. Architecture Decision Evidence
+
+For each major architecture, stack, hosting, data, auth, agent, or open-source choice, gather evidence that helps answer:
+
+- what real product or engineering pain the choice solves
+- whether it fits the current stage or is premature overengineering
+- what one-year technical debt or migration burden it creates
+- whether a larger team or multiple code agents can work safely with it
+- what the migration, replacement, or rollback path looks like
+
+Do not copy static technology recommendations from old articles or model memory. Use current official docs, repository health, release notes, migration guides, issue history, and primary vendor guidance.
+
+### 7. Launch Readiness
+
+For production-intended or `production-hardening` packs, research current guidance for:
+
+- authentication, authorization, secrets, and destructive-action approvals
+- data privacy, retention, audit logs, and permission boundaries
+- performance budgets, Core Web Vitals for web UI, or API latency targets for backend products
+- monitoring, logging, tracing, error reporting, and privacy-safe observability
+- CI/CD, preview/prod separation, environment variables, migration rollout, and rollback
+
+Prefer official platform docs and primary vendor guidance. Record unclear launch claims as `Inference` or `Unknown`.
+
 ## Source Scoring
 
 Use this confidence scale:

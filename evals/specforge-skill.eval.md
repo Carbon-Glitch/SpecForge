@@ -27,9 +27,9 @@ This eval checks that the skill can scaffold and validate a pressure-test prefli
     },
     {
       "id": "has-scope-and-docs-first-fields",
-      "text": "The generated pack includes scope boundary, prescriptive inputs, this-pack ownership, research depth, and unverified-claims fields.",
+      "text": "The generated pack includes scope boundary, prescriptive inputs, this-pack ownership, SDD mode, research depth, and unverified-claims fields.",
       "type": "command",
-      "cmd": "python -c \"import json, pathlib; p=pathlib.Path(r'{output}'); assert '## Scope Boundary' in (p/'00-product-brief.md').read_text(encoding='utf-8'); data=json.load(open(p/'research_ledger.json', encoding='utf-8')); assert 'research_depth' in data and 'unverified_claims' in data\""
+      "cmd": "python -c \"import json, pathlib; p=pathlib.Path(r'{output}'); text=(p/'00-product-brief.md').read_text(encoding='utf-8'); assert '## Scope Boundary' in text and '## SDD Mode' in text; data=json.load(open(p/'research_ledger.json', encoding='utf-8')); assert 'research_depth' in data and 'unverified_claims' in data\""
     },
     {
       "id": "visual-contract-connected-to-evals",
@@ -54,6 +54,31 @@ This eval checks that the skill can scaffold and validate a pressure-test prefli
     {
       "id": "has-executable-contracts",
       "text": "The generated pack contains executable contracts for state truth, workflow/navigation/actions, module/file boundaries, generated artifacts, deterministic judging, and data sufficiency.",
+      "type": "llm-judge"
+    },
+    {
+      "id": "has-sdd-mode-decision",
+      "text": "The skill chooses between vibe-prototype, spec-lite, full-sdd, and production-hardening based on risk signals such as context drift, regressions, team expansion, and production intent.",
+      "type": "llm-judge"
+    },
+    {
+      "id": "has-architecture-decision-lens",
+      "text": "The technical design requires major architecture choices to explain real pain solved, stage fit, one-year debt, team scaling cost, rollback path, and research evidence.",
+      "type": "llm-judge"
+    },
+    {
+      "id": "has-agent-prompt-packets",
+      "text": "The execution plan includes prompt packets with role, context/files to read, task, constraints, output format, and validation evidence for code-agent sessions.",
+      "type": "llm-judge"
+    },
+    {
+      "id": "has-living-spec-protocol",
+      "text": "The execution plan requires upstream docs and traceability to be updated when implementation changes behavior, API, schema, permissions, security, visual contract, or eval evidence.",
+      "type": "llm-judge"
+    },
+    {
+      "id": "has-launch-ready-state",
+      "text": "The pack distinguishes launch-ready from build-ready and requires security, performance, monitoring, CI/CD, environment separation, and rollback evidence before launch-ready handoff.",
       "type": "llm-judge"
     },
     {

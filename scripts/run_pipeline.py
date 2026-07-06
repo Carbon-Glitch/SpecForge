@@ -25,6 +25,7 @@ DOCS: list[tuple[str, str, str, list[str]]] = [
             "Pressure Test Status",
             "Verdict",
             "Scorecard",
+            "SDD Mode Decision",
             "Core Assumption",
             "Fatal Flaws",
             "Problem Reality",
@@ -41,6 +42,7 @@ DOCS: list[tuple[str, str, str, list[str]]] = [
         "Product Brief",
         [
             "Mode",
+            "SDD Mode",
             "Brainstorming Summary",
             "Concept",
             "Target Users",
@@ -113,6 +115,7 @@ DOCS: list[tuple[str, str, str, list[str]]] = [
         [
             "Architecture Overview",
             "Stack Decision",
+            "Architecture Decision Lens",
             "Open Source Reuse Plan",
             "Integration Plan",
             "Module Boundaries",
@@ -179,6 +182,7 @@ DOCS: list[tuple[str, str, str, list[str]]] = [
             "Automated Checks",
             "Manual Review",
             "Regression Gates",
+            "Launch Readiness Checks",
         ],
     ),
     (
@@ -189,10 +193,13 @@ DOCS: list[tuple[str, str, str, list[str]]] = [
             "Agent Operating Rules",
             "Implementation Phases",
             "Task List",
+            "Agent Session Plan",
             "Parallelization",
             "Source Vs Generated Rules",
             "Design And Visual Implementation Phase",
+            "Living Spec Update Protocol",
             "Validation Commands",
+            "Launch Handoff",
             "Handoff To Coding Agent",
             "Generated AGENTS.md Content",
             "Done Definition",
@@ -243,7 +250,25 @@ def render_doc(filename: str, title: str, sections: list[str], idea: str) -> str
     ]
     for section in sections:
         body = "<!-- Fill with specific, sourced, AI-readable content. -->"
-        if section == "Scope Boundary":
+        if section == "SDD Mode Decision":
+            body = (
+                "| Signal | Observation | Mode Impact |\n"
+                "|---|---|---|\n"
+                "| production intent | TBD | choose `full-sdd` or `production-hardening` when real users, money, privacy, or team handoff matter |\n"
+                "| context drift risk | TBD | move from `vibe-prototype` to `spec-lite` or `full-sdd` when the agent may lose the plot |\n"
+                "| regression risk | TBD | require contracts and evals when changes can break existing behavior |\n"
+                "| team scaling | TBD | prefer clearer boundaries and prompt packets when multiple contributors or agents work in parallel |"
+            )
+        elif section == "SDD Mode":
+            body = (
+                "| Mode | Use When | Required Pack Depth |\n"
+                "|---|---|---|\n"
+                "| `vibe-prototype` | disposable demo or learning spike | Gate 0/1 light, no build-ready claim |\n"
+                "| `spec-lite` | small feature or low-risk MVP slice | Gate 1 plus focused Gate 2/3 sections |\n"
+                "| `full-sdd` | production-intended product or broad feature | all gates, traceability, evals, contracts |\n"
+                "| `production-hardening` | existing app nearing launch | full-sdd plus launch readiness and rollback evidence |"
+            )
+        elif section == "Scope Boundary":
             body = (
                 "| Area | Status | Rule |\n"
                 "|---|---|---|\n"
@@ -263,11 +288,50 @@ def render_doc(filename: str, title: str, sections: list[str], idea: str) -> str
                 "| a11y_contrast | token pairs | contrast meets selected threshold |\n"
                 "| route_snapshot | key route | screenshot command proves expected screen, not a wrong/default page |"
             )
+        elif section == "Architecture Decision Lens":
+            body = (
+                "| Option | Real Pain Solved | Stage Fit / Overengineering Risk | One-Year Technical Debt | Team Scaling Cost | Migration / Rollback Path | Evidence |\n"
+                "|---|---|---|---|---|---|---|\n"
+                "| TBD | TBD | TBD | TBD | TBD | TBD | link to `01-reality-research.md` or `research_ledger.json` |"
+            )
+        elif section == "Agent Session Plan":
+            body = (
+                "| Task | Role | Context / Files To Read | Task Prompt | Constraints | Output Format | Validation Evidence |\n"
+                "|---|---|---|---|---|---|---|\n"
+                "| T-001 | coding agent | TBD | TBD | follow contracts and scope boundary | diff plus notes | command or manual evidence |\n\n"
+                "Use one session per module or task slice when context may drift. Each session should start by reading the listed docs and files instead of relying on previous chat memory."
+            )
         elif section == "Design And Visual Implementation Phase":
             body = (
                 "- If `08-ui-visual-design.md` exists, UI tasks must cite it before implementation.\n"
                 "- If repo-level design governance is needed, create or refresh `DESIGN.md` with `$design` first.\n"
                 "- If pixel/reference matching is required, hand off to `$visual-ralph` after reference approval."
+            )
+        elif section == "Living Spec Update Protocol":
+            body = (
+                "- If implementation changes behavior, API, schema, permissions, generated artifacts, security boundaries, visual contract, or validation evidence, update upstream specs before marking the task complete.\n"
+                "- Update traceability when requirements, tasks, or evals change.\n"
+                "- Record intentional divergence in handoff notes with owner, reason, risk, and follow-up validation."
+            )
+        elif section == "Launch Handoff":
+            body = (
+                "| Area | Required Evidence | Status |\n"
+                "|---|---|---|\n"
+                "| auth/security | permissions, secrets, destructive-action gates, audit notes | TBD |\n"
+                "| performance | budget, Core Web Vitals or API latency target where relevant | TBD |\n"
+                "| monitoring/logging | errors, traces, metrics, correlation IDs, privacy-safe logs | TBD |\n"
+                "| CI/CD | test/build/deploy command and preview/prod separation | TBD |\n"
+                "| rollback | migration rollback or feature flag plan | TBD |"
+            )
+        elif section == "Launch Readiness Checks":
+            body = (
+                "| Area | Check | Evidence |\n"
+                "|---|---|---|\n"
+                "| auth/security | access boundaries and secret handling verified | command or manual audit |\n"
+                "| performance | performance budget or Core Web Vitals target verified where relevant | command, report, or manual note |\n"
+                "| monitoring | errors/logs/metrics defined and privacy-safe | config or code reference |\n"
+                "| CI/CD | validation runs in CI or documented release command | CI link or command |\n"
+                "| rollback | rollback path exists for schema/config/deploy changes | runbook or migration note |"
             )
         elif section == "Design Orchestration":
             body = (
@@ -346,6 +410,9 @@ def initial_traceability(idea: str, include_visual: bool) -> dict[str, Any]:
             "Build-ready packs must not rely only on synthetic reference cases.",
             "Greenfield commercial products should pass the idea pressure test or carry an explicit pivot/research-needed decision before Gate 1.",
             "If 08-ui-visual-design.md exists, UI tasks must cite its visual contract and UI judge entries.",
+            "Architecture decisions must answer real pain solved, stage fit, one-year debt, team scaling cost, and rollback path.",
+            "Agent execution tasks should include prompt packets with role, context, task, constraints, output format, and validation evidence.",
+            "Implementation changes to behavior, API, schema, permissions, security, visual contract, or eval evidence must update upstream specs before completion.",
         ],
         "optional_documents": ["08-ui-visual-design.md"] if include_visual else [],
     }
@@ -374,6 +441,8 @@ def initial_research_ledger(idea: str) -> dict[str, Any]:
             "open_source_reuse_decisions": [],
             "risk_compliance": [],
             "implementation_prior_art": [],
+            "architecture_decision_sources": [],
+            "production_readiness": [],
         },
         "source_fields": [
             "title",
@@ -403,6 +472,7 @@ def initial_handoff(
     scope: str,
     exclude: str,
     repo_root: Path | None,
+    sdd_mode: str,
 ) -> dict[str, Any]:
     """Create a handoff manifest."""
     wanted_stages = set(STAGE_ORDER[stage])
@@ -414,6 +484,7 @@ def initial_handoff(
         "product": idea,
         "generated_at": now_iso(),
         "stage": stage,
+        "sdd_mode": sdd_mode,
         "stage_gate": STAGE_NEXT_ACTION[stage],
         "documents": [filename for filename, doc_stage, _, _ in DOCS if doc_stage in wanted_stages],
         "pending_documents": [
@@ -430,6 +501,7 @@ def initial_handoff(
         "build_readiness_meaning": {
             "spec-complete": "Documents and traceability can be reviewed for implementation.",
             "build-ready": "Requires populated seed data or fixtures, at least one runnable validation command, and non-empty automated checks.",
+            "launch-ready": "Requires build-ready plus security, performance, monitoring, CI/CD, environment, and rollback evidence.",
         },
         "scope": {
             "requested": scope or "full-product",
@@ -442,6 +514,7 @@ def initial_handoff(
             "rule": "Treat existing repository docs as evidence; label prescriptive inputs separately from this pack's ownership.",
         },
         "gates_skipped": GATE_REVIEW_ORDER if single_pass and stage in {"gate3", "all"} else [],
+        "living_spec_rule": "When implementation changes behavior, API, schema, permissions, security, visual contract, or eval evidence, update upstream specs and traceability before marking the task done.",
         "open_questions": [],
         "next_action": STAGE_NEXT_ACTION[stage],
     }
@@ -457,6 +530,7 @@ def run_pipeline(
     scope: str = "",
     exclude: str = "",
     repo_root: Path | None = None,
+    sdd_mode: str = "auto",
 ) -> Path:
     """Create the document pack.
 
@@ -496,6 +570,7 @@ def run_pipeline(
             scope=scope,
             exclude=exclude,
             repo_root=repo_root,
+            sdd_mode=sdd_mode,
         ),
     }
     for filename, data in artifacts.items():
@@ -523,6 +598,12 @@ def main() -> None:
     parser.add_argument("--scope", default="", help="Scope slice to own in this pack, for example user-app-only")
     parser.add_argument("--exclude", default="", help="Comma-separated subsystems excluded from this pack")
     parser.add_argument("--repo-root", default="", help="Existing repository root for docs-first markdown indexing")
+    parser.add_argument(
+        "--sdd-mode",
+        choices=["auto", "vibe-prototype", "spec-lite", "full-sdd", "production-hardening"],
+        default="auto",
+        help="Desired SDD depth. Default: auto.",
+    )
     args = parser.parse_args()
 
     repo_root = Path(args.repo_root) if args.repo_root else None
@@ -536,6 +617,7 @@ def main() -> None:
         scope=args.scope,
         exclude=args.exclude,
         repo_root=repo_root,
+        sdd_mode=args.sdd_mode,
     )
     print(f"Created SpecForge {args.stage} document pack at {out.resolve()}")
     print(STAGE_NEXT_ACTION[args.stage])

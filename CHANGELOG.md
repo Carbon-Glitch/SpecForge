@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.7.0 - 2026-07-06
+
+- Adds explicit SDD depth selection: `vibe-prototype`, `spec-lite`, `full-sdd`, and `production-hardening`.
+- Adds architecture decision lens requirements for real pain solved, stage fit, one-year debt, team scaling cost, migration/rollback path, and research evidence.
+- Adds agent session prompt packets and a living-spec update protocol for code-agent implementation.
+- Adds `launch-ready` readiness semantics and launch readiness checks for production-intended packs.
+- Extends research categories to include architecture decision sources and production readiness evidence.
+
 ## 1.6.0 - 2026-07-01
 
 - Adds optional `08-ui-visual-design.md` for UI-heavy products and connects it to UI judge checks and design-tool orchestration.

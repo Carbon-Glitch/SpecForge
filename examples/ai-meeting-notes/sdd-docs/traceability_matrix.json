@@ -25,6 +25,9 @@
     "Every requirement must map to at least one task.",
     "Every task must map to at least one validation command or evidence requirement.",
     "Every current-world claim must map to a research ledger source.",
-    "Reference and bad cases must declare provenance."
+    "Reference and bad cases must declare provenance.",
+    "Architecture decisions must cite research and explain real pain, stage fit, one-year debt, team scaling cost, and rollback.",
+    "Task prompt packets must specify role, context, task, constraints, output, and validation evidence.",
+    "Implementation changes to behavior, API, schema, permissions, security, visual contract, or eval evidence must update upstream docs before completion."
   ]
 }

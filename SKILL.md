@@ -6,9 +6,9 @@ description: >-
 license: MIT
 metadata:
   author: Codex
-  version: 1.6.0
+  version: 1.7.0
   created: 2026-06-28
-  last_reviewed: 2026-06-28
+  last_reviewed: 2026-07-06
   review_interval_days: 45
   provenance:
     maintainer: Codex
@@ -71,14 +71,14 @@ Preflight:
 
 Core development documents:
 
-1. `00-product-brief.md` — mode, brainstorm summary, concept or change brief, users, jobs, constraints, assumptions, and open questions
+1. `00-product-brief.md` — mode, SDD depth, brainstorm summary, concept or change brief, users, jobs, constraints, assumptions, and open questions
 2. `01-reality-research.md` — live market, existing-system reality, official-doc, and GitHub open-source research with citations
 3. `02-prd-behavior-contract.md` — product PRD plus behavior contract, scope, anti-goals, guardrails, and success metrics
 4. `03-sdd-requirements-spec.md` — testable functional/non-functional requirements, user stories, and EARS acceptance criteria
-5. `04-technical-design.md` — architecture, stack decision, module boundaries, data flow, state truth model, workflow/action contract, generated artifact plan, failure handling, observability
+5. `04-technical-design.md` — architecture, stack decision, architecture decision lens, module boundaries, data flow, state truth model, workflow/action contract, generated artifact plan, failure handling, observability
 6. `05-contracts-data-permissions.md` — API/data/tool schemas, access and permission rules, state and storage contracts, module/file responsibility contracts, model context, migration, integration contracts
-7. `06-eval-and-test-cases.md` — eval criteria, deterministic judge contract, evidence matrix, data sufficiency check, reference cases, bad cases, regression cases, edge cases, launch thresholds
-8. `07-agent-execution-plan.md` — agent-facing implementation plan, source-vs-generated rules, task order, validation commands, AGENTS.md content, handoff rules
+7. `06-eval-and-test-cases.md` — eval criteria, deterministic judge contract, evidence matrix, data sufficiency check, reference cases, bad cases, regression cases, edge cases, launch readiness checks
+8. `07-agent-execution-plan.md` — agent-facing implementation plan, prompt packets, source-vs-generated rules, task order, validation commands, living-spec update protocol, AGENTS.md content, handoff rules
 
 Also generate these support artifacts when useful:
 
@@ -108,12 +108,27 @@ Mandatory research passes:
 3. **GitHub open-source search** — current repositories, activity, stars are not enough; inspect recency, releases, issues, docs, license, API fit, and maintenance. Treat GitHub as an engineering asset library: if a framework, module, workflow engine, UI component, agent runtime, evaluation harness, backend service, or reference app already exists and is suitable, prefer integrating, wrapping, forking, or modifying it over building from scratch.
 4. **Risk and compliance search** — privacy, safety, permissions, AI policy, data retention, domain-specific constraints.
 5. **Implementation prior art search** — current examples, templates, reference architectures, and known traps.
+6. **Architecture decision evidence search** — current evidence for the chosen pattern's fit, operational cost, migration path, and team-scaling burden.
+7. **Launch readiness search** — current host/platform guidance for auth, security, performance, monitoring, CI/CD, environment separation, and rollback.
 
 Prefer primary sources: official docs, repository README/releases/issues, standards, papers, regulatory pages, vendor docs. Use blogs and social posts only as weak supporting evidence.
 
-Every material market or technology claim must have a source or be labeled as inference.
+Every material market or technology claim must have a source or be labeled as inference. Research must survive into decisions: `04-technical-design.md#Architecture Decision Lens` must cite `01-reality-research.md` or `research_ledger.json` for each major choice.
 
 See `references/research-protocol.md` for the detailed source scoring rubric.
+
+## SDD Mode Decision
+
+Choose the lightest mode that protects the work. Record the decision in Gate 0 and `00-product-brief.md`.
+
+| Mode | Use When | Required Depth |
+|---|---|---|
+| `vibe-prototype` | disposable demo, learning spike, or throwaway exploration | Gate 0/1 light; never claim `build-ready` |
+| `spec-lite` | small feature, narrow MVP slice, or low-risk internal flow | Gate 1 plus focused Gate 2/3 contracts |
+| `full-sdd` | production-intended product, broad feature, shared codebase, or real money/privacy/users | all gates, traceability, evals, contracts |
+| `production-hardening` | existing app is nearing launch or reliability/security matters | full-sdd plus launch readiness evidence |
+
+Upgrade the mode when any signal appears: context drift, recurring regressions, team expansion, production intent, private data, payments, public launch, or fear that a feature change may break unknown behavior. Do not force full SDD for every sketch; the goal is enough specification to reduce risk, not ceremony.
 
 ## Gate 0 — Idea Pressure Test
 
@@ -136,6 +151,8 @@ Evaluate:
 9. **Decision** — whether to proceed to Gate 1, adjust the idea first, do more research, or stop.
 
 Use live search when current market or competitor facts matter. Do not invent market size, demand, or competitor claims. Record the pressure-test decision in `research_ledger.json.idea_pressure_test`.
+
+Also record the SDD mode decision. A weak or unvalidated idea may proceed as `vibe-prototype` or `spec-lite`; it should not be promoted to `full-sdd` unless the user accepts the validation risk.
 
 ## Discovery Brainstorming Gate
 
@@ -197,9 +214,11 @@ Use:
 | `gate-review-required` | A gate has been scaffolded or drafted and needs user confirmation. |
 | `spec-complete` | Documents, scope, contracts, traceability, and eval plan are complete enough for engineering review. |
 | `build-ready` | `spec-complete` plus seed data or fixtures, at least one runnable validation command, non-empty automated checks, and no unresolved blocker affecting the first implementation slice. |
+| `launch-ready` | `build-ready` plus auth/security, performance, monitoring/logging, CI/CD, environment separation, and rollback evidence. |
 | `blocked` | A missing decision, source, permission, or dependency prevents reliable implementation. |
 
 Strict validation should reject `build-ready` when `06 Automated Checks` is empty or `07 Validation Commands` has no runnable command and no explicit `manual-only` marking.
+Do not mark `launch-ready` until `06 Launch Readiness Checks` and `07 Launch Handoff` cover security, performance, monitoring, CI/CD, preview/prod separation, and rollback.
 
 ## Workflow
 
@@ -226,6 +245,8 @@ After Gate 0 is confirmed or explicitly skipped, scaffold Gate 1:
 ```bash
 python scripts/run_pipeline.py --idea "<product concept>" --out sdd-docs --stage gate1
 ```
+
+Use `--sdd-mode vibe-prototype|spec-lite|full-sdd|production-hardening` when the desired depth is known. Otherwise keep the default `auto` mode and decide in Gate 0.
 
 Populate `00-product-brief.md` and `01-reality-research.md` before making architecture decisions.
 
@@ -271,6 +292,15 @@ Then write:
 3. `04-technical-design.md`
 
 Stop again after Gate 2. Show the user the PRD, acceptance criteria, compatibility contract, architecture, stack choice, state truth model, workflow/action contract, integration plan, and generated artifact plan. Continue only after confirmation.
+
+`04-technical-design.md#Architecture Decision Lens` must answer for every major architecture or stack choice:
+
+- what real pain this choice solves
+- why it fits the current project stage and is not premature overengineering
+- what one-year technical debt it creates
+- what happens when the team doubles or multiple agents work in parallel
+- how to migrate, replace, or roll back if the choice fails
+- which research source supports the decision
 
 Validate Gate 2 with:
 
@@ -323,6 +353,23 @@ For UI products, `06-eval-and-test-cases.md#UI Judge` must include at least one 
 - `screenshot_manual` — named route, viewport, state, expected visual evidence, reviewer rule
 - `a11y_contrast` — token pair, minimum contrast threshold, check command or manual rule
 - `route_snapshot` — route, viewport, screenshot command, and non-overlap/no-overflow assertions
+
+`06-eval-and-test-cases.md#Launch Readiness Checks` must cover auth/security, performance, monitoring/logging, CI/CD, environment separation, and rollback when the pack targets production or `production-hardening`.
+
+`07-agent-execution-plan.md#Agent Session Plan` must provide prompt packets for implementation slices:
+
+| Field | Requirement |
+|---|---|
+| role | the agent stance needed for the task |
+| context/files to read | exact docs and source files to load first |
+| task | one concrete change or module slice |
+| constraints | scope, contracts, forbidden changes, compatibility rules |
+| output format | expected diff, files, report, or artifact |
+| validation evidence | command, screenshot, API/state/file evidence, or manual review |
+
+Use one session per module or task slice when context may drift. Do not ask a code agent to carry the whole product in one chat if the work naturally splits.
+
+`07-agent-execution-plan.md#Living Spec Update Protocol` must state: if implementation changes behavior, API, schema, permissions, generated artifacts, security boundaries, visual contract, or validation evidence, update upstream specs and traceability before marking the task complete.
 
 ### 5. Validate
 

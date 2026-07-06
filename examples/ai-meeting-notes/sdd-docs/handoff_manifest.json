@@ -3,6 +3,7 @@
   "product": "AI meeting notes for sales teams",
   "generated_at": "2026-06-28T00:00:00Z",
   "stage": "gate3",
+  "sdd_mode": "full-sdd",
   "stage_gate": "All gates reviewed in demo sample.",
   "documents": [
     "preflight-idea-pressure-test.md",
@@ -28,7 +29,8 @@
   "build_readiness_meaning": {
     "demo-only": "Example shape only; refresh research and commands before implementation.",
     "spec-complete": "Documents and traceability can be reviewed for implementation.",
-    "build-ready": "Requires fixtures, runnable validation commands, and non-empty automated checks."
+    "build-ready": "Requires fixtures, runnable validation commands, and non-empty automated checks.",
+    "launch-ready": "Requires build-ready plus security, performance, monitoring, CI/CD, environment separation, and rollback evidence."
   },
   "scope": {
     "requested": "upload-first-sales-meeting-notes",
@@ -45,6 +47,7 @@
     "rule": "For real repos, index existing product/domain/design markdown before Gate 1."
   },
   "gates_skipped": [],
+  "living_spec_rule": "When implementation changes behavior, API, schema, permissions, security, visual contract, or eval evidence, update upstream specs and traceability before marking the task done.",
   "open_questions": [
     "Confirm first CRM integration.",
     "Confirm audio retention policy.",

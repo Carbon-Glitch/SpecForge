@@ -28,6 +28,15 @@ The broad "AI meeting notes" category is crowded. The stronger wedge is not gene
 | Speed to validate | 5/5 | Can test with manual call uploads and hand-edited outputs before full automation. |
 | Team advantage | 3/5 | Advantage depends on access to sales users and CRM workflow knowledge. |
 
+## SDD Mode Decision
+
+| Signal | Observation | Mode Impact |
+|---|---|---|
+| production intent | Commercial SaaS idea with CRM writes and meeting-data privacy risk. | `full-sdd` for real implementation; this example remains `demo-only`. |
+| context drift risk | Multiple adapters: upload, transcription, notes, review, CRM export. | Use prompt packets by module in `07`. |
+| regression risk | External write gate must never regress. | Requires deterministic evals before build-ready. |
+| team scaling | Frontend, backend, and eval work can split. | Explicit module boundaries and session plan required. |
+
 ## Core Assumption
 
 Sales teams will repeatedly use and pay for a tool that turns calls into trusted CRM-ready follow-up faster than their current meeting recorder, note template, or manual process.

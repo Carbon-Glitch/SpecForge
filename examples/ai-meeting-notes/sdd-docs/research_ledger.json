@@ -95,6 +95,28 @@
         "claim_supported": "Meeting note and transcription project patterns exist on GitHub.",
         "confidence": "medium"
       }
+    ],
+    "architecture_decision_sources": [
+      {
+        "title": "Transcription adapter prior-art decision",
+        "url": "https://github.com/ggml-org/whisper.cpp",
+        "publisher": "SpecForge demo",
+        "published_or_updated": "2026-06-28",
+        "accessed_at": "2026-06-28",
+        "claim_supported": "A pluggable transcription adapter keeps local and hosted transcription options replaceable.",
+        "confidence": "medium"
+      }
+    ],
+    "production_readiness": [
+      {
+        "title": "Production readiness placeholder",
+        "url": "https://example.com/refresh-before-launch",
+        "publisher": "SpecForge demo",
+        "published_or_updated": "2026-06-28",
+        "accessed_at": "2026-06-28",
+        "claim_supported": "Launch-readiness evidence must be refreshed from official hosting, monitoring, auth, and CRM platform docs before launch.",
+        "confidence": "low"
+      }
     ]
   }
 }

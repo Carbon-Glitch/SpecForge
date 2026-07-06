@@ -25,6 +25,7 @@ Purpose: turn the user's rough idea into a clear working brief.
 Must include:
 
 - mode: `greenfield` or `feature`
+- SDD mode: `vibe-prototype`, `spec-lite`, `full-sdd`, or `production-hardening`
 - brainstorming summary
 - one-sentence product concept
 - existing system context when adding to a codebase
@@ -105,6 +106,7 @@ Must include:
 
 - architecture overview
 - stack decision with source-backed rationale
+- architecture decision lens: real pain solved, stage fit, one-year technical debt, team scaling cost, migration/rollback path, and evidence source
 - open-source reuse plan: what to integrate, fork, wrap, extract, or build from scratch
 - integration plan for existing modules, APIs, routes, data, jobs, and tests when in Feature Mode
 - module boundaries
@@ -157,6 +159,7 @@ Must include:
 - automated checks
 - manual review checks
 - regression gates
+- launch readiness checks for production-intended packs: auth/security, performance, monitoring/logging, CI/CD, environment separation, and rollback
 
 Cases can be JSON, CSV, markdown, screenshots, fixtures, API examples, or scenario tables, but they must be concrete.
 
@@ -169,10 +172,13 @@ Must include:
 - agent operating rules
 - implementation phases
 - task list with IDs
+- agent session plan with prompt packets: role, context/files to read, task, constraints, output format, and validation evidence
 - dependencies and parallelization
 - source-vs-generated rules
 - design and visual implementation phase when `08-ui-visual-design.md` exists
+- living spec update protocol for behavior/API/schema/permission/security/visual/eval changes
 - validation commands
+- launch handoff for production-intended packs
 - handoff to coding agent
 - generated `AGENTS.md` content
 - done definition
@@ -221,6 +227,7 @@ Use these labels in `handoff_manifest.json`:
 - `gate-review-required` — a gate has been scaffolded or drafted and needs user confirmation
 - `spec-complete` — docs, scope, contracts, traceability, and eval plan are complete enough for engineering review
 - `build-ready` — `spec-complete` plus fixtures/seed data, at least one runnable validation command, non-empty automated checks, and no blocker for the first implementation slice
+- `launch-ready` — `build-ready` plus auth/security, performance, monitoring/logging, CI/CD, preview/prod separation, and rollback evidence
 - `blocked` — missing external access or critical unanswered question
 
 ## Stage Gates

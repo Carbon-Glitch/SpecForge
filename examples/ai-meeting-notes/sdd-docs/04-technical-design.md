@@ -17,6 +17,14 @@ The MVP uses a web app plus API backend. Uploaded audio creates a meeting job. A
 | Transcription | pluggable adapter | Allows cloud or local backend evaluation. |
 | Storage | relational DB plus object storage | Structured approvals plus audio/transcript retention. |
 
+## Architecture Decision Lens
+
+| Option | Real Pain Solved | Stage Fit / Overengineering Risk | One-Year Technical Debt | Team Scaling Cost | Migration / Rollback Path | Evidence |
+|---|---|---|---|---|---|---|
+| Pluggable transcription adapter | Avoids locking the product to one transcription engine before accuracy/cost research is complete. | Good MVP fit; lower risk than building custom speech recognition. | Adapter maintenance and fixture drift across providers. | Backend and eval work can split by adapter contract. | Swap provider behind interface; keep transcript segment schema stable. | `01-reality-research.md#GitHub And Open Source Findings`, `research_ledger.json.github_open_source` |
+| Review-before-CRM-write gate | Solves trust gap for generated sales notes and prevents bad external writes. | Not overengineering because CRM writes are a core risk. | More UI and audit complexity than auto-sync. | Clear frontend/backend boundary for approval state. | Feature flag external sync; retain markdown/CSV export fallback. | `01-reality-research.md#Risk And Compliance Findings` |
+| Relational DB plus object storage | Separates structured approvals from large audio files. | Standard fit for uploaded recordings; avoids premature event sourcing. | Retention and deletion workflows must stay synchronized. | Data ownership remains understandable for new contributors. | Additive migrations; object keys remain outside note schema. | `01-reality-research.md#Official Documentation Findings` |
+
 ## Open Source Reuse Plan
 
 | Subsystem | Plan |

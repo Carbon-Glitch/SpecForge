@@ -8,6 +8,10 @@
 
 greenfield
 
+## SDD Mode
+
+`full-sdd` for a real build because the product handles private meeting data, external CRM writes, and multiple implementation modules. This example pack is `demo-only` and must refresh live research before implementation.
+
 ## Brainstorming Summary
 
 The product direction is an upload-first sales meeting notes tool, not a live meeting bot. The recommended MVP emphasizes transcript-grounded action items, human review, and gated CRM export.
