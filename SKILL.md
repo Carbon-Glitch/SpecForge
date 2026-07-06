@@ -6,7 +6,7 @@ description: >-
 license: MIT
 metadata:
   author: Codex
-  version: 1.7.0
+  version: 1.8.0
   created: 2026-06-28
   last_reviewed: 2026-07-06
   review_interval_days: 45
@@ -75,10 +75,10 @@ Core development documents:
 2. `01-reality-research.md` — live market, existing-system reality, official-doc, and GitHub open-source research with citations
 3. `02-prd-behavior-contract.md` — product PRD plus behavior contract, scope, anti-goals, guardrails, and success metrics
 4. `03-sdd-requirements-spec.md` — testable functional/non-functional requirements, user stories, and EARS acceptance criteria
-5. `04-technical-design.md` — architecture, stack decision, architecture decision lens, module boundaries, data flow, state truth model, workflow/action contract, generated artifact plan, failure handling, observability
-6. `05-contracts-data-permissions.md` — API/data/tool schemas, access and permission rules, state and storage contracts, module/file responsibility contracts, model context, migration, integration contracts
-7. `06-eval-and-test-cases.md` — eval criteria, deterministic judge contract, evidence matrix, data sufficiency check, reference cases, bad cases, regression cases, edge cases, launch readiness checks
-8. `07-agent-execution-plan.md` — agent-facing implementation plan, prompt packets, source-vs-generated rules, task order, validation commands, living-spec update protocol, AGENTS.md content, handoff rules
+5. `04-technical-design.md` — architecture, stack decision, architecture decision lens, frontend/backend/data/algorithm decision matrices, module boundaries, data flow, state truth model, workflow/action contract, generated artifact plan, failure handling, observability
+6. `05-contracts-data-permissions.md` — API/data/tool schemas, access and permission rules, cache consistency, data access/index contracts, state and storage contracts, module/file responsibility contracts, model context, migration, integration contracts
+7. `06-eval-and-test-cases.md` — eval criteria, deterministic judge contract, architecture fitness checks, evidence matrix, data sufficiency check, reference cases, bad cases, regression cases, edge cases, launch readiness checks
+8. `07-agent-execution-plan.md` — agent-facing implementation plan, prompt packets, architecture workstream packets, source-vs-generated rules, task order, validation commands, living-spec update protocol, AGENTS.md content, handoff rules
 
 Also generate these support artifacts when useful:
 
@@ -110,12 +110,37 @@ Mandatory research passes:
 5. **Implementation prior art search** — current examples, templates, reference architectures, and known traps.
 6. **Architecture decision evidence search** — current evidence for the chosen pattern's fit, operational cost, migration path, and team-scaling burden.
 7. **Launch readiness search** — current host/platform guidance for auth, security, performance, monitoring, CI/CD, environment separation, and rollback.
+8. **Domain architecture search** — current official docs, GitHub projects, package docs, benchmarks, security guidance, and production examples for frontend rendering/state/motion, backend API/workflow/cache, data store/index/transaction/retention, and algorithm/search/ranking/rate-limit/scheduler/graph decisions.
 
 Prefer primary sources: official docs, repository README/releases/issues, standards, papers, regulatory pages, vendor docs. Use blogs and social posts only as weak supporting evidence.
 
 Every material market or technology claim must have a source or be labeled as inference. Research must survive into decisions: `04-technical-design.md#Architecture Decision Lens` must cite `01-reality-research.md` or `research_ledger.json` for each major choice.
 
 See `references/research-protocol.md` for the detailed source scoring rubric.
+
+## Domain Architecture Decision Gate
+
+Do not let a code agent improvise frontend state, rendering, backend boundaries, database schema, indexes, cache invalidation, queues, or algorithms while coding.
+
+In Gate 2, `04-technical-design.md` must include decision matrices for relevant workstreams:
+
+| Workstream | Required Decisions |
+|---|---|
+| Frontend | rendering strategy, state ownership, interaction/motion, component/design-system approach, performance and accessibility evidence |
+| Backend | deployment shape, domain boundaries, API style, async/workflow strategy, caching and invalidation |
+| Data | primary store, schema and migrations, indexes/query paths, transactions/consistency, retention and privacy |
+| Algorithm/Data Structure | search, ranking/recommendation, rate limiting, scheduling/queues, graph/relationship traversal, matching/retrieval when relevant |
+
+Each decision must state options researched, chosen direction, why it fits this product, rejected alternatives, validation evidence, and source links. Use current official docs and GitHub/package evidence. Static recommendations from an article, model memory, or a previous project are examples to investigate, not defaults to copy.
+
+In Gate 3, connect these choices to:
+
+- `05#Cache And Consistency Contract`
+- `05#Data Access And Index Contract`
+- `06#Architecture Fitness Checks`
+- `07#Architecture Workstream Prompt Packets`
+
+If a product has no UI/backend/data/algorithm surface, mark that workstream `not_applicable` with reason.
 
 ## SDD Mode Decision
 
@@ -302,6 +327,8 @@ Stop again after Gate 2. Show the user the PRD, acceptance criteria, compatibili
 - how to migrate, replace, or roll back if the choice fails
 - which research source supports the decision
 
+Also fill the domain architecture decision matrices. For example, UI-heavy products must decide rendering, state ownership, and motion constraints; backend products must decide API/workflow/cache boundaries; data-heavy products must decide stores, indexes, transactions, and retention; search/recommendation/scheduler products must decide algorithms and validation cases.
+
 Validate Gate 2 with:
 
 ```bash
@@ -346,6 +373,8 @@ Do not let later docs invent requirements not traceable to earlier docs. If a ne
 
 Before starting `07-agent-execution-plan.md`, verify that documents `04`, `05`, and `06` contain the executable contracts gate above. Implementation tasks must reference these contracts, not re-infer state, navigation, module ownership, generated files, or eval evidence.
 
+`05-contracts-data-permissions.md` must include cache/consistency and data access/index contracts when the product uses caching, databases, search, queues, or external state.
+
 Reference, bad, and regression cases must declare provenance: `user-confirmed`, `real-source-derived`, `existing-test-derived`, or `synthetic`. A build-ready pack must include at least one non-synthetic reference case; do not rely only on cases made by the same model that writes the eval.
 
 For UI products, `06-eval-and-test-cases.md#UI Judge` must include at least one of:
@@ -355,6 +384,8 @@ For UI products, `06-eval-and-test-cases.md#UI Judge` must include at least one 
 - `route_snapshot` — route, viewport, screenshot command, and non-overlap/no-overflow assertions
 
 `06-eval-and-test-cases.md#Launch Readiness Checks` must cover auth/security, performance, monitoring/logging, CI/CD, environment separation, and rollback when the pack targets production or `production-hardening`.
+
+`06-eval-and-test-cases.md#Architecture Fitness Checks` must include evidence for selected frontend, backend, data, and algorithm decisions: screenshot/render metrics, contract tests, migration/query/index tests, cache invalidation tests, golden ranking/search cases, rate-limit burst tests, queue retry/idempotency tests, or graph permission traversal cases.
 
 `07-agent-execution-plan.md#Agent Session Plan` must provide prompt packets for implementation slices:
 
@@ -368,6 +399,8 @@ For UI products, `06-eval-and-test-cases.md#UI Judge` must include at least one 
 | validation evidence | command, screenshot, API/state/file evidence, or manual review |
 
 Use one session per module or task slice when context may drift. Do not ask a code agent to carry the whole product in one chat if the work naturally splits.
+
+`07-agent-execution-plan.md#Architecture Workstream Prompt Packets` must split frontend, backend, data, and algorithm tasks when those surfaces exist, so each agent session starts from the relevant contracts and validation evidence.
 
 `07-agent-execution-plan.md#Living Spec Update Protocol` must state: if implementation changes behavior, API, schema, permissions, generated artifacts, security boundaries, visual contract, or validation evidence, update upstream specs and traceability before marking the task complete.
 
@@ -435,43 +468,13 @@ Chinese is allowed, but the same structure must remain:
 
 Never select a framework, database, model, SDK, or open-source library solely because it is familiar.
 
-For every major technical choice, include:
-
-- chosen option
-- current official source
-- GitHub/package health evidence when open source
-- reuse strategy: integrate, fork/modify, wrap, extract pattern, or build from scratch
-- estimated development cost saved by reuse and integration cost introduced by reuse
-- why it fits this product
-- rejected alternatives
-- operational risks
-- migration or fallback path
+For every major technical choice, include the chosen option, current official source, GitHub/package health when open source, reuse strategy, fit rationale, rejected alternatives, operational risks, and migration/fallback path. Use `references/research-protocol.md` for the full evidence rubric.
 
 ## Open-Source Reuse Rule
 
 Before proposing custom implementation for any non-trivial subsystem, search GitHub and package registries for reusable assets.
 
-Subsystems that require explicit reuse research include:
-
-- app scaffolds and starter kits
-- authentication and authorization
-- dashboards and admin panels
-- workflow engines and job queues
-- agent runtimes and tool registries
-- RAG, search, indexing, and vector pipelines
-- eval frameworks, test fixtures, and regression harnesses
-- UI component libraries and feature-specific components
-- realtime collaboration, notifications, files, media, payments, analytics
-
-For each candidate, evaluate:
-
-- fit to product requirements
-- integration surface and required adaptation
-- license compatibility
-- maintenance health and release recency
-- dependency and security risk
-- test coverage and documentation quality
-- whether forking creates long-term maintenance burden
+Always research reuse for app scaffolds, auth, dashboards/admin panels, workflow engines, queues, agent runtimes, RAG/search/vector pipelines, eval harnesses, UI components, realtime, notifications, files, media, payments, and analytics when relevant. Evaluate fit, integration surface, license, maintenance health, dependency/security risk, docs/tests, and fork burden.
 
 Do not default to "build from scratch" unless the research shows that reuse is unsuitable, riskier, or more expensive than implementation.
 

@@ -25,6 +25,45 @@ The MVP uses a web app plus API backend. Uploaded audio creates a meeting job. A
 | Review-before-CRM-write gate | Solves trust gap for generated sales notes and prevents bad external writes. | Not overengineering because CRM writes are a core risk. | More UI and audit complexity than auto-sync. | Clear frontend/backend boundary for approval state. | Feature flag external sync; retain markdown/CSV export fallback. | `01-reality-research.md#Risk And Compliance Findings` |
 | Relational DB plus object storage | Separates structured approvals from large audio files. | Standard fit for uploaded recordings; avoids premature event sourcing. | Retention and deletion workflows must stay synchronized. | Data ownership remains understandable for new contributors. | Additive migrations; object keys remain outside note schema. | `01-reality-research.md#Official Documentation Findings` |
 
+## Frontend Architecture Decisions
+
+| Decision Area | Options To Research | Chosen Direction | Why It Fits | Validation Evidence |
+|---|---|---|---|---|
+| rendering | CSR / SSR / hybrid routes | Hybrid: marketing pages can be SSR/static; review workflow is interactive app UI. | Review screen needs rich interaction; public pages may need SEO. | route snapshot plus Core Web Vitals before launch. |
+| state ownership | server state / client global / URL / local UI | Server state for meetings/transcripts; local UI state for unsaved edits; URL for selected meeting. | Avoids duplicating meeting truth in client stores. | approval-flow state test and unsaved-edit warning test. |
+| interaction and motion | CSS transitions / animation library / none | Minimal transitions for upload, processing, and approve/export feedback. | Trust matters more than decorative motion. | screenshot/manual motion review with reduced-motion rule. |
+| component system | existing component library / headless primitives / custom | Accessible table, dialog, upload, and diff/review primitives. | Faster MVP while preserving a11y. | a11y contrast and keyboard review. |
+
+## Backend Architecture Decisions
+
+| Decision Area | Options To Research | Chosen Direction | Why It Fits | Validation Evidence |
+|---|---|---|---|---|
+| deployment shape | modular monolith / services / serverless jobs | Modular monolith plus background job adapter for MVP. | Keeps CRM gate, notes, and transcript workflow understandable. | integration tests for job status transitions. |
+| domain boundaries | CRUD modules / DDD contexts | Modules: meetings, transcription, notes, CRM export, evals. | Clear enough without premature DDD ceremony. | module boundary review. |
+| API style | REST / RPC / GraphQL | REST-like endpoints for upload/review/export. | Simple client contract and easy HTTP testing. | API contract tests. |
+| async/workflow | direct call / queue / workflow engine | Background job for transcription and note extraction. | Uploads can be slow and retryable. | retry/idempotency tests. |
+| caching | no cache / app cache / HTTP cache | Avoid caching sensitive transcript/note detail in MVP. | Privacy and correctness beat speed. | cache-control header review. |
+
+## Data Architecture Decisions
+
+| Decision Area | Options To Research | Chosen Direction | Why It Fits | Validation Evidence |
+|---|---|---|---|---|
+| primary store | relational / document / object | Relational DB for metadata and structured notes; object storage for audio. | Approval, audit, and export state need relational consistency. | schema and relationship tests. |
+| schema and migrations | additive / destructive | Additive migrations for statuses, versions, and export records. | Preserves rollback and auditability. | migration command. |
+| indexes and query paths | owner/time/status indexes | Index meetings by owner/status/created_at; action items by meeting_id. | Main flows list user meetings and load one review. | query plan or benchmark before launch. |
+| transactions and consistency | strong / eventual / idempotent | Strong approval state; idempotent CRM export. | Prevents duplicate or unapproved writes. | CRM export gate tests. |
+| retention and privacy | TTL / policy field / hard delete | `retention_until` for audio; transcript/note retention follows workspace policy. | Meeting data is sensitive. | retention policy tests. |
+
+## Algorithm And Data Structure Decisions
+
+| Capability | Options To Research | Trigger To Use | Chosen Direction | Validation Evidence |
+|---|---|---|---|---|
+| search | keyword / full-text / vector | Needed only after users need historical call retrieval. | Defer to future pack; keep transcript segments searchable later. | not_applicable for MVP. |
+| ranking/recommendation | rules / scoring / embeddings | Not central to upload-first MVP. | not_applicable. | not_applicable. |
+| rate limiting | fixed window / token bucket / quota ledger | Needed to control upload/transcription cost. | Simple per-user upload quota for MVP. | quota limit test before build-ready. |
+| scheduling/queues | FIFO / delay queue / workflow DAG | Required for transcription and extraction retries. | FIFO job queue with retry and idempotency key. | retry and duplicate job tests. |
+| graph/relationship | adjacency / graph DB | No graph traversal in MVP. | not_applicable. | not_applicable. |
+
 ## Open Source Reuse Plan
 
 | Subsystem | Plan |

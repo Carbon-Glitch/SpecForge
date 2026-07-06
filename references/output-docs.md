@@ -107,6 +107,10 @@ Must include:
 - architecture overview
 - stack decision with source-backed rationale
 - architecture decision lens: real pain solved, stage fit, one-year technical debt, team scaling cost, migration/rollback path, and evidence source
+- frontend architecture decisions when UI exists: rendering, state ownership, interaction/motion, component/design-system choice, performance and accessibility evidence
+- backend architecture decisions when backend exists: deployment shape, domain boundaries, API style, async/workflow strategy, caching and invalidation
+- data architecture decisions when data exists: primary store, schema/migrations, indexes/query paths, transactions/consistency, retention/privacy
+- algorithm and data-structure decisions when relevant: search, ranking/recommendation, rate limiting, scheduling/queues, graph/relationship traversal, matching/retrieval
 - open-source reuse plan: what to integrate, fork, wrap, extract, or build from scratch
 - integration plan for existing modules, APIs, routes, data, jobs, and tests when in Feature Mode
 - module boundaries
@@ -132,6 +136,8 @@ Must include:
 - state model contract
 - tool contracts
 - access and permission rules
+- cache and consistency contract: source of truth, cache layer, invalidation rule, staleness budget, and failure behavior
+- data access and index contract: query path, owner, expected cardinality, index/search structure, permission filter, and validation
 - module file responsibility contract: each module/file role, allowed content, forbidden content, ownership, dependency direction, and public interface
 - security boundaries
 - storage and retention rules
@@ -148,6 +154,7 @@ Must include:
 - eval philosophy
 - launch, target, and aspirational thresholds
 - deterministic judge contract: code/state/API/file/screenshot/log/manual evidence for each requirement
+- architecture fitness checks for selected frontend, backend, data, and algorithm decisions
 - evidence matrix mapping requirement IDs to judge type, command, fixture, expected state, and failure signal
 - data sufficiency check for defaults, fixtures, seed scenarios, edge cases, and bad cases
 - UI judge when the product has visible UI: `screenshot_manual`, `a11y_contrast`, `route_snapshot`, or explicit manual-only reason
@@ -173,6 +180,7 @@ Must include:
 - implementation phases
 - task list with IDs
 - agent session plan with prompt packets: role, context/files to read, task, constraints, output format, and validation evidence
+- architecture workstream prompt packets for frontend, backend, data, and algorithm work when those surfaces exist
 - dependencies and parallelization
 - source-vs-generated rules
 - design and visual implementation phase when `08-ui-visual-design.md` exists

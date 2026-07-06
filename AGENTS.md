@@ -32,6 +32,8 @@ Key operating rule: perform live web research before market claims, technology c
 
 Research must feed decisions. For every major architecture or stack choice, `04-technical-design.md#Architecture Decision Lens` must cite `01-reality-research.md` or `research_ledger.json` and answer: real pain solved, stage fit, one-year technical debt, team scaling cost, and migration or rollback path.
 
+Domain-architecture rule: when the product has UI, backend, data, or algorithmic behavior, `04-technical-design.md` must include relevant decision matrices for frontend rendering/state/motion, backend deployment/API/workflow/cache, data stores/migrations/indexes/consistency/retention, and algorithms/search/ranking/rate-limit/scheduling/graph logic. These choices require live official-doc and GitHub/package research; article examples and model memory are only leads.
+
 Feature-mode rule: when the request targets an existing project, inspect current code, tests, docs, schemas, routes, data, and deployment constraints before writing specs. Preserve compatibility unless the user asks for redesign.
 
 Docs-first rule: when the repository already contains product/domain/design markdown, index those docs before Gate 1. Put path plus one-line responsibility in `00-product-brief.md#Existing System Context`, then separate `Prescriptive Inputs` from `This Pack Owns`.
@@ -40,7 +42,11 @@ Scope-slice rule: if the user supplies `--scope` or `--exclude`, put `in_pack`, 
 
 Executable-contract operating rule: before implementation tasks, require contracts for state truth, workflow/navigation/actions, deterministic judging, module/file boundaries, generated artifacts, and data sufficiency. Tasks should reference those contracts and include concrete validation commands or evidence requirements.
 
+Data/cache operating rule: when caching, databases, search, queues, or external state exist, `05-contracts-data-permissions.md` must define cache invalidation, staleness budget, data access paths, indexes/search structures, permission filters, and migration/rollback constraints.
+
 Agent-session rule: `07-agent-execution-plan.md` must include prompt packets for implementation slices: role, context/files to read, task, constraints, output format, and validation evidence. Use one session per module or task slice when context may drift.
+
+Workstream rule: split frontend, backend, data, and algorithm prompt packets when those surfaces exist. Each workstream must start from the relevant contracts and end with its own evidence: screenshot/render/a11y, API/contract/workflow, migration/query/index/cache, or golden search/ranking/rate-limit/graph cases.
 
 Living-spec rule: if implementation changes behavior, API, schema, permissions, generated artifacts, security boundaries, visual contract, or validation evidence, update upstream specs and traceability before marking the task complete.
 

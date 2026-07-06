@@ -34,6 +34,15 @@ Evaluation must prove that generated notes are grounded in transcript evidence a
 | GC-002 | FR-004 | `pytest tests/test_crm_export_gate.py` | export blocked before approval |
 | BC-001 | NFR-003 | `pytest tests/test_preview_no_external_write.py` | no external write in preview |
 
+## Architecture Fitness Checks
+
+| Architecture Area | Check | Command Or Evidence |
+|---|---|---|
+| frontend rendering/state | Review route shows transcript, generated notes, edits, approval state, and CRM preview without duplicating source of truth. | `pytest tests/test_approval_flow.py` plus route screenshot. |
+| backend/API/workflow | Upload creates a job, transcription retry does not duplicate segments, export requires approval. | `pytest tests/test_transcription_adapter.py` and `pytest tests/test_crm_export_gate.py` |
+| data/index/consistency | Meeting list, review load, and idempotency-key lookup use expected access paths. | query plan review or repository data test. |
+| algorithm/queue/quota | Upload quota blocks excessive transcription cost and job retry is idempotent. | quota and retry tests before build-ready. |
+
 ## Data Sufficiency Check
 
 Fixtures must include:

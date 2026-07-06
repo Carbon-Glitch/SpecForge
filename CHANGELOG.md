@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.8.0 - 2026-07-06
+
+- Adds domain architecture decision matrices for frontend, backend, data, and algorithm/data-structure workstreams.
+- Adds cache consistency and data access/index contracts to the contracts document.
+- Adds architecture fitness checks and workstream prompt packets so code agents validate architecture choices with evidence.
+- Expands live research requirements to cover rendering/state/motion, API/workflow/cache, stores/indexes/transactions, and search/ranking/rate-limit/scheduler/graph decisions.
+
 ## 1.7.0 - 2026-07-06
 
 - Adds explicit SDD depth selection: `vibe-prototype`, `spec-lite`, `full-sdd`, and `production-hardening`.

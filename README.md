@@ -4,7 +4,7 @@
 
 SpecForge is a cross-platform agent skill that turns a simple product concept into a research-grounded Spec-Driven Development document pack for AI coding agents.
 
-Unlike generic spec generators, SpecForge combines live research, GitHub open-source reuse analysis, executable engineering contracts, deterministic eval planning, architecture decision lenses, and code-agent prompt packets before coding begins.
+Unlike generic spec generators, SpecForge combines live research, GitHub open-source reuse analysis, executable engineering contracts, deterministic eval planning, architecture decision lenses, frontend/backend/data/algorithm decision matrices, and code-agent prompt packets before coding begins.
 
 It supports both new products and feature work in existing repositories.
 
@@ -47,10 +47,10 @@ Core documents:
 2. `01-reality-research.md` - live market, competitor, official-doc, and GitHub open-source research with citations
 3. `02-prd-behavior-contract.md` - PRD, behavior contract, scope, guardrails, and success metrics
 4. `03-sdd-requirements-spec.md` - functional/non-functional requirements, user stories, and EARS acceptance criteria
-5. `04-technical-design.md` - architecture, stack choices, architecture decision lens, state truth model, workflows/actions, generated artifacts, and observability
-6. `05-contracts-data-permissions.md` - API/data/tool contracts, permissions, storage, module/file boundaries, and integrations
-7. `06-eval-and-test-cases.md` - deterministic judge contract, evidence matrix, test fixtures, reference cases, bad cases, regression gates, and launch readiness checks
-8. `07-agent-execution-plan.md` - coding-agent implementation plan, prompt packets, task order, validation commands, living-spec update protocol, and AGENTS.md handoff rules
+5. `04-technical-design.md` - architecture, stack choices, architecture decision lens, frontend/backend/data/algorithm decisions, state truth model, workflows/actions, generated artifacts, and observability
+6. `05-contracts-data-permissions.md` - API/data/tool contracts, permissions, cache consistency, data access/index contracts, storage, module/file boundaries, and integrations
+7. `06-eval-and-test-cases.md` - deterministic judge contract, architecture fitness checks, evidence matrix, test fixtures, reference cases, bad cases, regression gates, and launch readiness checks
+8. `07-agent-execution-plan.md` - coding-agent implementation plan, prompt packets, architecture workstream packets, task order, validation commands, living-spec update protocol, and AGENTS.md handoff rules
 
 Optional:
 
@@ -71,12 +71,14 @@ Support artifacts:
 - **Respect existing systems**: for feature work, inspect the current codebase and preserve compatibility unless the user asks for a redesign.
 - **GitHub reuse before custom build**: if a subsystem already has a suitable open-source implementation, evaluate integration, wrapping, forking, or pattern extraction before building from scratch.
 - **Architecture decisions must age well**: each major choice should explain real pain solved, stage fit, one-year technical debt, team scaling cost, and rollback path.
+- **Engineering choices are explicit**: frontend rendering/state/motion, backend API/workflow/cache, data store/index/transaction/retention, and algorithm/search/ranking/rate-limit decisions are researched and validated instead of improvised during coding.
 - **Executable contracts before tasks**: state, workflows, actions, modules, generated files, data, and judges must be explicit before implementation starts.
 - **Scope before expansion**: when only one slice should be built, mark every subsystem as `in_pack`, `referenced_only`, or `future_pack`.
 - **Visual contracts before UI coding**: UI-heavy products can add `08-ui-visual-design.md`; use `$design` for durable `DESIGN.md` and `$visual-ralph` for pixel/reference implementation.
 - **Agent-readable over prose-heavy**: stable headings, IDs, tables, acceptance criteria, validation commands, and traceability beat vague planning text.
 - **Evidence-based verification**: every task should have a command, state/API/file check, screenshot/log evidence, or explicit manual review criterion.
 - **Prompt packets over giant chats**: implementation slices should tell the code agent which role to take, which files to read, what to change, what not to change, and how to prove completion.
+- **Workstream handoff**: frontend, backend, data, and algorithm tasks get separate prompt packets and evidence expectations when those surfaces exist.
 - **Living specs during implementation**: behavior/API/schema/permission/security/visual/eval changes update the upstream docs before task completion.
 
 ## Quick Start
@@ -203,7 +205,7 @@ SpecForge 是一个跨平台 agent skill，用来把简单的产品概念转成�
 
 它适配 Cursor、Codex、Claude Code、Antigravity、GitHub Copilot、Gemini CLI、Windsurf、Cline、Roo、Kiro、OpenCode、Goose 等能读取 `SKILL.md`、`AGENTS.md` 或项目规则的 agent 环境。
 
-它和普通“生成 PRD/spec”的工具不同：SpecForge 会在开发前加入真实调研、GitHub 开源复用分析、可执行工程契约、确定性评测规划、架构决策透镜和 code agent prompt packet。
+它和普通“生成 PRD/spec”的工具不同：SpecForge 会在开发前加入真实调研、GitHub 开源复用分析、可执行工程契约、确定性评测规划、架构决策透镜、前端/后端/数据/算法选型矩阵和 code agent prompt packet。
 
 它既支持从 0 到 1 的新产品，也支持在已有代码库中加功能、改模块或做集成。
 
@@ -236,10 +238,10 @@ SpecForge 会生成 1 份前置决策文档和 8 份核心开发文档。
 2. `01-reality-research.md` - 真实市场、竞品、官方文档、GitHub 开源方案调研和引用来源
 3. `02-prd-behavior-contract.md` - PRD、行为契约、范围、护栏和成功指标
 4. `03-sdd-requirements-spec.md` - 可测试需求、用户故事和 EARS 验收标准
-5. `04-technical-design.md` - 架构、技术栈、架构决策透镜、状态真相模型、流程动作、生成物和可观测性
-6. `05-contracts-data-permissions.md` - API、数据、工具、权限、存储、模块文件边界和集成契约
-7. `06-eval-and-test-cases.md` - 确定性评测、证据矩阵、测试 fixtures、reference cases、bad cases、回归门槛和上线准备检查
-8. `07-agent-execution-plan.md` - 给 code agent 执行的 prompt packets、任务顺序、验证命令、living spec 更新协议和 AGENTS.md 交接规则
+5. `04-technical-design.md` - 架构、技术栈、架构决策透镜、前端/后端/数据/算法选型、状态真相模型、流程动作、生成物和可观测性
+6. `05-contracts-data-permissions.md` - API、数据、工具、权限、缓存一致性、数据访问/索引、存储、模块文件边界和集成契约
+7. `06-eval-and-test-cases.md` - 确定性评测、架构适配检查、证据矩阵、测试 fixtures、reference cases、bad cases、回归门槛和上线准备检查
+8. `07-agent-execution-plan.md` - 给 code agent 执行的 prompt packets、架构工种 prompt packets、任务顺序、验证命令、living spec 更新协议和 AGENTS.md 交接规则
 
 可选文档：
 
@@ -260,12 +262,14 @@ SpecForge 会生成 1 份前置决策文档和 8 份核心开发文档。
 - **尊重现有系统**：已有项目加功能时，先读当前代码、接口、数据、测试和部署约束。
 - **先看 GitHub 能否复用，再决定自研**：能集成、包装、fork、魔改或借鉴的，不默认从零造。
 - **架构决策要经得住一年后复盘**：重大选择要回答真实痛点、阶段适配、技术债、团队扩张成本和回滚路径。
+- **工程选型要提前说清楚**：前端渲染/状态/动效、后端 API/工作流/缓存、数据存储/索引/事务/留存、算法搜索/排序/限流等，都要先联网调研再写入 spec。
 - **先定义可执行契约，再拆开发任务**：状态、流程、动作、模块、生成物、数据、评测都要提前说清楚。
 - **先切范围，再防膨胀**：只做一个切片时，把子系统标成 `in_pack`、`referenced_only` 或 `future_pack`。
 - **先定视觉合同，再写 UI**：消费产品、移动端、游戏、dashboard 等可加 `08-ui-visual-design.md`；需要 DESIGN.md 用 `$design`，需要像素对照实现用 `$visual-ralph`。
 - **给 AI 看优先于给人写散文**：稳定标题、ID、表格、验收标准、验证命令、追踪矩阵比漂亮长文更重要。
 - **完成必须有证据**：每个任务都应有命令、状态/API/文件检查、截图/日志证据或明确人工验收标准。
 - **不要把所有开发塞进一个长会话**：每个实现切片要给 code agent 明确角色、上下文文件、任务、约束、输出格式和验证证据。
+- **按工种交接给 AI**：前端、后端、数据、算法任务各自有 prompt packet 和验收证据，不让一个会话临时乱猜全部架构。
 - **实现期间保持规范活着**：行为、API、schema、权限、安全、视觉合同或 eval 变化时，先更新上游文档和追踪关系。
 
 ## 快速使用

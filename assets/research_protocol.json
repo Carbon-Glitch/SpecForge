@@ -6,7 +6,10 @@
     "github_open_source",
     "open_source_reuse_decisions",
     "risk_compliance",
-    "implementation_prior_art"
+    "implementation_prior_art",
+    "architecture_decision_sources",
+    "production_readiness",
+    "domain_architecture"
   ],
   "minimum_sources": {
     "market": 5,
@@ -14,7 +17,10 @@
     "github_open_source": 3,
     "open_source_reuse_decisions": 1,
     "risk_compliance": 2,
-    "implementation_prior_art": 2
+    "implementation_prior_art": 2,
+    "architecture_decision_sources": 1,
+    "production_readiness": 1,
+    "domain_architecture": 2
   },
   "reuse_decisions": [
     "reuse as-is",

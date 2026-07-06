@@ -46,6 +46,22 @@
 | Manager | View team approved notes and risk summaries. |
 | Admin | Configure CRM mapping and retention policy. |
 
+## Cache And Consistency Contract
+
+| Cached Thing | Source Of Truth | Cache Layer | Invalidation Rule | Staleness Budget | Failure Behavior |
+|---|---|---|---|---|---|
+| Meeting list | database | client/server data cache | invalidate after upload, approve, export, delete | 30 seconds for list view | refresh from database |
+| Meeting detail | database | no persistent shared cache in MVP | reload after every status transition | 0 for approval/export state | fail closed before CRM export |
+| CRM export preview | generated from approved note and mapping | runtime only | regenerate after note edit or mapping change | 0 | block export |
+
+## Data Access And Index Contract
+
+| Query / Access Path | Owner | Expected Cardinality | Index / Search Structure | Permission Filter | Validation |
+|---|---|---|---|---|---|
+| list user's meetings | meetings service | thousands per user | `(owner_id, created_at desc)` | `owner_id = current_user` | query plan or repository test |
+| load review screen | meetings service | one meeting with transcript segments | `meeting_id` on transcript/action/approval/export rows | owner or team permission | API contract test |
+| find export by idempotency key | CRM exporter | one per approved meeting/export target | unique `(target, idempotency_key)` | owner/admin export permission | duplicate export test |
+
 ## Module File Responsibility Contract
 
 | File / module | Allowed | Forbidden |

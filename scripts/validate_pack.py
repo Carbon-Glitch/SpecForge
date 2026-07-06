@@ -71,6 +71,10 @@ REQUIRED_DOCS: dict[str, list[str]] = {
         "Architecture Overview",
         "Stack Decision",
         "Architecture Decision Lens",
+        "Frontend Architecture Decisions",
+        "Backend Architecture Decisions",
+        "Data Architecture Decisions",
+        "Algorithm And Data Structure Decisions",
         "Open Source Reuse Plan",
         "Integration Plan",
         "Module Boundaries",
@@ -86,12 +90,15 @@ REQUIRED_DOCS: dict[str, list[str]] = {
         "State Model Contract",
         "Tool Contracts",
         "Access And Permission Rules",
+        "Cache And Consistency Contract",
+        "Data Access And Index Contract",
         "Module File Responsibility Contract",
     ],
     "06-eval-and-test-cases.md": [
         "Launch Thresholds",
         "Deterministic Judge Contract",
         "Evidence Matrix",
+        "Architecture Fitness Checks",
         "Data Sufficiency Check",
         "UI Judge",
         "Case Source Policy",
@@ -105,6 +112,7 @@ REQUIRED_DOCS: dict[str, list[str]] = {
         "Agent Operating Rules",
         "Task List",
         "Agent Session Plan",
+        "Architecture Workstream Prompt Packets",
         "Source Vs Generated Rules",
         "Design And Visual Implementation Phase",
         "Living Spec Update Protocol",
@@ -174,6 +182,14 @@ HEADING_ALIASES: dict[str, list[str]] = {
     "Living Spec Update Protocol": ["Spec Update Protocol", "Living Specification Protocol"],
     "Launch Readiness Checks": ["Production Readiness Checks", "Launch Checklist", "Production Checklist"],
     "Launch Handoff": ["Production Handoff", "Release Handoff"],
+    "Frontend Architecture Decisions": ["Frontend Decision Matrix", "Frontend Architecture Matrix"],
+    "Backend Architecture Decisions": ["Backend Decision Matrix", "Backend Architecture Matrix"],
+    "Data Architecture Decisions": ["Database Architecture Decisions", "Data Decision Matrix"],
+    "Algorithm And Data Structure Decisions": ["Algorithm Decisions", "Algorithmic Decisions", "Data Structure Decisions"],
+    "Cache And Consistency Contract": ["Cache Consistency Contract", "Caching And Consistency"],
+    "Data Access And Index Contract": ["Index Contract", "Query And Index Contract", "Data Access Contract"],
+    "Architecture Fitness Checks": ["Architecture Validation Checks", "Fitness Checks"],
+    "Architecture Workstream Prompt Packets": ["Workstream Prompt Packets", "Architecture Prompt Packets"],
 }
 
 
@@ -238,6 +254,7 @@ def validate_research_ledger(pack_dir: Path, strict: bool) -> list[str]:
         "implementation_prior_art",
         "architecture_decision_sources",
         "production_readiness",
+        "domain_architecture",
     ]
     for key in required:
         if key not in categories:
@@ -386,6 +403,33 @@ def validate_architecture_decision_lens(pack_dir: Path, strict: bool) -> list[st
     return errors
 
 
+def validate_domain_architecture_decisions(pack_dir: Path, strict: bool) -> list[str]:
+    """Validate frontend/backend/data/algorithm decision scaffolds."""
+    errors: list[str] = []
+    path = pack_dir / "04-technical-design.md"
+    if not path.exists():
+        return errors
+    text = path.read_text(encoding="utf-8")
+    required = {
+        "Frontend Architecture Decisions": ["rendering", "state", "motion", "Validation"],
+        "Backend Architecture Decisions": ["deployment", "domain", "API", "async", "caching"],
+        "Data Architecture Decisions": ["store", "migrations", "indexes", "transactions", "retention"],
+        "Algorithm And Data Structure Decisions": ["search", "ranking", "rate", "scheduling", "graph"],
+    }
+    for heading, terms in required.items():
+        section = section_text(text, heading)
+        if not section:
+            continue
+        missing = [term for term in terms if term.lower() not in section.lower()]
+        if missing:
+            errors.append(f"04 {heading} missing decision dimensions: {', '.join(missing)}")
+    if strict:
+        eval_text = (pack_dir / "06-eval-and-test-cases.md").read_text(encoding="utf-8") if (pack_dir / "06-eval-and-test-cases.md").exists() else ""
+        if not section_text(eval_text, "Architecture Fitness Checks"):
+            errors.append("strict mode: 06 must include Architecture Fitness Checks for domain architecture decisions")
+    return errors
+
+
 def validate_agent_session_plan(pack_dir: Path, strict: bool) -> list[str]:
     """Validate prompt packets and living-spec update rules."""
     errors: list[str] = []
@@ -460,6 +504,7 @@ def validate_pack(pack_dir: Path, strict: bool = False, stage: str = "all") -> l
         errors.extend(validate_requirement_task_refs(pack_dir, strict))
         errors.extend(validate_agent_session_plan(pack_dir, strict))
         errors.extend(validate_architecture_decision_lens(pack_dir, strict))
+        errors.extend(validate_domain_architecture_decisions(pack_dir, strict))
     errors.extend(validate_ui_visual_contract(pack_dir, strict))
     return errors
 

@@ -116,6 +116,10 @@ DOCS: list[tuple[str, str, str, list[str]]] = [
             "Architecture Overview",
             "Stack Decision",
             "Architecture Decision Lens",
+            "Frontend Architecture Decisions",
+            "Backend Architecture Decisions",
+            "Data Architecture Decisions",
+            "Algorithm And Data Structure Decisions",
             "Open Source Reuse Plan",
             "Integration Plan",
             "Module Boundaries",
@@ -157,6 +161,8 @@ DOCS: list[tuple[str, str, str, list[str]]] = [
             "State Model Contract",
             "Tool Contracts",
             "Access And Permission Rules",
+            "Cache And Consistency Contract",
+            "Data Access And Index Contract",
             "Module File Responsibility Contract",
             "Security Boundaries",
             "Storage And Retention",
@@ -172,6 +178,7 @@ DOCS: list[tuple[str, str, str, list[str]]] = [
             "Launch Thresholds",
             "Deterministic Judge Contract",
             "Evidence Matrix",
+            "Architecture Fitness Checks",
             "Data Sufficiency Check",
             "UI Judge",
             "Case Source Policy",
@@ -194,6 +201,7 @@ DOCS: list[tuple[str, str, str, list[str]]] = [
             "Implementation Phases",
             "Task List",
             "Agent Session Plan",
+            "Architecture Workstream Prompt Packets",
             "Parallelization",
             "Source Vs Generated Rules",
             "Design And Visual Implementation Phase",
@@ -294,6 +302,45 @@ def render_doc(filename: str, title: str, sections: list[str], idea: str) -> str
                 "|---|---|---|---|---|---|---|\n"
                 "| TBD | TBD | TBD | TBD | TBD | TBD | link to `01-reality-research.md` or `research_ledger.json` |"
             )
+        elif section == "Frontend Architecture Decisions":
+            body = (
+                "| Decision Area | Options To Research | Chosen Direction | Why It Fits | Validation Evidence |\n"
+                "|---|---|---|---|---|\n"
+                "| rendering | CSR / SSR / SSG / ISR / RSC / native shell | TBD | match SEO, interactivity, latency, and hosting constraints | Core Web Vitals, route snapshot, bundle or render check |\n"
+                "| state ownership | server state / client global / URL / local UI | TBD | avoid duplicate sources of truth and unnecessary re-rendering | state transition test or UI regression |\n"
+                "| interaction and motion | CSS transitions / animation library / timeline engine / none | TBD | motion serves task feedback, navigation, or storytelling | screenshot/manual motion review and reduced-motion rule |\n"
+                "| component and design system | existing library / headless primitives / custom | TBD | fit brand, accessibility, and maintenance needs | a11y and visual contract checks |"
+            )
+        elif section == "Backend Architecture Decisions":
+            body = (
+                "| Decision Area | Options To Research | Chosen Direction | Why It Fits | Validation Evidence |\n"
+                "|---|---|---|---|---|\n"
+                "| deployment shape | modular monolith / services / serverless / edge / workers | TBD | fit team size, latency, operations, and coupling | build/deploy command or architecture test |\n"
+                "| domain boundaries | CRUD modules / DDD bounded contexts / plugin modules | TBD | match business complexity without ceremony | module boundary check |\n"
+                "| API style | REST / GraphQL / tRPC/RPC / gRPC / event API | TBD | fit clients, caching, type safety, and service calls | contract test |\n"
+                "| async and workflow | direct call / queue / scheduler / workflow engine / event stream | TBD | fit retries, idempotency, throughput, and observability | job or workflow test |\n"
+                "| caching | HTTP/CDN / app cache / data cache / no cache | TBD | fit read patterns and invalidation complexity | cache invalidation test |"
+            )
+        elif section == "Data Architecture Decisions":
+            body = (
+                "| Decision Area | Options To Research | Chosen Direction | Why It Fits | Validation Evidence |\n"
+                "|---|---|---|---|---|\n"
+                "| primary store | relational / document / key-value / graph / object / vector | TBD | fit query shape, consistency, and operations | schema or query test |\n"
+                "| schema and migrations | additive migrations / destructive migration / generated schema | TBD | preserve data and rollback ability | migration command |\n"
+                "| indexes and query paths | B-tree / full-text / vector / compound / partial / none | TBD | match top queries and expected scale | query plan or benchmark |\n"
+                "| transactions and consistency | strong / eventual / optimistic / idempotent | TBD | fit user-visible correctness and side effects | concurrency or idempotency test |\n"
+                "| retention and privacy | TTL / soft delete / hard delete / audit archive | TBD | fit compliance and user trust | retention test or audit checklist |"
+            )
+        elif section == "Algorithm And Data Structure Decisions":
+            body = (
+                "| Capability | Options To Research | Trigger To Use | Chosen Direction | Validation Evidence |\n"
+                "|---|---|---|---|---|\n"
+                "| search | keyword / full-text / vector / hybrid / external engine | user searches or retrieves semantic content | TBD | relevance fixture or benchmark |\n"
+                "| ranking/recommendation | rules / scoring / embedding similarity / learning-to-rank | ordered results affect product value | TBD | golden ranking cases |\n"
+                "| rate limiting | fixed window / sliding window / token bucket / quota ledger | abuse, cost, or fairness matters | TBD | limit and burst tests |\n"
+                "| scheduling/queues | FIFO / priority queue / delay queue / workflow DAG | background work has dependencies or retries | TBD | retry/idempotency tests |\n"
+                "| graph/relationship | adjacency list / closure table / graph DB / derived edges | permissions, social graph, hierarchy, or dependency graph matters | TBD | traversal and permission cases |"
+            )
         elif section == "Agent Session Plan":
             body = (
                 "| Task | Role | Context / Files To Read | Task Prompt | Constraints | Output Format | Validation Evidence |\n"
@@ -332,6 +379,36 @@ def render_doc(filename: str, title: str, sections: list[str], idea: str) -> str
                 "| monitoring | errors/logs/metrics defined and privacy-safe | config or code reference |\n"
                 "| CI/CD | validation runs in CI or documented release command | CI link or command |\n"
                 "| rollback | rollback path exists for schema/config/deploy changes | runbook or migration note |"
+            )
+        elif section == "Cache And Consistency Contract":
+            body = (
+                "| Cached Thing | Source Of Truth | Cache Layer | Invalidation Rule | Staleness Budget | Failure Behavior |\n"
+                "|---|---|---|---|---|---|\n"
+                "| TBD | TBD | HTTP/CDN/app/data/client | TBD | TBD | bypass, refresh, or fail closed |"
+            )
+        elif section == "Data Access And Index Contract":
+            body = (
+                "| Query / Access Path | Owner | Expected Cardinality | Index / Search Structure | Permission Filter | Validation |\n"
+                "|---|---|---|---|---|---|\n"
+                "| TBD | TBD | TBD | TBD | TBD | query plan, benchmark, or contract test |"
+            )
+        elif section == "Architecture Fitness Checks":
+            body = (
+                "| Architecture Area | Check | Command Or Evidence |\n"
+                "|---|---|---|\n"
+                "| frontend rendering/state | route renders intended screen, state ownership is not duplicated | screenshot, state test, or render metric |\n"
+                "| backend/API/workflow | API contracts, idempotency, queues, and retries behave as specified | contract or integration test |\n"
+                "| data/index/consistency | schema, migrations, indexes, permissions, and cache invalidation hold | migration, query plan, or data test |\n"
+                "| algorithm/search/ranking | ranking, search, rate limit, graph, or scheduler behavior matches cases | golden cases or benchmark |"
+            )
+        elif section == "Architecture Workstream Prompt Packets":
+            body = (
+                "| Workstream | Agent Role | Required Context | Prompt Focus | Required Evidence |\n"
+                "|---|---|---|---|---|\n"
+                "| frontend | frontend engineer | 04 frontend decisions, 08 visual contract, relevant routes/components | implement rendering/state/motion without changing backend contracts | screenshot, a11y, render/state test |\n"
+                "| backend | backend engineer | 04 backend decisions, 05 API/tool contracts | implement API/workflow boundaries and side-effect rules | contract/integration tests |\n"
+                "| data | data engineer | 04 data decisions, 05 data/index/cache contracts | implement schema, migrations, indexes, retention, permissions | migration/query/permission checks |\n"
+                "| algorithm | algorithm engineer | 04 algorithm decisions, 06 golden cases | implement search/ranking/rate limit/scheduler/graph behavior | golden cases or benchmark |"
             )
         elif section == "Design Orchestration":
             body = (
@@ -413,6 +490,10 @@ def initial_traceability(idea: str, include_visual: bool) -> dict[str, Any]:
             "Architecture decisions must answer real pain solved, stage fit, one-year debt, team scaling cost, and rollback path.",
             "Agent execution tasks should include prompt packets with role, context, task, constraints, output format, and validation evidence.",
             "Implementation changes to behavior, API, schema, permissions, security, visual contract, or eval evidence must update upstream specs before completion.",
+            "Frontend architecture decisions must cover rendering, state ownership, motion, component system, and validation evidence when UI exists.",
+            "Backend architecture decisions must cover deployment shape, domain boundaries, API style, async/workflow, caching, and validation evidence when backend exists.",
+            "Data architecture decisions must cover store choice, schema/migrations, indexes/query paths, transactions/consistency, retention/privacy, and validation evidence when data exists.",
+            "Algorithm and data-structure decisions must be explicit when the product needs search, ranking, rate limiting, scheduling, queues, graph traversal, matching, recommendation, or retrieval.",
         ],
         "optional_documents": ["08-ui-visual-design.md"] if include_visual else [],
     }
@@ -443,6 +524,7 @@ def initial_research_ledger(idea: str) -> dict[str, Any]:
             "implementation_prior_art": [],
             "architecture_decision_sources": [],
             "production_readiness": [],
+            "domain_architecture": [],
         },
         "source_fields": [
             "title",

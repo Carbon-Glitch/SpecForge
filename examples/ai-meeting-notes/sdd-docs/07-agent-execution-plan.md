@@ -44,6 +44,15 @@
 
 Use one session per module when implementation context grows beyond the listed files.
 
+## Architecture Workstream Prompt Packets
+
+| Workstream | Agent Role | Required Context | Prompt Focus | Required Evidence |
+|---|---|---|---|---|
+| frontend | frontend engineer | `04#Frontend Architecture Decisions`, `08-ui-visual-design.md`, review route contract | Build upload/status/review/approval UI without duplicating meeting source of truth. | route screenshot, a11y contrast, approval-flow test. |
+| backend | backend engineer | `04#Backend Architecture Decisions`, `05#API Contracts`, `05#Tool Contracts` | Implement upload, job status, transcription adapter, notes, and CRM gate APIs. | API contract and retry/idempotency tests. |
+| data | data engineer | `04#Data Architecture Decisions`, `05#Data Access And Index Contract`, `05#Cache And Consistency Contract` | Implement schema, migrations, access paths, retention, idempotency, and permission filters. | migration, query/index review, retention test. |
+| algorithm | algorithm engineer | `04#Algorithm And Data Structure Decisions`, `06#Architecture Fitness Checks` | Implement upload quota and FIFO retry semantics; defer search/ranking. | quota, retry, and duplicate job tests. |
+
 ## Parallelization
 
 Frontend review UI can start after API contracts are stable. CRM adapter tests can be written in parallel with note extraction once payload schema is fixed.

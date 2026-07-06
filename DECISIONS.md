@@ -59,3 +59,9 @@ The final execution plan now includes prompt packets per implementation slice: r
 ## Launch Readiness
 
 `launch-ready` is stricter than `build-ready`. It requires security, performance, monitoring/logging, CI/CD, preview/prod separation, and rollback evidence. This prevents a merely runnable MVP from being confused with a production launch candidate.
+
+## Domain Architecture Decisions
+
+SpecForge keeps the eight-document pack stable and strengthens `04`, `05`, `06`, and `07` instead of adding more core documents. Frontend, backend, data, and algorithm decisions are explicit matrices inside `04-technical-design.md`; their contracts live in `05`; their proof lives in `06`; their code-agent handoff lives in `07`.
+
+Concrete technology names from articles or prior projects are not defaults. They are research leads. The agent must verify current official docs, GitHub/package health, benchmarks, and safety guidance before selecting rendering, state, motion, API style, workflows, queues, caches, databases, indexes, transactions, search, ranking, rate limiting, scheduling, or graph structures.

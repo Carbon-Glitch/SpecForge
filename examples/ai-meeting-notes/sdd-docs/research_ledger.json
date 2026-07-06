@@ -117,6 +117,26 @@
         "claim_supported": "Launch-readiness evidence must be refreshed from official hosting, monitoring, auth, and CRM platform docs before launch.",
         "confidence": "low"
       }
+    ],
+    "domain_architecture": [
+      {
+        "title": "Domain architecture refresh placeholder",
+        "url": "https://react.dev/reference/rsc/server-components",
+        "publisher": "SpecForge demo",
+        "published_or_updated": "2026-07-06",
+        "accessed_at": "2026-07-06",
+        "claim_supported": "Frontend rendering and state choices must be refreshed from official framework docs before implementation.",
+        "confidence": "low"
+      },
+      {
+        "title": "Data/index architecture refresh placeholder",
+        "url": "https://www.postgresql.org/docs/current/indexes.html",
+        "publisher": "SpecForge demo",
+        "published_or_updated": "2026-07-06",
+        "accessed_at": "2026-07-06",
+        "claim_supported": "Data access and index choices must be verified against official database docs and actual query paths.",
+        "confidence": "low"
+      }
     ]
   }
 }

@@ -176,6 +176,43 @@ For production-intended or `production-hardening` packs, research current guidan
 
 Prefer official platform docs and primary vendor guidance. Record unclear launch claims as `Inference` or `Unknown`.
 
+### 8. Domain Architecture
+
+Research the engineering decision dimensions that match the product surface. Do not hardcode a favorite stack.
+
+Frontend research:
+
+- rendering and routing modes: CSR, SSR, SSG, ISR, server components, native shells, or hybrid choices
+- state ownership: server/cache state, client global state, URL state, local UI state, and duplicate-source-of-truth risks
+- interaction and motion: CSS transitions, animation libraries, timeline engines, reduced-motion support, and performance impact
+- component and design-system options: headless primitives, component libraries, custom systems, accessibility, and theming
+
+Backend research:
+
+- deployment shape: modular monolith, services, serverless, edge functions, workers, or hybrid
+- domain boundaries: CRUD modules, DDD bounded contexts, plugin architecture, or generated modules
+- API style: REST, GraphQL, RPC/tRPC, gRPC, events, webhooks, or tool interfaces
+- async/workflow: direct calls, queues, schedulers, workflow engines, event streams, retries, and idempotency
+- caching: HTTP/CDN, app cache, data cache, client cache, invalidation, and staleness budgets
+
+Data research:
+
+- primary and secondary stores: relational, document, key-value, graph, object, vector, search engine, or warehouse
+- schema and migrations: additive vs destructive migration, generated schema, rollback, seed data
+- indexes and query paths: B-tree, compound, partial, full-text, vector, graph traversal, or external search
+- transactions and consistency: strong consistency, eventual consistency, optimistic concurrency, idempotency, and conflict resolution
+- retention and privacy: TTL, soft delete, hard delete, audit archive, data export, and per-tenant isolation
+
+Algorithm and data-structure research:
+
+- search: keyword, full-text, vector, hybrid, reranking, or external engine
+- ranking/recommendation: rules, scoring functions, embeddings, graph features, or learning-to-rank
+- rate limiting and quotas: fixed window, sliding window, token bucket, leaky bucket, account ledger
+- scheduling and queues: FIFO, priority queue, delay queue, workflow DAG, retries, dead-letter handling
+- graph/relationship logic: adjacency lists, closure tables, derived edges, graph database, permission traversal
+
+For each selected option, record official docs, GitHub/package health when applicable, rejected alternatives, and a validation command or evidence type. If a workstream is irrelevant, mark it `not_applicable` with reason.
+
 ## Source Scoring
 
 Use this confidence scale:

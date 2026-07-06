@@ -67,8 +67,33 @@ This eval checks that the skill can scaffold and validate a pressure-test prefli
       "type": "llm-judge"
     },
     {
+      "id": "has-domain-architecture-decisions",
+      "text": "The technical design requires frontend rendering/state/motion, backend deployment/API/workflow/cache, data store/index/transaction/retention, and algorithm/search/ranking/rate-limit decisions when those surfaces exist.",
+      "type": "llm-judge"
+    },
+    {
+      "id": "domain-decisions-require-live-research",
+      "text": "Frontend, backend, data, and algorithm choices are framed as current official-doc/GitHub/package research tasks, not hardcoded recommendations from model memory or an old article.",
+      "type": "llm-judge"
+    },
+    {
+      "id": "has-cache-and-index-contracts",
+      "text": "The data/contracts document requires cache consistency and data access/index contracts when caching, databases, search, queues, or external state exist.",
+      "type": "llm-judge"
+    },
+    {
+      "id": "has-architecture-fitness-checks",
+      "text": "The eval plan requires architecture fitness checks for selected frontend, backend, data, and algorithm decisions using concrete commands or evidence.",
+      "type": "llm-judge"
+    },
+    {
       "id": "has-agent-prompt-packets",
       "text": "The execution plan includes prompt packets with role, context/files to read, task, constraints, output format, and validation evidence for code-agent sessions.",
+      "type": "llm-judge"
+    },
+    {
+      "id": "has-workstream-prompt-packets",
+      "text": "The execution plan splits frontend, backend, data, and algorithm workstream prompt packets when those implementation surfaces exist.",
       "type": "llm-judge"
     },
     {
