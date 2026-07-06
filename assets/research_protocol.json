@@ -31,5 +31,27 @@
     "build from scratch"
   ],
   "confidence_values": ["high", "medium", "low"],
-  "claim_labels": ["Evidence", "Inference", "Unknown"]
+  "claim_labels": ["Evidence", "Inference", "Unknown"],
+  "freshness_status_values": ["fresh", "acceptable", "stale", "undated", "blocked"],
+  "freshness_policy": {
+    "market_window_days": 180,
+    "fast_moving_technology_window_days": 90,
+    "github_activity_window_days": 365,
+    "regulatory_window_days": 365,
+    "stale_year_query_policy": "Do not use old years in latest/current queries unless the query is explicitly historical, migration-related, backward-compatibility-related, or user-specified."
+  },
+  "required_temporal_fields": [
+    "current_date_anchor.current_date",
+    "current_date_anchor.current_year",
+    "current_date_anchor.timezone",
+    "current_date_anchor.recorded_at",
+    "query_log",
+    "freshness_summary"
+  ],
+  "required_source_freshness_fields": [
+    "freshness_status",
+    "freshness_reason",
+    "retrieval_method",
+    "query_used"
+  ]
 }

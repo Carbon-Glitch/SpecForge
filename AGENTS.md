@@ -30,6 +30,8 @@ Optional UI-heavy packs may also include `08-ui-visual-design.md`. Treat it as t
 
 Key operating rule: perform live web research before market claims, technology choices, API choices, compliance claims, or open-source recommendations. If live research is unavailable, label those claims unverified.
 
+Temporal freshness rule: before searching, record `current_date_anchor` in `research_ledger.json` and derive latest/current query years from that anchor. Do not use stale hardcoded years from model memory for current research. Log material queries and label every source `fresh`, `acceptable`, `stale`, `undated`, or `blocked` with a reason.
+
 Research must feed decisions. For every major architecture or stack choice, `04-technical-design.md#Architecture Decision Lens` must cite `01-reality-research.md` or `research_ledger.json` and answer: real pain solved, stage fit, one-year technical debt, team scaling cost, and migration or rollback path.
 
 Domain-architecture rule: when the product has UI, backend, data, or algorithmic behavior, `04-technical-design.md` must include relevant decision matrices for frontend rendering/state/motion, backend deployment/API/workflow/cache, data stores/migrations/indexes/consistency/retention, and algorithms/search/ranking/rate-limit/scheduling/graph logic. These choices require live official-doc and GitHub/package research; article examples and model memory are only leads.

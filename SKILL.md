@@ -6,7 +6,7 @@ description: >-
 license: MIT
 metadata:
   author: Codex
-  version: 1.8.0
+  version: 1.9.0
   created: 2026-06-28
   last_reviewed: 2026-07-06
   review_interval_days: 45
@@ -101,6 +101,18 @@ Do not generate technical recommendations from model memory alone.
 
 Before writing `01-reality-research.md`, perform live web research unless the user explicitly says offline-only. If web access is unavailable, write `research_status: blocked` and mark all current-world claims as unverified.
 
+### Temporal Freshness Guard
+
+Before the first search, record a current-date anchor in `research_ledger.json`: `current_date`, `current_year`, `timezone`, `recorded_at`, and `freshness_policy`. Derive query dates from that anchor, not from model memory.
+
+Search hygiene rules:
+
+- Use current terms such as `latest`, `current`, the anchored current year, `release notes`, `changelog`, `docs`, `pricing`, `license`, `security`, and `migration`.
+- For GitHub or registry research, prefer recency-aware searches when supported, such as pushed/updated/released since the anchored year or last 12 months.
+- Do not hardcode stale years from memory into "latest/current" queries. Past years are allowed only for historical comparison, migration research, or a user-specified timeframe, and must be labeled in `query_log`.
+- Each source must record `published_or_updated`, `accessed_at`, `freshness_status` (`fresh`, `acceptable`, `stale`, `undated`, or `blocked`), and `freshness_reason`.
+- If only stale, undated, or unreachable sources are available, mark the claim `Inference`, `Unknown`, or `unverified`; do not present it as verified current fact.
+
 Mandatory research passes:
 
 1. **Market reality search** — current competitors, user behavior, pricing, distribution, product patterns, failure modes.
@@ -190,14 +202,7 @@ Do this before or during Gate 0. Keep it short and decision-oriented.
 5. State default assumptions if the user does not answer.
 6. Continue only when the user confirms, corrects, or explicitly asks you to proceed with assumptions.
 
-Question categories:
-
-- target user and job-to-be-done
-- must-have workflow, anti-goals, and launch bar
-- existing repository path, current stack, and affected modules
-- data sensitivity, access rules, and external writes
-- deployment target, timeline, and MVP strictness
-- preferred stack, model, or agent host
+Question categories: target user/job, must-have workflow, anti-goals, launch bar, repo path, current stack, affected modules, data sensitivity, access rules, external writes, deployment target, timeline, MVP strictness, preferred stack, model, or agent host.
 
 ## Scope Slice Gate
 

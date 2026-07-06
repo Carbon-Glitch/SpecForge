@@ -2,6 +2,50 @@
 
 The skill treats live research as a required production step. The agent must not choose market positioning, pricing, frameworks, APIs, models, SDKs, or open-source libraries from memory alone.
 
+## Temporal Freshness Guard
+
+Current-world research starts by anchoring time. Before the first search, record in `research_ledger.json`:
+
+```json
+{
+  "current_date_anchor": {
+    "current_date": "YYYY-MM-DD",
+    "current_year": 2026,
+    "timezone": "UTC+08:00",
+    "recorded_at": "YYYY-MM-DDTHH:MM:SSZ"
+  },
+  "freshness_policy": {
+    "market_window_days": 180,
+    "fast_moving_technology_window_days": 90,
+    "github_activity_window_days": 365,
+    "regulatory_window_days": 365,
+    "stale_year_query_policy": "Do not use old years in latest/current queries unless the query is explicitly historical or user-specified."
+  }
+}
+```
+
+Use this anchor to generate search terms. Do not let model memory choose stale years such as last year's date for "latest" research.
+
+Query hygiene:
+
+- Include `latest`, `current`, the anchored current year, `release notes`, `changelog`, `official docs`, `pricing`, `security`, `license`, `migration`, or equivalent terms as appropriate.
+- For GitHub, package registries, and open-source reuse, prefer recency-aware filters when supported, such as updated/pushed/released within the anchored year or last 12 months.
+- Record material queries in `query_log` with category, query text, search target, date basis, and whether the query was successful, blocked, or degraded.
+- A past year is allowed only for historical comparison, migration notes, backward compatibility, or a user-specified timeframe. Mark that reason in `query_log`.
+- If the host cannot browse, mark the category `blocked`, list intended queries, and place affected claims in `unverified_claims`.
+
+Freshness status:
+
+| Status | Use When |
+| --- | --- |
+| `fresh` | Source is inside the relevant window and supports a current claim. |
+| `acceptable` | Source is older but canonical or stable enough for the claim, with a reason. |
+| `stale` | Source is outside the relevant window for a current claim. Use only as history or background. |
+| `undated` | Source has no visible update date. Corroborate before using for current claims. |
+| `blocked` | Search, page access, or source verification failed. |
+
+For fast-moving claims about frameworks, models, SDKs, agent tools, pricing, policies, or open-source health, at least one primary source must be `fresh` or explicitly `acceptable`. Blogs can explain context but cannot be the only basis for a current technical choice.
+
 ## Research Passes
 
 ### 1. Market Reality
@@ -240,6 +284,10 @@ Each source in `research_ledger.json` should include:
   "publisher": "Example",
   "published_or_updated": "2026-06-01",
   "accessed_at": "2026-06-28T00:00:00Z",
+  "freshness_status": "fresh",
+  "freshness_reason": "Official changelog updated inside the fast-moving technology window.",
+  "retrieval_method": "live-web",
+  "query_used": "example framework latest release notes 2026",
   "claim_supported": "What this source proves",
   "confidence": "high"
 }

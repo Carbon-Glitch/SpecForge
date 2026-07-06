@@ -63,6 +63,9 @@ DOCS: list[tuple[str, str, str, list[str]]] = [
         "Reality Research",
         [
             "Research Status",
+            "Temporal Freshness Guard",
+            "Search Query Log",
+            "Freshness Assessment",
             "Market Reality",
             "Competitors And Substitutes",
             "User Behavior Evidence",
@@ -245,6 +248,34 @@ def now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
+def current_date_anchor() -> dict[str, Any]:
+    """Return a local date anchor for freshness-aware research."""
+    local_now = datetime.now().astimezone()
+    offset = local_now.strftime("%z")
+    timezone_label = f"UTC{offset[:3]}:{offset[3:]}" if offset else "local"
+    return {
+        "current_date": local_now.date().isoformat(),
+        "current_year": local_now.year,
+        "timezone": timezone_label,
+        "recorded_at": now_iso(),
+    }
+
+
+def freshness_policy() -> dict[str, Any]:
+    """Return default freshness windows for current-world claims."""
+    return {
+        "market_window_days": 180,
+        "fast_moving_technology_window_days": 90,
+        "github_activity_window_days": 365,
+        "regulatory_window_days": 365,
+        "source_status_values": ["fresh", "acceptable", "stale", "undated", "blocked"],
+        "stale_year_query_policy": (
+            "Do not use old years in latest/current queries unless the query is explicitly "
+            "historical, migration-related, backward-compatibility-related, or user-specified."
+        ),
+    }
+
+
 def render_doc(filename: str, title: str, sections: list[str], idea: str) -> str:
     """Render one markdown document skeleton."""
     lines = [
@@ -275,6 +306,28 @@ def render_doc(filename: str, title: str, sections: list[str], idea: str) -> str
                 "| `spec-lite` | small feature or low-risk MVP slice | Gate 1 plus focused Gate 2/3 sections |\n"
                 "| `full-sdd` | production-intended product or broad feature | all gates, traceability, evals, contracts |\n"
                 "| `production-hardening` | existing app nearing launch | full-sdd plus launch readiness and rollback evidence |"
+            )
+        elif section == "Temporal Freshness Guard":
+            anchor = current_date_anchor()
+            body = (
+                f"- Current date anchor: `{anchor['current_date']}` ({anchor['timezone']}).\n"
+                "- Search queries must derive year/date terms from this anchor, not from model memory.\n"
+                "- Do not use stale hardcoded years for latest/current research unless the query is explicitly historical, migration-related, or user-specified.\n"
+                "- Fast-moving market, framework, model, SDK, policy, pricing, and GitHub health claims need fresh primary-source evidence or an explicit degraded/unverified label."
+            )
+        elif section == "Search Query Log":
+            body = (
+                "| Category | Query | Target | Date Basis | Status | Notes |\n"
+                "|---|---|---|---|---|---|\n"
+                "| market | TBD latest/current + anchored year terms | web | current_date_anchor | pending | replace with actual query |\n"
+                "| github_open_source | TBD pushed/updated/released within anchored year or last 12 months | GitHub/package registry | current_date_anchor | pending | record exact query/filter |\n"
+                "| official_docs | TBD official docs release notes changelog current | official docs | current_date_anchor | pending | prefer primary source |"
+            )
+        elif section == "Freshness Assessment":
+            body = (
+                "| Claim | Source | Freshness Status | Reason | Decision Impact |\n"
+                "|---|---|---|---|---|\n"
+                "| TBD | TBD | fresh / acceptable / stale / undated / blocked | TBD | verified, provisional, or blocked |"
             )
         elif section == "Scope Boundary":
             body = (
@@ -501,11 +554,23 @@ def initial_traceability(idea: str, include_visual: bool) -> dict[str, Any]:
 
 def initial_research_ledger(idea: str) -> dict[str, Any]:
     """Create an empty research ledger with required categories."""
+    anchor = current_date_anchor()
     return {
         "schema": "specforge-research-ledger-v1",
         "product": idea,
         "generated_at": now_iso(),
         "status": "pending-live-research",
+        "web_research_capability": "pending-check",
+        "current_date_anchor": anchor,
+        "freshness_policy": freshness_policy(),
+        "query_log": [],
+        "freshness_summary": {
+            "fresh": 0,
+            "acceptable": 0,
+            "stale": 0,
+            "undated": 0,
+            "blocked": 0,
+        },
         "research_depth": "light",
         "unverified_claims": [],
         "idea_pressure_test": {
@@ -534,6 +599,10 @@ def initial_research_ledger(idea: str) -> dict[str, Any]:
             "accessed_at",
             "claim_supported",
             "confidence",
+            "freshness_status",
+            "freshness_reason",
+            "retrieval_method",
+            "query_used",
         ],
     }
 

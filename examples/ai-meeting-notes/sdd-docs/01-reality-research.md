@@ -9,6 +9,28 @@
 
 This demo uses a small public-source sample to show SpecForge's expected evidence format. A production pack should expand the source list before final stack selection.
 
+## Temporal Freshness Guard
+
+- Current date anchor: `2026-06-28` (`UTC+00:00` for this demo sample).
+- Query year terms were anchored to 2026 or expressed as latest/current.
+- This example is `demo-only`; before production use, refresh all market, pricing, policy, and repository-health evidence.
+
+## Search Query Log
+
+| Category | Query | Target | Date Basis | Status | Notes |
+|---|---|---|---|---|---|
+| market | AI meeting notes sales teams latest 2026 pricing privacy | web | current_date_anchor | completed-demo | Sample only; refresh before production. |
+| github_open_source | AI meeting notes transcription GitHub pushed 2026 | GitHub | current_date_anchor | completed-demo | Demonstrates recency-aware open-source search. |
+| official_docs | Whisper official docs release notes current | official docs / GitHub | current_date_anchor | completed-demo | Primary-source refresh still required before implementation. |
+
+## Freshness Assessment
+
+| Claim | Source | Freshness Status | Reason | Decision Impact |
+|---|---|---|---|---|
+| Open-source transcription engines should be evaluated before custom speech recognition. | OpenAI Whisper, whisper.cpp | acceptable | Source is canonical or repository-backed, but implementation-time health must be refreshed. | Use adapter contract, not a hardcoded engine choice. |
+| Meeting assistant market is crowded. | Meetily and GitHub topic sample | acceptable | Demo sources indicate category density, but competitor/pricing list is not exhaustive. | Keep narrow sales wedge and refresh market research. |
+| CRM writes require review-before-sync. | Product risk analysis | acceptable | External write risk is stable product logic, but exact CRM policies need refresh. | Require explicit user approval in contracts. |
+
 ## Market Reality
 
 AI meeting notes are a crowded product category. The strongest wedge for this concept is not generic summarization; it is sales-specific structured follow-up, CRM sync, review-before-write, and transcript-grounded evidence.

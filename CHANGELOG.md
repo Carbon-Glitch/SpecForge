@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.9.0 - 2026-07-06
+
+- Adds a Temporal Freshness Guard for current-world research.
+- Requires `research_ledger.json` to record current date/year/timezone, freshness policy, query log, freshness summary, and source freshness fields.
+- Adds `01-reality-research.md` sections for temporal freshness, search query log, and freshness assessment.
+- Strengthens validation against stale-year query contamination and unqualified stale/undated sources.
+
 ## 1.8.0 - 2026-07-06
 
 - Adds domain architecture decision matrices for frontend, backend, data, and algorithm/data-structure workstreams.

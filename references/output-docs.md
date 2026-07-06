@@ -49,6 +49,9 @@ Purpose: align the product and technology plan with the real world.
 Must include:
 
 - research status
+- temporal freshness guard with current date anchor, current year, timezone, freshness windows, and stale-year query policy
+- search query log with exact material queries, target, date basis, status, and degradation notes
+- freshness assessment labeling sources as `fresh`, `acceptable`, `stale`, `undated`, or `blocked`
 - market reality
 - competitor table
 - current user behavior evidence
@@ -62,6 +65,8 @@ Must include:
 - sources
 
 This document must be written before stack decisions are finalized.
+
+For current-world claims, `published_or_updated`, `accessed_at`, `freshness_status`, and `freshness_reason` must be visible either in the source table or `research_ledger.json`. Stale or undated sources can support background context, not verified current decisions, unless the rationale is explicit.
 
 ## 02-prd-behavior-contract.md
 

@@ -12,6 +12,10 @@ The skill outputs one preflight decision document plus eight core development do
 
 Live research is mandatory because product markets, open-source libraries, APIs, policies, and coding-agent platforms change quickly. The skill treats model memory as insufficient for current-world claims.
 
+## Temporal Freshness Guard
+
+Current-world research records a current-date anchor before search. Query years must derive from that anchor, not from model memory, because stale prompts such as last year's "latest" search can silently poison market, framework, model, policy, and open-source decisions. Each material query is logged, and each source is labeled `fresh`, `acceptable`, `stale`, `undated`, or `blocked` with a reason. Stale and undated sources may support background context, but they cannot be treated as verified current evidence without corroboration.
+
 ## Scripts
 
 Scripts are deterministic helpers only. They scaffold and validate the pack. The agent still performs the market research, reasoning, writing, and citations.

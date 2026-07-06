@@ -46,6 +46,9 @@ REQUIRED_DOCS: dict[str, list[str]] = {
     ],
     "01-reality-research.md": [
         "Research Status",
+        "Temporal Freshness Guard",
+        "Search Query Log",
+        "Freshness Assessment",
         "Market Reality",
         "Existing System Reality",
         "Official Documentation Findings",
@@ -160,6 +163,8 @@ SUPPORT_FILES = [
     "handoff_manifest.json",
 ]
 
+FRESHNESS_STATUSES = {"fresh", "acceptable", "stale", "undated", "blocked"}
+
 HEADING_ALIASES: dict[str, list[str]] = {
     "Anti Goals": ["Anti-Goals", "Anti-goals", "Non Goals", "Non-Goals"],
     "Non Functional Requirements": ["Non-Functional Requirements", "Nonfunctional Requirements", "NFRs"],
@@ -190,6 +195,9 @@ HEADING_ALIASES: dict[str, list[str]] = {
     "Data Access And Index Contract": ["Index Contract", "Query And Index Contract", "Data Access Contract"],
     "Architecture Fitness Checks": ["Architecture Validation Checks", "Fitness Checks"],
     "Architecture Workstream Prompt Packets": ["Workstream Prompt Packets", "Architecture Prompt Packets"],
+    "Temporal Freshness Guard": ["Freshness Guard", "Current Date Anchor", "Temporal Guard"],
+    "Search Query Log": ["Query Log", "Research Query Log", "Search Log"],
+    "Freshness Assessment": ["Source Freshness", "Freshness Review", "Freshness Summary"],
 }
 
 
@@ -230,6 +238,25 @@ def validate_research_ledger(pack_dir: Path, strict: bool) -> list[str]:
     if errors:
         return errors
     data = json.loads(path.read_text(encoding="utf-8"))
+    anchor = data.get("current_date_anchor")
+    if not isinstance(anchor, dict):
+        errors.append("research_ledger.json missing current_date_anchor object")
+    else:
+        for field in ["current_date", "current_year", "timezone", "recorded_at"]:
+            if field not in anchor or anchor.get(field) in {"", None}:
+                errors.append(f"research_ledger.json current_date_anchor missing {field}")
+        if "current_year" in anchor and not isinstance(anchor.get("current_year"), int):
+            errors.append("research_ledger.json current_date_anchor.current_year must be an integer")
+    if not isinstance(data.get("freshness_policy"), dict):
+        errors.append("research_ledger.json missing freshness_policy object")
+    if "query_log" not in data or not isinstance(data.get("query_log"), list):
+        errors.append("research_ledger.json missing query_log array")
+    if not isinstance(data.get("freshness_summary"), dict):
+        errors.append("research_ledger.json missing freshness_summary object")
+    source_fields = data.get("source_fields", [])
+    for field in ["freshness_status", "freshness_reason", "retrieval_method", "query_used"]:
+        if field not in source_fields:
+            errors.append(f"research_ledger.json source_fields missing {field}")
     if "research_depth" not in data:
         errors.append("research_ledger.json missing research_depth")
     elif data.get("research_depth") not in {"light", "standard", "deep"}:
@@ -261,6 +288,44 @@ def validate_research_ledger(pack_dir: Path, strict: bool) -> list[str]:
             errors.append(f"research_ledger.json missing category: {key}")
         elif strict and not categories[key]:
             errors.append(f"strict mode: research category has no sources: {key}")
+    current_year = anchor.get("current_year") if isinstance(anchor, dict) else None
+    query_log = data.get("query_log") if isinstance(data.get("query_log"), list) else []
+    if strict and data.get("status") not in {"blocked", "offline-only", "pending-live-research"} and not query_log:
+        errors.append("strict mode: research_ledger.json query_log must record material live searches or an explicit blocked/offline status")
+    if isinstance(current_year, int):
+        for item in query_log:
+            if not isinstance(item, dict):
+                errors.append("research_ledger.json query_log entries must be objects")
+                continue
+            query = str(item.get("query", ""))
+            reason = str(item.get("date_basis", "")) + " " + str(item.get("notes", ""))
+            years = [int(value) for value in re.findall(r"\b20\d{2}\b", query)]
+            stale_years = [year for year in years if year < current_year - 1]
+            if stale_years and not re.search(r"historical|history|migration|compatib|user-specified|用户指定|历史|迁移|兼容", reason, re.I):
+                errors.append(
+                    "research_ledger.json query_log has stale year in non-historical query: "
+                    f"{query[:120]}"
+                )
+    for category, entries in categories.items():
+        if not isinstance(entries, list):
+            errors.append(f"research_ledger.json category must be an array: {category}")
+            continue
+        for index, entry in enumerate(entries):
+            if not isinstance(entry, dict):
+                errors.append(f"research_ledger.json {category}[{index}] must be an object")
+                continue
+            if strict:
+                freshness = entry.get("freshness_status")
+                if freshness not in FRESHNESS_STATUSES:
+                    errors.append(f"strict mode: {category}[{index}] missing valid freshness_status")
+                if not entry.get("freshness_reason"):
+                    errors.append(f"strict mode: {category}[{index}] missing freshness_reason")
+                if not entry.get("published_or_updated"):
+                    errors.append(f"strict mode: {category}[{index}] missing published_or_updated")
+                if not entry.get("accessed_at"):
+                    errors.append(f"strict mode: {category}[{index}] missing accessed_at")
+                if freshness in {"stale", "undated", "blocked"} and entry.get("confidence") == "high":
+                    errors.append(f"strict mode: {category}[{index}] cannot be high confidence with {freshness} freshness")
     return errors
 
 

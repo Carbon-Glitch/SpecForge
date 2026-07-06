@@ -4,7 +4,7 @@
 
 SpecForge is a cross-platform agent skill that turns a simple product concept into a research-grounded Spec-Driven Development document pack for AI coding agents.
 
-Unlike generic spec generators, SpecForge combines live research, GitHub open-source reuse analysis, executable engineering contracts, deterministic eval planning, architecture decision lenses, frontend/backend/data/algorithm decision matrices, and code-agent prompt packets before coding begins.
+Unlike generic spec generators, SpecForge combines live research with a Temporal Freshness Guard, GitHub open-source reuse analysis, executable engineering contracts, deterministic eval planning, architecture decision lenses, frontend/backend/data/algorithm decision matrices, and code-agent prompt packets before coding begins.
 
 It supports both new products and feature work in existing repositories.
 
@@ -67,6 +67,7 @@ Support artifacts:
 - **Brainstorm before specs**: clarify intent, mode, options, assumptions, and material unknowns before writing documents.
 - **Pressure-test before planning**: for greenfield commercial ideas, test whether the idea deserves SDD work before generating development specs.
 - **Research before architecture**: market claims, compliance claims, APIs, frameworks, and open-source choices must be checked against current sources.
+- **Anchor time before searching**: record the current date/year/timezone, derive latest/current search terms from that anchor, and label sources as `fresh`, `acceptable`, `stale`, `undated`, or `blocked`.
 - **Choose the right SDD depth**: use `vibe-prototype`, `spec-lite`, `full-sdd`, or `production-hardening` based on risk, not ceremony.
 - **Respect existing systems**: for feature work, inspect the current codebase and preserve compatibility unless the user asks for a redesign.
 - **GitHub reuse before custom build**: if a subsystem already has a suitable open-source implementation, evaluate integration, wrapping, forking, or pattern extraction before building from scratch.
@@ -205,7 +206,7 @@ SpecForge 是一个跨平台 agent skill，用来把简单的产品概念转成�
 
 它适配 Cursor、Codex、Claude Code、Antigravity、GitHub Copilot、Gemini CLI、Windsurf、Cline、Roo、Kiro、OpenCode、Goose 等能读取 `SKILL.md`、`AGENTS.md` 或项目规则的 agent 环境。
 
-它和普通“生成 PRD/spec”的工具不同：SpecForge 会在开发前加入真实调研、GitHub 开源复用分析、可执行工程契约、确定性评测规划、架构决策透镜、前端/后端/数据/算法选型矩阵和 code agent prompt packet。
+它和普通“生成 PRD/spec”的工具不同：SpecForge 会在开发前加入带时间新鲜度护栏的真实调研、GitHub 开源复用分析、可执行工程契约、确定性评测规划、架构决策透镜、前端/后端/数据/算法选型矩阵和 code agent prompt packet。
 
 它既支持从 0 到 1 的新产品，也支持在已有代码库中加功能、改模块或做集成。
 
@@ -259,6 +260,7 @@ SpecForge 会生成 1 份前置决策文档和 8 份核心开发文档。
 - **先压力测试，再进入规划**：从 0 到 1 的商业产品先判断是否值得进入 SDD，而不是把任何想法都包装成开发文档。
 - **先选 SDD 深度，再决定文档强度**：按风险选择 `vibe-prototype`、`spec-lite`、`full-sdd` 或 `production-hardening`。
 - **先联网调研，再做架构**：市场、合规、API、框架、开源项目都必须和真实世界对齐。
+- **先锚定时间，再发起搜索**：记录当前日期/年份/时区，用这个锚点生成 latest/current 搜索词，并把来源标成 `fresh`、`acceptable`、`stale`、`undated` 或 `blocked`。
 - **尊重现有系统**：已有项目加功能时，先读当前代码、接口、数据、测试和部署约束。
 - **先看 GitHub 能否复用，再决定自研**：能集成、包装、fork、魔改或借鉴的，不默认从零造。
 - **架构决策要经得住一年后复盘**：重大选择要回答真实痛点、阶段适配、技术债、团队扩张成本和回滚路径。

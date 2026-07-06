@@ -29,7 +29,11 @@
         "published_or_updated": "accessed 2026-06-28",
         "accessed_at": "2026-06-28",
         "claim_supported": "Local-first AI meeting notes positioning.",
-        "confidence": "medium"
+        "confidence": "medium",
+        "freshness_status": "acceptable",
+        "freshness_reason": "Demo source acceptable for shape; refresh before production or implementation decisions.",
+        "retrieval_method": "live-web-demo",
+        "query_used": "See query_log for demo search terms."
       }
     ],
     "official_docs": [
@@ -40,7 +44,11 @@
         "published_or_updated": "accessed 2026-06-28",
         "accessed_at": "2026-06-28",
         "claim_supported": "Open-source speech recognition model repository.",
-        "confidence": "high"
+        "confidence": "high",
+        "freshness_status": "acceptable",
+        "freshness_reason": "Demo source acceptable for shape; refresh before production or implementation decisions.",
+        "retrieval_method": "live-web-demo",
+        "query_used": "See query_log for demo search terms."
       }
     ],
     "github_open_source": [
@@ -51,7 +59,11 @@
         "published_or_updated": "accessed 2026-06-28",
         "accessed_at": "2026-06-28",
         "claim_supported": "Local Whisper implementation option.",
-        "confidence": "high"
+        "confidence": "high",
+        "freshness_status": "acceptable",
+        "freshness_reason": "Demo source acceptable for shape; refresh before production or implementation decisions.",
+        "retrieval_method": "live-web-demo",
+        "query_used": "See query_log for demo search terms."
       },
       {
         "title": "Meetily GitHub",
@@ -60,7 +72,11 @@
         "published_or_updated": "accessed 2026-06-28",
         "accessed_at": "2026-06-28",
         "claim_supported": "Open-source AI meeting note taker reference.",
-        "confidence": "medium"
+        "confidence": "medium",
+        "freshness_status": "acceptable",
+        "freshness_reason": "Demo source acceptable for shape; refresh before production or implementation decisions.",
+        "retrieval_method": "live-web-demo",
+        "query_used": "See query_log for demo search terms."
       }
     ],
     "open_source_reuse_decisions": [
@@ -71,7 +87,11 @@
         "published_or_updated": "2026-06-28",
         "accessed_at": "2026-06-28",
         "claim_supported": "Wrap or evaluate existing transcription engines before custom implementation.",
-        "confidence": "medium"
+        "confidence": "medium",
+        "freshness_status": "acceptable",
+        "freshness_reason": "Demo source acceptable for shape; refresh before production or implementation decisions.",
+        "retrieval_method": "live-web-demo",
+        "query_used": "See query_log for demo search terms."
       }
     ],
     "risk_compliance": [
@@ -82,7 +102,11 @@
         "published_or_updated": "2026-06-28",
         "accessed_at": "2026-06-28",
         "claim_supported": "Privacy and local processing are meaningful product concerns for meeting notes.",
-        "confidence": "medium"
+        "confidence": "medium",
+        "freshness_status": "acceptable",
+        "freshness_reason": "Demo source acceptable for shape; refresh before production or implementation decisions.",
+        "retrieval_method": "live-web-demo",
+        "query_used": "See query_log for demo search terms."
       }
     ],
     "implementation_prior_art": [
@@ -93,7 +117,11 @@
         "published_or_updated": "accessed 2026-06-28",
         "accessed_at": "2026-06-28",
         "claim_supported": "Meeting note and transcription project patterns exist on GitHub.",
-        "confidence": "medium"
+        "confidence": "medium",
+        "freshness_status": "acceptable",
+        "freshness_reason": "Demo source acceptable for shape; refresh before production or implementation decisions.",
+        "retrieval_method": "live-web-demo",
+        "query_used": "See query_log for demo search terms."
       }
     ],
     "architecture_decision_sources": [
@@ -104,7 +132,11 @@
         "published_or_updated": "2026-06-28",
         "accessed_at": "2026-06-28",
         "claim_supported": "A pluggable transcription adapter keeps local and hosted transcription options replaceable.",
-        "confidence": "medium"
+        "confidence": "medium",
+        "freshness_status": "acceptable",
+        "freshness_reason": "Demo source acceptable for shape; refresh before production or implementation decisions.",
+        "retrieval_method": "live-web-demo",
+        "query_used": "See query_log for demo search terms."
       }
     ],
     "production_readiness": [
@@ -115,7 +147,11 @@
         "published_or_updated": "2026-06-28",
         "accessed_at": "2026-06-28",
         "claim_supported": "Launch-readiness evidence must be refreshed from official hosting, monitoring, auth, and CRM platform docs before launch.",
-        "confidence": "low"
+        "confidence": "low",
+        "freshness_status": "acceptable",
+        "freshness_reason": "Demo source acceptable for shape; refresh before production or implementation decisions.",
+        "retrieval_method": "live-web-demo",
+        "query_used": "See query_log for demo search terms."
       }
     ],
     "domain_architecture": [
@@ -126,7 +162,11 @@
         "published_or_updated": "2026-07-06",
         "accessed_at": "2026-07-06",
         "claim_supported": "Frontend rendering and state choices must be refreshed from official framework docs before implementation.",
-        "confidence": "low"
+        "confidence": "low",
+        "freshness_status": "acceptable",
+        "freshness_reason": "Demo source acceptable for shape; refresh before production or implementation decisions.",
+        "retrieval_method": "live-web-demo",
+        "query_used": "See query_log for demo search terms."
       },
       {
         "title": "Data/index architecture refresh placeholder",
@@ -135,8 +175,72 @@
         "published_or_updated": "2026-07-06",
         "accessed_at": "2026-07-06",
         "claim_supported": "Data access and index choices must be verified against official database docs and actual query paths.",
-        "confidence": "low"
+        "confidence": "low",
+        "freshness_status": "acceptable",
+        "freshness_reason": "Demo source acceptable for shape; refresh before production or implementation decisions.",
+        "retrieval_method": "live-web-demo",
+        "query_used": "See query_log for demo search terms."
       }
     ]
-  }
+  },
+  "web_research_capability": "demo-sample",
+  "current_date_anchor": {
+    "current_date": "2026-06-28",
+    "current_year": 2026,
+    "timezone": "UTC+00:00",
+    "recorded_at": "2026-06-28T00:00:00Z"
+  },
+  "freshness_policy": {
+    "market_window_days": 180,
+    "fast_moving_technology_window_days": 90,
+    "github_activity_window_days": 365,
+    "regulatory_window_days": 365,
+    "source_status_values": [
+      "fresh",
+      "acceptable",
+      "stale",
+      "undated",
+      "blocked"
+    ],
+    "stale_year_query_policy": "Do not use old years in latest/current queries unless the query is explicitly historical, migration-related, backward-compatibility-related, or user-specified."
+  },
+  "query_log": [
+    {
+      "category": "market",
+      "query": "AI meeting notes sales teams latest 2026 pricing privacy",
+      "target": "web",
+      "date_basis": "current_date_anchor",
+      "status": "completed-demo",
+      "notes": "Demo query; refresh before production use."
+    },
+    {
+      "category": "github_open_source",
+      "query": "AI meeting notes transcription GitHub pushed 2026",
+      "target": "GitHub",
+      "date_basis": "current_date_anchor",
+      "status": "completed-demo",
+      "notes": "Demonstrates recency-aware open-source search."
+    },
+    {
+      "category": "official_docs",
+      "query": "Whisper official docs release notes current",
+      "target": "official docs / GitHub",
+      "date_basis": "current_date_anchor",
+      "status": "completed-demo",
+      "notes": "Primary-source refresh still required before implementation."
+    }
+  ],
+  "freshness_summary": {
+    "fresh": 0,
+    "acceptable": 11,
+    "stale": 0,
+    "undated": 0,
+    "blocked": 0
+  },
+  "source_fields": [
+    "freshness_status",
+    "freshness_reason",
+    "retrieval_method",
+    "query_used"
+  ]
 }

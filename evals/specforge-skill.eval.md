@@ -26,6 +26,18 @@ This eval checks that the skill can scaffold and validate a pressure-test prefli
       "cmd": "python -c \"import json, pathlib; json.load(open(pathlib.Path(r'{output}')/'research_ledger.json', encoding='utf-8'))\""
     },
     {
+      "id": "has-temporal-freshness-guard",
+      "text": "The research ledger includes a current date anchor, freshness policy, query log, freshness summary, and source freshness fields.",
+      "type": "command",
+      "cmd": "python -c \"import json, pathlib; p=pathlib.Path(r'{output}'); data=json.load(open(p/'research_ledger.json', encoding='utf-8')); assert 'current_date_anchor' in data and 'current_year' in data['current_date_anchor']; assert 'freshness_policy' in data and 'query_log' in data and 'freshness_summary' in data; fields=set(data['source_fields']); assert {'freshness_status','freshness_reason','retrieval_method','query_used'} <= fields\""
+    },
+    {
+      "id": "reality-research-has-freshness-sections",
+      "text": "The reality research document includes temporal freshness guard, search query log, and freshness assessment sections.",
+      "type": "command",
+      "cmd": "python -c \"from pathlib import Path; text=(Path(r'{output}')/'01-reality-research.md').read_text(encoding='utf-8'); assert '## Temporal Freshness Guard' in text and '## Search Query Log' in text and '## Freshness Assessment' in text\""
+    },
+    {
       "id": "has-scope-and-docs-first-fields",
       "text": "The generated pack includes scope boundary, prescriptive inputs, this-pack ownership, SDD mode, research depth, and unverified-claims fields.",
       "type": "command",
@@ -74,6 +86,11 @@ This eval checks that the skill can scaffold and validate a pressure-test prefli
     {
       "id": "domain-decisions-require-live-research",
       "text": "Frontend, backend, data, and algorithm choices are framed as current official-doc/GitHub/package research tasks, not hardcoded recommendations from model memory or an old article.",
+      "type": "llm-judge"
+    },
+    {
+      "id": "prevents-stale-year-query-contamination",
+      "text": "The skill requires latest/current searches to derive year terms from the current date anchor and forbids stale hardcoded years unless the query is historical, migration-related, or user-specified.",
       "type": "llm-judge"
     },
     {
